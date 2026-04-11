@@ -1,6 +1,4 @@
 target/
-!**/src/main/**/target/
-!**/src/test/**/target/
 .kotlin
 
 ### IntelliJ IDEA ###
@@ -33,3 +31,10 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Vaadin ###
+backend/src/main/bundles/
+backend/src/main/frontend/generated/**
+src/main/frontend/generated/**
+backend/node_modules/
+src/main/frontend/generated/jar-resources/**
