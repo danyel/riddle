@@ -1,8 +1,9 @@
-package be.riddler.question.port.out;
+package be.riddler.question.port;
 
 import be.riddler.question.domain.Question;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * QuestionRepository
@@ -12,4 +13,6 @@ import java.util.List;
  */
 public interface QuestionRepository {
     List<Question> getQuestions();
+
+    Question findById(UUID uuid);
 }

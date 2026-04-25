@@ -1,6 +1,7 @@
 package be.riddler.question.bff;
 
 import be.riddler.question.domain.QuestionType;
+import org.jspecify.annotations.NonNull;
 
 import java.util.UUID;
 
@@ -10,5 +11,5 @@ import java.util.UUID;
  * @author dnoulet
  * @version 1.0.0 11/04/2026
  */
-public record Question(UUID id, String question, QuestionType type) {
+public record Question(@NonNull UUID id, @NonNull String question, @NonNull QuestionType type) {
 }
