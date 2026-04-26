@@ -1,5 +1,5 @@
 // @ts-ignore
-import styles from './layout.module.css';
+import styles from 'Frontend/themes/riddler/common.module.css';
 
 import {AppLayout} from '@vaadin/react-components/AppLayout.js';
 import {DrawerToggle} from '@vaadin/react-components/DrawerToggle.js';

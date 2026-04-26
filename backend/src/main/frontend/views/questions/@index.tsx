@@ -5,7 +5,7 @@ import {Answers} from "Frontend/components/Answer";
 import {ViewConfig} from '@vaadin/hilla-file-router/types.js';
 import {Grid, GridColumn} from "@vaadin/react-components";
 // @ts-ignore
-import styles from './questions.module.css';
+import styles from 'Frontend/themes/riddler/common.module.css';
 
 export default function Index() {
     const [questions, setQuestions] = useState<Question[]>([]);

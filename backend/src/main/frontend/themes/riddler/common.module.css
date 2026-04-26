@@ -1,3 +1,11 @@
+.navigation_header {
+
+}
+
+.question_table {
+    width: 100%;
+}
+
 .navbar_container {
     display: flex;
     align-items: center;
