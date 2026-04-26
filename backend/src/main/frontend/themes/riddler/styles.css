@@ -1,0 +1,23 @@
+/* riddler/styles.css */
+
+/* When the drawer is CLOSED: remove the margin and show icon-only bar */
+vaadin-app-layout:not([drawer-opened]) .main-content-area {
+    margin-right: 0 !important;
+}
+
+/* Ensure the drawer stays as a 64px icon-bar when 'closed' */
+vaadin-app-layout:not([drawer-opened])::part(drawer) {
+    width: 64px;
+    visibility: visible;
+}
+
+/* When drawer is OPEN: apply your 15% margin */
+vaadin-app-layout[drawer-opened] .main-content-area {
+    margin-right: 15%;
+    background-color: red;
+}
+
+/* Sync the AppLayout offset with the mini-bar width */
+vaadin-app-layout:not([drawer-opened]) {
+    --vaadin-app-layout-drawer-offset-size: 64px;
+}
