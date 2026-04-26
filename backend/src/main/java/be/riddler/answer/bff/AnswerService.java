@@ -1,6 +1,6 @@
 package be.riddler.answer.bff;
 
-import be.riddler.answer.port.AnswerRepository;
+import be.riddler.answer.port.AnswerOutPort;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
 import lombok.AccessLevel;
@@ -20,10 +20,10 @@ import java.util.UUID;
 @BrowserCallable
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class AnswerService {
-    private final AnswerRepository answerRepository;
+    private final AnswerOutPort answerOutPort;
 
     public @NonNull List<@NonNull Answer> findByQuestion(UUID id) {
-        return answerRepository.findByQuestion(id)
+        return answerOutPort.findByQuestion(id)
                 .stream()
                 .map(AnswerService::toBff)
                 .toList();

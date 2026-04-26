@@ -1,6 +1,6 @@
 package be.riddler.menu.bff;
 
-import be.riddler.menu.external.MenuResource;
+import be.riddler.menu.api.MenuApi;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
 import lombok.AccessLevel;
@@ -19,8 +19,9 @@ import java.util.List;
 @AnonymousAllowed
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class MenuService {
-    private final MenuResource menuResource;
+    private final MenuApi menuApi;
+
     public @NonNull List<@NonNull Menu> menu() {
-        return menuResource.menu();
+        return menuApi.menu();
     }
 }

@@ -2,7 +2,7 @@ package be.riddler.answer.adapter;
 
 import be.riddler.answer.domain.Answer;
 import be.riddler.answer.fixture.AnswerFixture;
-import be.riddler.answer.port.AnswerRepository;
+import be.riddler.answer.port.AnswerOutPort;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ import java.util.UUID;
  */
 @Component
 @Profile("demo")
-class AnswerLocalRepository implements AnswerRepository {
+class AnswerOutAdapter implements AnswerOutPort {
     @Override
     public List<Answer> findByQuestion(UUID questionId) {
         return List.of(AnswerFixture.ANSWER_ONE, AnswerFixture.ANSWER_TWO, AnswerFixture.ANSWER_THREE);

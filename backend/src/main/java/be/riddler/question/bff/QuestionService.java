@@ -1,6 +1,6 @@
 package be.riddler.question.bff;
 
-import be.riddler.question.external.QuestionResource;
+import be.riddler.question.api.QuestionApi;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
 import lombok.AccessLevel;
@@ -20,14 +20,14 @@ import java.util.UUID;
 @AnonymousAllowed
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class QuestionService {
-    private final QuestionResource questionResource;
+    private final QuestionApi questionApi;
 
     public @NonNull List<@NonNull Question> getQuestions() {
-        return questionResource.getQuestions();
+        return questionApi.getQuestions();
     }
 
 
     public @NonNull Question get(UUID uuid) {
-        return questionResource.findById(uuid);
+        return questionApi.findById(uuid);
     }
 }

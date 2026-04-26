@@ -1,1 +1,18 @@
 services:
+  riddler_database:
+    container_name: riddler_database
+    image: postgres
+    volumes:
+      - ./data/riddler:/data/postgres
+    environment:
+      - POSTGRES_USER=app_user
+      - POSTGRES_PASSWORD=app_user_password
+      - PGDATA=/data/postgres
+      - POSGRES_DB=riddler
+    ports:
+      - "5433:5432"
+    networks:
+      - riddler
+
+networks:
+  riddler:

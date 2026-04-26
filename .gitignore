@@ -38,3 +38,4 @@ backend/src/main/frontend/generated/**
 src/main/frontend/generated/**
 backend/node_modules/
 src/main/frontend/generated/jar-resources/**
+infrastructure/data/

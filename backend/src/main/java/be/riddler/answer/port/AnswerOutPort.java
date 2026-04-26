@@ -11,6 +11,6 @@ import java.util.UUID;
  * @author dnoulet
  * @version 1.0.0 11/04/2026
  */
-public interface AnswerRepository {
+public interface AnswerOutPort {
     List<Answer> findByQuestion(UUID questionId);
 }

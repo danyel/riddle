@@ -10,6 +10,6 @@ import java.util.List;
  * @author dnoulet
  * @version 1.0.0 26/04/2026
  */
-public interface MenuRepository {
+public interface MenuOutPort {
     List<Menu> findAll(String username);
 }
