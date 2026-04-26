@@ -1,28 +1,38 @@
 import {useEffect, useState} from 'react';
-import {QuestionService} from "Frontend/generated/endpoints";
+import {ComponentService, QuestionService} from "Frontend/generated/endpoints";
 import Question from "Frontend/generated/be/riddler/question/bff/Question";
-import {Answers} from "Frontend/components/Answer";
 import {ViewConfig} from '@vaadin/hilla-file-router/types.js';
-import {Grid, GridColumn} from "@vaadin/react-components";
+import {Button, Grid, GridColumn, Icon} from "@vaadin/react-components";
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css';
 
-export default function Index() {
-    const [questions, setQuestions] = useState<Question[]>([]);
+// CRITICAL: You must import the iconset for the icons to render
+import '@vaadin/icons';
+import {useNavigate} from "react-router";
+import {IconsConstant} from "Frontend/constant/constants";
 
+export default function Index() {
+    const [items, setItems] = useState<string[]>([]);
+    const [questions, setQuestions] = useState<Question[]>([]);
+    const navigate = useNavigate();
     useEffect(() => {
         QuestionService.getQuestions().then(setQuestions);
+        ComponentService.icons().then(setItems);
     }, []);
 
+    const handleClick = (question: Question) => {
+        navigate(`/question/${question.id}`);
+    }
+
     const answerRenderer = ({item}: { item: Question }) => {
-        return <Answers id={item.id}/>;
+        return <Button theme="primary" onClick={() => handleClick(item)}><Icon icon={IconsConstant.EYE}/> </Button>;
     };
 
     return (
         <Grid key={"id"} items={questions} className={styles.question_table} allRowsVisible={true}>
             <GridColumn key={"id"} path={"id"}/>
             <GridColumn key={"question"} path={"question"}/>
-            <GridColumn header={'answer'} renderer={answerRenderer}/>
+            <GridColumn header={'Action'} renderer={answerRenderer}/>
         </Grid>
     );
 }

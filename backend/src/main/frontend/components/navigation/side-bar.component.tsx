@@ -1,24 +1,26 @@
 import {Icon, SideNav, SideNavItem} from "@vaadin/react-components";
+import {useEffect, useState} from "react";
+import Menu from "Frontend/generated/be/riddler/menu/bff/Menu";
+import {MenuService} from "Frontend/generated/endpoints";
 
 export default function SideBar() {
+    const [menus, setMenus] = useState<Menu[]>([]);
+
+    useEffect(() => {
+        MenuService.menu()
+            .then(setMenus);
+    }, []);
+
     return (
         <SideNav id="sideNav">
-            <SideNavItem path="/questions">
-                <Icon icon="vaadin:dashboard" slot="prefix"/>
-                Dashboard
-            </SideNavItem>
-            <SideNavItem path="/inbox">
-                <Icon icon="vaadin:envelope" slot="prefix"/>
-                Inbox
-            </SideNavItem>
-            <SideNavItem path="/calendar">
-                <Icon icon="vaadin:calendar" slot="prefix"/>
-                Calendar
-            </SideNavItem>
-            <SideNavItem path="/settings">
-                <Icon icon="vaadin:cog" slot="prefix"/>
-                Settings
-            </SideNavItem>
+            {menus.map(menu => {
+                return (
+                    <SideNavItem path={menu.path}>
+                        <Icon icon={menu.icon} slot="prefix"/>
+                        {menu.label}
+                    </SideNavItem>
+                );
+            })}
         </SideNav>
     );
 }
