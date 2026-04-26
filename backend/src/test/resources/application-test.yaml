@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 1000
+      jdbc-url: ${spring.datasource.url}
+      driver-class-name: org.postgresql.Driver
+      auto-commit: false
+      schema: public
+    schema: public
+    username: app_user
+    password: app_user_password
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: public
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    defer-datasource-initialization: false
+  liquibase:
+    enabled: true
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    contexts: lcl
+    driver-class-name: org.postgresql.Driver
+    change-log: classpath:db/db.master.xml
+    default-schema: public
+hibernate:
+  generate_statistics: false
+server:
+  port: 8081

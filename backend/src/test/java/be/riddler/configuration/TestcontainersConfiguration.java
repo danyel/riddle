@@ -1,5 +1,9 @@
 package be.riddler.configuration;
 
+import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.HostConfig;
+import com.github.dockerjava.api.model.PortBinding;
+import com.github.dockerjava.api.model.Ports;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +19,13 @@ public class TestcontainersConfiguration {
     @Bean
     @ServiceConnection
     PostgreSQLContainer postgresContainer() {
-        return new PostgreSQLContainer(DockerImageName.parse("postgres:latest"));
+        //noinspection resource
+        return new PostgreSQLContainer(DockerImageName.parse("postgres:latest"))
+                .withDatabaseName("riddler") // Sets the database name used in the JDBC URL
+                .withUsername("app_user")
+                .withCreateContainerCmdModifier(cmd -> cmd.withHostConfig(
+                        new HostConfig().withPortBindings(new PortBinding(Ports.Binding.bindPort(55432), new ExposedPort(5432)))
+                ))
+                .withPassword("app_user_password");
     }
-
 }

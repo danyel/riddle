@@ -1,7 +1,7 @@
 import {Icon, SideNav, SideNavItem} from "@vaadin/react-components";
 import {useEffect, useState} from "react";
-import Menu from "Frontend/generated/be/riddler/menu/bff/Menu";
 import {MenuService} from "Frontend/generated/endpoints";
+import Menu from "Frontend/generated/be/riddler/domain/menu/api/Menu";
 
 export default function SideBar() {
     const [menus, setMenus] = useState<Menu[]>([]);

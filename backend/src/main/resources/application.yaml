@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ecommerce-api
+    name: riddler-api
   datasource:
     hikari:
       maximum-pool-size: 10

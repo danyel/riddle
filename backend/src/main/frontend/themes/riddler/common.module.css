@@ -26,6 +26,16 @@
     transition: margin-right 0.3s ease-in-out;
 }
 
+.participant_content_container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    background-color: grey;
+    /* Use a transition for smooth resizing */
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+}
 
 .side_bar {
     background-color: var(--lumo-base-color);
