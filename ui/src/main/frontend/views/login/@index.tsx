@@ -1,6 +1,5 @@
 import {LoginOverlay, LoginOverlayElement} from '@vaadin/react-components/LoginOverlay.js';
 import {useRef, useState} from 'react';
-import {Navigate} from 'react-router-dom';
 import {useAuth} from 'Frontend/auth'; // Import from your new auth.ts
 
 export default function LoginView() {
@@ -8,10 +7,10 @@ export default function LoginView() {
     const [error, setError] = useState(false);
     const loginOverlayRef = useRef<LoginOverlayElement>(null);
 
-    // If already logged in, redirect to home
-    if (state.user) {
-        return <Navigate to="/" replace/>;
-    }
+    // // If already logged in, redirect to home
+    // if (state.user) {
+    //     return <Navigate to="/" replace/>;
+    // }
 
     return (
         <LoginOverlay

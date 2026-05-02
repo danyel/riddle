@@ -12,7 +12,7 @@ import * as net from 'net';
 import {processThemeResources} from './target/plugins/application-theme-plugin/theme-handle.js';
 import {rewriteCssUrls} from './target/plugins/theme-loader/theme-loader-utils.js';
 import {
-    addFunctionComponentSourceLocationBabel
+  addFunctionComponentSourceLocationBabel
 } from './target/plugins/react-function-location-plugin/react-function-location-plugin.js';
 import settings from './target/vaadin-dev-server-settings.json';
 import {AssetInfo, ChunkInfo, defineConfig, mergeConfig, OutputOptions, PluginOption, UserConfigFn} from 'vite';
@@ -28,7 +28,7 @@ import reactPlugin from '@vitejs/plugin-react';
 
 import vitePluginFileSystemRouter from '@vaadin/hilla-file-router/vite-plugin.js';
 
-export { default as useLocalWebComponents } from './target/plugins/vite-plugin-local-web-components';
+export {default as useLocalWebComponents} from './target/plugins/vite-plugin-local-web-components';
 
 const frontendFolder = path.resolve(__dirname, settings.frontendFolder);
 const themeFolder = path.resolve(frontendFolder, settings.themeFolder);

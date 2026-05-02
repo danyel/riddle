@@ -1,7 +1,6 @@
 package be.riddler.v1.answer.api;
 
 import be.riddler.common.resource.AbstractResourceTest;
-import be.riddler.configuration.filter.AuthorizationFilter;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -16,7 +15,6 @@ class AnswerResourceTest extends AbstractResourceTest {
     void findByQuestionId() {
         webTestClient.get()
                 .uri("/v1/answers/question/a2b20b03-9d96-41d4-8e83-a35b21c21fe7")
-                .header(AuthorizationFilter.X_AUTHORIZATION, xAuthenticationContent())
                 .exchange()
                 .expectStatus()
                 .isOk()

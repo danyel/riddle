@@ -1,7 +1,6 @@
 package be.riddler.v1.ui.api;
 
 import be.riddler.common.resource.AbstractResourceTest;
-import be.riddler.configuration.filter.AuthorizationFilter;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -16,7 +15,6 @@ class UiResourceTest extends AbstractResourceTest {
     void icons() {
         webTestClient.get()
                 .uri("/v1/ui/icons")
-                .header(AuthorizationFilter.X_AUTHORIZATION, xAuthenticationContent())
                 .exchange()
                 .expectStatus()
                 .isOk()

@@ -12,7 +12,7 @@ export default function QuestionDetailView() {
     useEffect(() => {
         console.log(`Trying to fetch ${id}`);
         QuestionEndpoint.get(id).then(setQuestion);
-    }, [id]);
+    }, []);
 
     return question && (
         <div>
