@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
     <modules>
-        <module>backend</module>
+        <module>ui</module>
     </modules>
     <modelVersion>4.0.0</modelVersion>
 

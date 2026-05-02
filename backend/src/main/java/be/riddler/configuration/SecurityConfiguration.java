@@ -1,15 +1,22 @@
 package be.riddler.configuration;
 
-import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
-import org.slf4j.LoggerFactory;
+import be.riddler.configuration.filter.AuthorizationFilter;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import tools.jackson.databind.ObjectMapper;
+
+import java.util.List;
 
 /**
  * SecurityConfiguration
@@ -19,39 +26,61 @@ import org.springframework.security.web.SecurityFilterChain;
  */
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 class SecurityConfiguration {
+    private final ObjectMapper objectMapper;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) {
-        http.authorizeHttpRequests(auth -> {
-            // 1. Specific public API and UI paths
-            auth.requestMatchers("/v1/**", "/participant/**", "/swagger-ui/**").permitAll();
-
-            // 2. Explicitly secure the /secured path
-            auth.requestMatchers("/secured/**").authenticated();
-
-            // 3. Permitting all others here is usually handled by VaadinSecurityConfigurer
-            // but if you want everything else public:
-            auth.requestMatchers("/**").permitAll();
-        });
-        return http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
-            // 1. All paths are secured by default with VaadinSecurityConfigurer
-            // 2. Set the login view to /login
-            configurer.loginView("/login");
-        }).build();
+        return http.authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/v1/**").permitAll();
+                    auth.requestMatchers("/swagger-ui/**",
+                                            "/v3/api-docs/**",
+                                            "/swagger-ui.html")
+                                    .permitAll();
+                            auth.requestMatchers("/**").permitAll();
+                        }
+                )
+                .build();
     }
 
     @Bean
     UserDetailsManager userDetailsManager() {
-        LoggerFactory.getLogger(SecurityConfiguration.class)
-                .warn("NOT FOR PRODUCTION: Using in-memory user details manager!");
-        var user = User.withUsername("dnoulet")
-                .password("{noop}developer")
-                .roles("USER")
-                .build();
-        var admin = User.withUsername("admin")
-                .password("{noop}admin")
-                .roles("ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(user, admin);
+        return new UserDetailsManager() {
+            @Override
+            public @NonNull UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
+                return new User(username, "password", List.of((GrantedAuthority) () -> "ADMIN"));
+            }
+
+            @Override
+            public void createUser(@NonNull UserDetails user) {
+
+            }
+
+            @Override
+            public void updateUser(@NonNull UserDetails user) {
+
+            }
+
+            @Override
+            public void deleteUser(@NonNull String username) {
+
+            }
+
+            @Override
+            public void changePassword(@NonNull String oldPassword, @NonNull String newPassword) {
+
+            }
+
+            @Override
+            public boolean userExists(@NonNull String username) {
+                return true;
+            }
+        };
+    }
+
+    @Bean
+    AuthorizationFilter authorizationFilter() {
+        return new AuthorizationFilter(objectMapper);
     }
 }
