@@ -2,6 +2,7 @@ package be.riddler.v1.question.bff;
 
 import be.riddler.v1.question.api.Question;
 import be.riddler.v1.question.api.QuestionApi;
+import be.riddler.v1.question.api.UpdateQuestion;
 import com.vaadin.hilla.BrowserCallable;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AccessLevel;
@@ -30,5 +31,9 @@ public class QuestionEndpoint {
 
     public @NonNull Question get(UUID uuid) {
         return questionApi.findById(uuid);
+    }
+
+    public @NonNull Question update(UUID id, UpdateQuestion updateQuestion) {
+        return questionApi.update(id, updateQuestion);
     }
 }

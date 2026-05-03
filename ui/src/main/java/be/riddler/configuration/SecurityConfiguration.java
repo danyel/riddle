@@ -1,19 +1,24 @@
 package be.riddler.configuration;
 
+import be.riddler.configuration.filter.JwtAuthenticationFilter;
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 import com.vaadin.flow.spring.security.stateless.VaadinStatelessSecurityConfigurer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authorization.EnableMultiFactorAuthentication;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.FactorGrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jose.jws.JwsAlgorithms;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -28,7 +33,10 @@ import java.util.List;
  * @author dnoulet
  * @version 1.0.0 26/04/2026
  */
-@EnableWebSecurity
+@EnableMultiFactorAuthentication(authorities = {
+        FactorGrantedAuthority.PASSWORD_AUTHORITY,
+        FactorGrantedAuthority.OTT_AUTHORITY
+})
 @EnableMethodSecurity(jsr250Enabled = true)
 @Configuration
 class SecurityConfiguration {
@@ -37,25 +45,50 @@ class SecurityConfiguration {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) {
-        http.sessionManagement(sessionManagement -> sessionManagement
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        // 1. Establish absolute statelessness
+        http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.with(VaadinSecurityConfigurer.vaadin(),
-                configurer -> configurer.loginView("/login"));
+        // 2. DISABLE CSRF for REST APIs so the Authorization header is processed
+        RequestMatcher apiMatcher = PathPatternRequestMatcher.withDefaults().matcher("/v1/**");
+        http.csrf(csrf -> csrf.ignoringRequestMatchers(apiMatcher));
 
-        http.with(new VaadinStatelessSecurityConfigurer<>(),
-                cfg -> cfg.withSecretKey()
-                        .secretKey(new SecretKeySpec(
-                                Base64.getDecoder().decode(authSecret),
-                                JwsAlgorithms.HS256)
-                        ).and().issuer("be.riddler")
+        // 3. Define public matching rules FIRST
+        http.authorizeHttpRequests(auth -> {
+            auth.requestMatchers(
+                    "/line-awesome/**", "/themes/**", "/VAADIN/**",
+                    "/swagger-ui/**", "/v3/api-docs/**", "/connect/**", "/v1/**"
+            ).permitAll();
+            auth.requestMatchers(
+                    "/question/**", "/questions/**", "/icons/**"
+            ).authenticated();
+            auth.requestMatchers(
+                    "/", "/login"
+            ).permitAll();
+        });
+
+        // 4. Return clean 401 Unauthorized for REST paths instead of 302 Redirect
+        http.exceptionHandling(exceptions -> exceptions
+                .defaultAuthenticationEntryPointFor(
+                        (request, response, authException) -> response.sendError(401, "Unauthorized"),
+                        apiMatcher
+                )
         );
 
-        http.authorizeHttpRequests(auth -> {
-            auth.requestMatchers("/line-awesome/**", "/themes/**", "/VAADIN/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll();
-            auth.requestMatchers("/v1/**").permitAll();
-            auth.requestMatchers("/", "/question/**", "/questions", "/icons", "/login").permitAll();
+        // 5. Place your JWT Filter BEFORE standard authentication filters
+        http.addFilterBefore(new JwtAuthenticationFilter(authSecret), UsernamePasswordAuthenticationFilter.class);
+
+        // 6. Apply Vaadin security
+        http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
+            configurer.loginView("/login");
         });
+
+        // 7. Apply stateless configurer
+        http.with(new VaadinStatelessSecurityConfigurer<>(), cfg -> cfg.withSecretKey()
+                .secretKey(new SecretKeySpec(
+                        Base64.getDecoder().decode(authSecret),
+                        JwsAlgorithms.HS256
+                )).and().issuer("be.riddler")
+        );
 
         return http.build();
     }

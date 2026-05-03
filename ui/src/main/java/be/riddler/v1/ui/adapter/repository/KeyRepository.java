@@ -12,4 +12,5 @@ import java.util.UUID;
  * @version 1.0.0 26/04/2026
  */
 public interface KeyRepository extends JpaRepository<KeyEntity, UUID> {
+    KeyEntity findByKey(String key);
 }

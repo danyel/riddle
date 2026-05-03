@@ -1,6 +1,8 @@
 package be.riddler.v1.ui.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -66,8 +68,31 @@ public interface UiApi {
     @Operation(
             method = "GET",
             tags = "ui",
+            summary = "Retrieves all question types",
+            operationId = "questionTypes",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(array = @ArraySchema(schema = @Schema(implementation = String.class)))
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            content = @Content(schema = @Schema(implementation = ProblemDetail.class))
+                    )
+            }
+    )
+    @GetMapping(path = "/question-types", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    List<String> questionTypes();
+
+    @Operation(
+            method = "GET",
+            tags = "ui",
             summary = "Retrieves translations for a specific language",
-            operationId = "icons",
+            operationId = "translations",
+            parameters = {
+                    @Parameter(in = ParameterIn.QUERY, name = "language", schema = @Schema(implementation = String.class))
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -82,4 +107,28 @@ public interface UiApi {
     @GetMapping(path = "/translations", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     List<Translation> translations(@RequestParam(name = "language") String language);
+
+    @Operation(
+            method = "GET",
+            tags = "ui",
+            summary = "Retrieves translations for a specific language",
+            operationId = "translate",
+            parameters = {
+                    @Parameter(in = ParameterIn.QUERY, name = "language", schema = @Schema(implementation = String.class)),
+                    @Parameter(in = ParameterIn.QUERY, name = "key", schema = @Schema(implementation = String.class))
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(array = @ArraySchema(schema = @Schema(implementation = Translation.class)))
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            content = @Content(schema = @Schema(implementation = ProblemDetail.class))
+                    )
+            }
+    )
+    @GetMapping(path = "/translate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    Translation translate(@RequestParam(name = "language") String language, @RequestParam(name = "key") String key);
 }

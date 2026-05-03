@@ -16,5 +16,7 @@ public interface QuestionOutPort {
 
     Question findById(UUID uuid);
 
-    Question create(Question build);
+    Question create(Question question);
+
+    Question update(Question question);
 }

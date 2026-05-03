@@ -49,4 +49,15 @@ class QuestionOutAdapter implements QuestionOutPort {
         return questionMapper()
                 .apply(questionRepository.save(questionEntity));
     }
+
+    @Override
+    public Question update(Question question) {
+        var questionEntity = questionRepository.findById(question.getId());
+        questionEntity.ifPresent(e -> {
+            e.setQuestion(question.getQuestion());
+            e.setType(question.getType());
+            questionRepository.save(e);
+        });
+        return question;
+    }
 }

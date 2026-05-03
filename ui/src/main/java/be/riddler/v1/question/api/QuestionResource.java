@@ -45,4 +45,9 @@ class QuestionResource implements QuestionApi {
         var question = new be.riddler.v1.question.domain.Question(createQuestion.question(), createQuestion.type());
         return map(questionOutPort.create(question));
     }
+
+    @Override
+    public Question update(UUID id, UpdateQuestion updateQuestion) {
+        return map(questionOutPort.update(new be.riddler.v1.question.domain.Question(id, updateQuestion.question(), updateQuestion.type())));
+    }
 }

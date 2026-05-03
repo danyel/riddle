@@ -62,3 +62,17 @@
     display: flex;
     justify-content: center;
 }
+
+.question_menu_bar {
+    display: flex;
+    justify-content: flex-end; /* Pushes content to the right */
+    align-items: center; /* Centers button vertically */
+    width: 100%; /* Ensures layout spans full width */
+    box-sizing: border-box;
+}
+
+.question_menu_bar vaadin-button {
+    width: auto; /* Prevents stretching */
+    flex-grow: 0; /* Prevents the button from expanding */
+    margin-left: 10px;
+}

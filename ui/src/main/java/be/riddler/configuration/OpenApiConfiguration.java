@@ -37,21 +37,21 @@ import java.util.List;
 class OpenApiConfiguration {
     @Bean
     OpenAPI openAPI(
-            @Value("${swagger.root}") String swaggerUrl,
-            @Value("${spring.application.name}") String applicationName,
-            @Value("${spring.application.version}") String version
+            @Value("${swagger.root:http://localhost:8080}") String swaggerUrl,
+            @Value("${spring.application.name:riddler-api}") String applicationName,
+            @Value("${spring.application.version:1.0.0}") String version
     ) {
-        var info = new Info();
-        var contact = new Contact();
-        var server = new Server();
-        server.setUrl(swaggerUrl);
-        contact.setName("Daniel Noulet");
-        info.setTitle(applicationName);
-        info.setDescription("Open API definition for the Riddler api");
-        info.setVersion(version);
-        info.contact(contact);
-        var securityRequirement = new SecurityRequirement();
-        securityRequirement.put("namer", List.of("X-Authorization"));
+        var info = new Info()
+                .title(applicationName)
+                .description("Open API definition for the Riddler API")
+                .version(version)
+                .contact(new Contact().name("Daniel Noulet"));
+
+        var server = new Server().url(swaggerUrl);
+
+        // Name must match the @SecurityScheme's name exactly
+        var securityRequirement = new SecurityRequirement().addList("X-Authorization");
+
         return new OpenAPI()
                 .servers(List.of(server))
                 .security(List.of(securityRequirement))
