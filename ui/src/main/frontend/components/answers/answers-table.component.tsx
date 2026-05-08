@@ -1,13 +1,12 @@
 import {useEffect, useState} from "react";
-import {Button, Dialog, Grid, GridColumn, HorizontalLayout, Icon, TextArea} from "@vaadin/react-components";
+import {Dialog, Grid, GridColumn, HorizontalLayout, TextArea} from "@vaadin/react-components";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
 import {AnswerEndpoint} from "Frontend/generated/endpoints";
 import Answer from "Frontend/generated/be/riddler/v1/answer/api/Answer";
 import {useSignal} from "@vaadin/hilla-react-signals";
-import {IconsConstant} from "Frontend/constant/constants";
 import CreateAnswer from "Frontend/generated/be/riddler/v1/answer/api/CreateAnswer";
-import {CancelButton, CheckButton, CloseButton} from "Frontend/components/ui/button";
+import {CancelButton, CheckButton, CloseButton, PlusButton} from "Frontend/components/ui/button";
 
 export interface AnswersTableProperties {
     questionId: string;
@@ -29,9 +28,7 @@ export default function AnswersTable(props: AnswersTableProperties) {
     return (
         <>
             <HorizontalLayout className={styles.answers_menu_bar}>
-                <Button theme="primary" onClick={() => setOpen(true)}>
-                    <Icon icon={IconsConstant.PLUS}/>
-                </Button>
+                <PlusButton onClick={() => setOpen(true)}/>
             </HorizontalLayout>
             {/* 1. We pass down a close handler to reset parent state */}
             <CreateDialogModal
@@ -57,9 +54,9 @@ interface CreateDialogModalProps {
 function CreateDialogModal(props: CreateDialogModalProps) {
     const answerValue = useSignal('');
 
-    // 2. Clear input value when the modal opens
     useEffect(() => {
         if (props.show) {
+            // Clear input value when the modal opens
             answerValue.value = '';
         }
     }, [props.show]);
@@ -85,51 +82,22 @@ function CreateDialogModal(props: CreateDialogModalProps) {
             header-title="Create answer"
             opened={props.show}
             onOpenedChanged={closeIfNotValue}
-            header={
-                <CancelButton onClick={() => props.onClose()}/>
-            }
+            header={<CancelButton onClick={() => props.onClose()}/>}
             footerRenderer={() => (
                 <>
                     <CloseButton onClick={props.onClose}/>
                     <CheckButton onClick={saveAnswer}/>
                 </>
-            )
-            }
+            )}
         >
-            <
-                div
-                style={
-                    {
-                        display: 'flex',
-                        flexDirection:
-                            'column',
-                        height:
-                            '100%',
-                        width:
-                            '100%',
-                        boxSizing:
-                            'border-box'
-                    }
-                }>
-                <
-                    TextArea
+            <div className={styles.div_full}>
+                <TextArea
                     label="Name"
                     value={answerValue.value}
-                    onValueChanged={(e) => (answerValue.value = e.detail.value)
-                    }
-                    // 3. Tells TextArea to grow and fill the flex container
-                    style={
-                        {
-                            flex: '1 1 auto',
-                            width:
-                                '100%',
-                            height:
-                                '100%'
-                        }
-                    }
+                    onValueChanged={(e) => (answerValue.value = e.detail.value)}
+                    className={styles.text_area_full}
                 />
             </div>
         </Dialog>
-    )
-        ;
+    );
 }

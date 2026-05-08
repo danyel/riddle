@@ -3,12 +3,12 @@ import {useEffect, useState} from "react";
 import {QuestionEndpoint, QuestionTypeEndpoint, TranslateEndpoint} from "Frontend/generated/endpoints";
 import Question from "Frontend/generated/be/riddler/v1/question/api/Question";
 import AnswersTable from "Frontend/components/answers/answers-table.component";
-import {Button, HorizontalLayout, Icon, Select, TextArea, VerticalLayout} from "@vaadin/react-components";
+import {HorizontalLayout, Select, TextArea, VerticalLayout} from "@vaadin/react-components";
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css';
 import QuestionType from "Frontend/generated/be/riddler/v1/question/api/QuestionType";
 import UpdateQuestion from "Frontend/generated/be/riddler/v1/question/api/UpdateQuestion";
-import {IconsConstant} from "Frontend/constant/constants";
+import {CheckButton, CloseButton} from "Frontend/components/ui/button";
 
 
 export default function QuestionDetailView() {
@@ -42,15 +42,15 @@ export default function QuestionDetailView() {
 
     return question && (<>
             <HorizontalLayout className={styles.question_menu_bar}>
-                <Button theme="primary" onClick={() => {
+                <CheckButton onClick={() => {
                     const updateQuestion: UpdateQuestion = {question: question?.question!!, type: question?.type!!};
                     QuestionEndpoint.update(question?.id!!, updateQuestion)
                         .then(() => navigate('/questions'));
-                }}><Icon icon={IconsConstant.CHECK}/></Button>
-                <Button theme="primary error" onClick={() => {
+                }}/>
+                <CloseButton onClick={() => {
                     QuestionEndpoint.delete(question.id)
                         .then(() => navigate('/questions'));
-                }}><Icon icon={IconsConstant.CLOSE}/></Button>
+                }}/>
             </HorizontalLayout>
             <HorizontalLayout className={styles.question_content}>
                 <VerticalLayout style={{width: '100%'}}>
