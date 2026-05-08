@@ -22,7 +22,6 @@ import java.util.UUID;
 class QuestionResource implements QuestionApi {
     private final QuestionOutPort questionOutPort;
 
-
     @Override
     public List<Question> getQuestions() {
         return questionOutPort.getQuestions()
@@ -44,6 +43,11 @@ class QuestionResource implements QuestionApi {
     public Question create(CreateQuestion createQuestion) {
         var question = new be.riddler.v1.question.domain.Question(createQuestion.question(), createQuestion.type());
         return map(questionOutPort.create(question));
+    }
+
+    @Override
+    public void delete(UUID id) {
+        questionOutPort.delete(id);
     }
 
     @Override

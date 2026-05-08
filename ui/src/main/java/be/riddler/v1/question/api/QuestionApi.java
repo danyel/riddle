@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -134,4 +135,33 @@ public interface QuestionApi {
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     Question update(@PathVariable(name = "id") UUID id, @RequestBody UpdateQuestion updateQuestion);
+
+
+    @SuppressWarnings("SpringMvcPathVariableDeclarationInspection")
+    @Operation(
+            method = "DELETE",
+            tags = "questions",
+            summary = "Deletes the question for a given id",
+            operationId = "delete",
+            parameters = {
+                    @Parameter(in = ParameterIn.PATH, name = "id", schema = @Schema(implementation = UUID.class))
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = Question.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            content = @Content(schema = @Schema(implementation = ProblemDetail.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            content = @Content(schema = @Schema(implementation = ProblemDetail.class))
+                    )
+            }
+    )
+    @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    void delete(@PathVariable(name = "id") UUID id);
 }

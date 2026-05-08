@@ -1,14 +1,14 @@
 import {useEffect, useState} from 'react';
-import {Button, Grid, GridColumn, Icon} from "@vaadin/react-components";
+import {Grid, GridColumn} from "@vaadin/react-components";
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css';
 
 // CRITICAL: You must import the iconset for the icons to render
 import '@vaadin/icons';
 import {useNavigate} from "react-router";
-import {IconsConstant} from "Frontend/constant/constants";
 import Question from "Frontend/generated/be/riddler/v1/question/api/Question";
 import {QuestionEndpoint} from "Frontend/generated/endpoints";
+import {ViewDetailButton} from "Frontend/components/ui/button";
 
 export default function QuestionsView() {
     const [questions, setQuestions] = useState<Question[]>([]);
@@ -17,13 +17,9 @@ export default function QuestionsView() {
         QuestionEndpoint.getQuestions().then(setQuestions);
     }, []);
 
-    const handleClick = (question: Question) => {
-        console.log(`Click handle executed for question ${question.id}`);
-        navigate(`/question/${question.id}`);
-    }
-
     const answerRenderer = ({item}: { item: Question }) => {
-        return <Button theme="primary" onClick={() => handleClick(item)}><Icon icon={IconsConstant.EYE}/> </Button>;
+        return <ViewDetailButton onClick={() => navigate(`/question/${item.id}`)}/>;
+
     };
 
     return (

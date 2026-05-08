@@ -15,7 +15,7 @@ export default function SideBar() {
         <SideNav id="sideNav">
             {menus.map(menu => {
                 return (
-                    <SideNavItem path={menu.path}>
+                    <SideNavItem key={menu.path} path={menu.path}>
                         <Icon icon={menu.icon} slot="prefix"/>
                         {menu.label}
                     </SideNavItem>

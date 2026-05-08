@@ -11,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
@@ -48,4 +50,27 @@ public interface AnswerApi {
     @GetMapping(path = "/question/{questionId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     List<Answer> findByQuestionId(@PathVariable(name = "questionId") UUID questionId);
+
+    @Operation(
+            method = "POST",
+            tags = "answers",
+            summary = "Creates an answer",
+            operationId = "create",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = {@Content(schema = @Schema(implementation = CreateAnswer.class), mediaType = MediaType.APPLICATION_JSON_VALUE)}
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(array = @ArraySchema(schema = @Schema(implementation = Answer.class)))
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            content = @Content(schema = @Schema(implementation = ProblemDetail.class))
+                    )
+            }
+    )
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    Answer create(@RequestBody CreateAnswer createAnswer);
 }

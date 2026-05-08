@@ -13,4 +13,6 @@ import java.util.UUID;
  */
 public interface AnswerOutPort {
     List<Answer> findByQuestion(UUID questionId);
+
+    Answer create(Answer answer);
 }

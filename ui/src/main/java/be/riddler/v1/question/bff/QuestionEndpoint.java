@@ -36,4 +36,8 @@ public class QuestionEndpoint {
     public @NonNull Question update(UUID id, UpdateQuestion updateQuestion) {
         return questionApi.update(id, updateQuestion);
     }
+
+    public void delete(@NonNull UUID uuid) {
+        questionApi.delete(uuid);
+    }
 }

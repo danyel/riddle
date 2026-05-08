@@ -29,7 +29,12 @@ class AnswerResource implements AnswerApi {
                 .toList();
     }
 
+    @Override
+    public Answer create(CreateAnswer createAnswer) {
+        return toBff(answerOutPort.create(new be.riddler.v1.answer.domain.Answer(createAnswer.value(), createAnswer.questionId())));
+    }
+
     private static Answer toBff(be.riddler.v1.answer.domain.Answer answer) {
-        return new Answer(answer.getId(), answer.getValue(), answer.getQuestionId());
+        return new Answer(answer.id(), answer.value(), answer.questionId());
     }
 }

@@ -1,13 +1,14 @@
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import {useEffect, useState} from "react";
 import {QuestionEndpoint, QuestionTypeEndpoint, TranslateEndpoint} from "Frontend/generated/endpoints";
 import Question from "Frontend/generated/be/riddler/v1/question/api/Question";
 import AnswersTable from "Frontend/components/answers/answers-table.component";
-import {Button, HorizontalLayout, Select} from "@vaadin/react-components";
+import {Button, HorizontalLayout, Icon, Select, TextArea, VerticalLayout} from "@vaadin/react-components";
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css';
 import QuestionType from "Frontend/generated/be/riddler/v1/question/api/QuestionType";
 import UpdateQuestion from "Frontend/generated/be/riddler/v1/question/api/UpdateQuestion";
+import {IconsConstant} from "Frontend/constant/constants";
 
 
 export default function QuestionDetailView() {
@@ -15,6 +16,7 @@ export default function QuestionDetailView() {
     const [translatedType, setTranslatedType] = useState<string>('');
     const [items, setItems] = useState<{ label: string, value: string }[]>([]);
     const {id} = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         console.log(`Trying to fetch ${id}`);
@@ -27,15 +29,6 @@ export default function QuestionDetailView() {
             });
     }, [id]);
 
-    const translate = (language: string, key: string): string => {
-        let translation = '';
-        TranslateEndpoint.translate(language, key)
-            .then(e => {
-                translation = e.value;
-                console.log(translation);
-            });
-        return translation;
-    }
     useEffect(() => {
         if (question?.type) {
             TranslateEndpoint.translate('en', `label.${question.type}`)
@@ -47,26 +40,26 @@ export default function QuestionDetailView() {
         }
     }, [question?.type]);
 
-    function updateQuestion() {
-        const updateQuestion: UpdateQuestion = {question: question?.question!!, type: question?.type!!};
-        QuestionEndpoint.update(question?.id!!, updateQuestion)
-            .then(setQuestion);
-    }
-
     return question && (<>
             <HorizontalLayout className={styles.question_menu_bar}>
-                <Button theme="primary">Save</Button>
-                <Button theme="primary" onClick={() => updateQuestion()}>Update</Button>
-                <Button theme="primary">Save</Button>
-                <Button theme="primary">Save</Button>
+                <Button theme="primary" onClick={() => {
+                    const updateQuestion: UpdateQuestion = {question: question?.question!!, type: question?.type!!};
+                    QuestionEndpoint.update(question?.id!!, updateQuestion)
+                        .then(() => navigate('/questions'));
+                }}><Icon icon={IconsConstant.CHECK}/></Button>
+                <Button theme="primary error" onClick={() => {
+                    QuestionEndpoint.delete(question.id)
+                        .then(() => navigate('/questions'));
+                }}><Icon icon={IconsConstant.CLOSE}/></Button>
             </HorizontalLayout>
-            <HorizontalLayout style={{width: "100%"}}>
-                <div>
-                    {question.question}
-                </div>
-                <div>
-                    question type {translatedType || 'Loading...'} {question.type}
-
+            <HorizontalLayout className={styles.question_content}>
+                <VerticalLayout style={{width: '100%'}}>
+                    <TextArea value={question.question}
+                              className={styles.question_text_area}
+                              onChange={(e) => {
+                                  setQuestion(prev => prev ? {...prev, question: e.target.value} : undefined);
+                              }}
+                    />
                     <Select
                         label="Question Type"
                         items={items}
@@ -78,9 +71,10 @@ export default function QuestionDetailView() {
                             setQuestion(prev => prev ? {...prev, type: newType} : undefined);
                         }}
                     />
-                </div>
+                    <AnswersTable questionId={question.id}/>
+                </VerticalLayout>
             </HorizontalLayout>
-            <AnswersTable questionId={question.id}/>
+
         </>
     );
 }

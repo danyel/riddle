@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {AnswerService} from "Frontend/generated/endpoints";
+import {AnswerEndpoint} from "Frontend/generated/endpoints";
 import Answer from "Frontend/generated/be/riddler/v1/answer/api/Answer";
 
 export interface AnswerProperties {
@@ -10,7 +10,7 @@ export function Answers(answerProperties: AnswerProperties) {
     const [answers, setAnswers] = useState<Answer[]>([]);
 
     useEffect(() => {
-        AnswerService.findByQuestion(answerProperties.id).then(setAnswers);
+        AnswerEndpoint.findByQuestion(answerProperties.id).then(setAnswers);
     }, []);
 
     return (

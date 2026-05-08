@@ -13,6 +13,7 @@ import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 
 import java.util.List;
 
@@ -27,10 +28,10 @@ import java.util.List;
 @SecuritySchemes(
         value = {
                 @SecurityScheme(
-                        name = "X-Authorization",
+                        name = HttpHeaders.AUTHORIZATION,
                         type = SecuritySchemeType.APIKEY,
                         in = SecuritySchemeIn.HEADER,
-                        paramName = "X-Authorization"
+                        paramName = HttpHeaders.AUTHORIZATION
                 )
         }
 )
@@ -50,7 +51,7 @@ class OpenApiConfiguration {
         var server = new Server().url(swaggerUrl);
 
         // Name must match the @SecurityScheme's name exactly
-        var securityRequirement = new SecurityRequirement().addList("X-Authorization");
+        var securityRequirement = new SecurityRequirement().addList(HttpHeaders.AUTHORIZATION);
 
         return new OpenAPI()
                 .servers(List.of(server))

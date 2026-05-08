@@ -4,6 +4,7 @@ import be.riddler.v1.question.adapter.entity.QuestionEntity;
 import be.riddler.v1.question.adapter.repository.QuestionRepository;
 import be.riddler.v1.question.domain.Question;
 import be.riddler.v1.question.port.QuestionOutPort;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
@@ -59,5 +60,13 @@ class QuestionOutAdapter implements QuestionOutPort {
             questionRepository.save(e);
         });
         return question;
+    }
+
+    @Override
+    public void delete(UUID id) {
+        if (!questionRepository.existsById(id)) {
+            throw new EntityNotFoundException(id.toString());
+        }
+        questionRepository.deleteById(id);
     }
 }

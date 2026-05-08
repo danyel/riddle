@@ -19,4 +19,6 @@ public interface QuestionOutPort {
     Question create(Question question);
 
     Question update(Question question);
+
+    void delete(UUID id);
 }

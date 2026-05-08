@@ -1,9 +1,13 @@
 import {useEffect, useState} from "react";
-import {Grid, GridColumn} from "@vaadin/react-components";
+import {Button, Dialog, Grid, GridColumn, HorizontalLayout, Icon, TextArea} from "@vaadin/react-components";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
-import {AnswerService} from "Frontend/generated/endpoints";
+import {AnswerEndpoint} from "Frontend/generated/endpoints";
 import Answer from "Frontend/generated/be/riddler/v1/answer/api/Answer";
+import {useSignal} from "@vaadin/hilla-react-signals";
+import {IconsConstant} from "Frontend/constant/constants";
+import CreateAnswer from "Frontend/generated/be/riddler/v1/answer/api/CreateAnswer";
+import {CancelButton, CheckButton, CloseButton} from "Frontend/components/ui/button";
 
 export interface AnswersTableProperties {
     questionId: string;
@@ -11,15 +15,121 @@ export interface AnswersTableProperties {
 
 export default function AnswersTable(props: AnswersTableProperties) {
     const [answers, setAnswers] = useState<Answer[]>([]);
-    useEffect(() => {
-        AnswerService.findByQuestion(props.questionId)
+    const [open, setOpen] = useState(false);
+
+    const fetchAnswers = () => {
+        AnswerEndpoint.findByQuestion(props.questionId)
             .then(setAnswers);
+    };
+
+    useEffect(() => {
+        fetchAnswers();
     }, [props.questionId]);
 
     return (
-        <Grid key={"id"} items={answers} className={styles.question_table} allRowsVisible={true}>
-            <GridColumn key={"id"} path={"id"}/>
-            <GridColumn key={"value"} path={"value"}/>
-        </Grid>
+        <>
+            <HorizontalLayout className={styles.answers_menu_bar}>
+                <Button theme="primary" onClick={() => setOpen(true)}>
+                    <Icon icon={IconsConstant.PLUS}/>
+                </Button>
+            </HorizontalLayout>
+            {/* 1. We pass down a close handler to reset parent state */}
+            <CreateDialogModal
+                show={open}
+                questionId={props.questionId}
+                onAnswerCreated={fetchAnswers}
+                onClose={() => setOpen(false)}
+            />
+            <Grid items={answers} className={styles.question_table} allRowsVisible={true}>
+                <GridColumn path="value" header="Answer Value"/>
+            </Grid>
+        </>
     );
+}
+
+interface CreateDialogModalProps {
+    show: boolean;
+    questionId: string;
+    onAnswerCreated: () => void;
+    onClose: () => void;
+}
+
+function CreateDialogModal(props: CreateDialogModalProps) {
+    const answerValue = useSignal('');
+
+    // 2. Clear input value when the modal opens
+    useEffect(() => {
+        if (props.show) {
+            answerValue.value = '';
+        }
+    }, [props.show]);
+
+    function saveAnswer() {
+        const payload: CreateAnswer = {question_id: props.questionId, value: answerValue.value};
+        AnswerEndpoint.create(payload)
+            .then(() => {
+                props.onAnswerCreated();
+                props.onClose();
+            });
+    }
+
+    function closeIfNotValue(e: CustomEvent<{ value: boolean }>) {
+        // Syncs background clicks / ESC keys directly back to parent
+        if (!e.detail.value) props.onClose();
+    }
+
+    return (
+        <Dialog
+            width={"100vh"}
+            height={"100vh"}
+            header-title="Create answer"
+            opened={props.show}
+            onOpenedChanged={closeIfNotValue}
+            header={
+                <CancelButton onClick={() => props.onClose()}/>
+            }
+            footerRenderer={() => (
+                <>
+                    <CloseButton onClick={props.onClose}/>
+                    <CheckButton onClick={saveAnswer}/>
+                </>
+            )
+            }
+        >
+            <
+                div
+                style={
+                    {
+                        display: 'flex',
+                        flexDirection:
+                            'column',
+                        height:
+                            '100%',
+                        width:
+                            '100%',
+                        boxSizing:
+                            'border-box'
+                    }
+                }>
+                <
+                    TextArea
+                    label="Name"
+                    value={answerValue.value}
+                    onValueChanged={(e) => (answerValue.value = e.detail.value)
+                    }
+                    // 3. Tells TextArea to grow and fill the flex container
+                    style={
+                        {
+                            flex: '1 1 auto',
+                            width:
+                                '100%',
+                            height:
+                                '100%'
+                        }
+                    }
+                />
+            </div>
+        </Dialog>
+    )
+        ;
 }

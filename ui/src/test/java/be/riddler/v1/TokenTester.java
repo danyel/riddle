@@ -30,7 +30,7 @@ class TokenTester {
         String jwt = Jwts.builder()
                 .subject("app_user")
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 3600000)) // 1 hour
+                .expiration(new Date(System.currentTimeMillis() + 99_999_999)) // 1 hour
                 .signWith(key) // Automatically applies HS256
                 .compact();
 
