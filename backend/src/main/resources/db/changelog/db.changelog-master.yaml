@@ -1,5 +1,0 @@
-databaseChangeLog:
-  - includeAll:
-      path: "../migration/"
-      relativeToChangelogFile: true
-  # Scripts in this folder will run in alphanumeric order

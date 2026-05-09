@@ -1,6 +1,7 @@
 package be.riddler.v1.participant.bff;
 
 import be.riddler.v1.participant.api.ParticipantApi;
+import be.riddler.v1.participant.domain.CreateParticipant;
 import be.riddler.v1.participant.domain.ParticipantDetail;
 import com.vaadin.hilla.BrowserCallable;
 import jakarta.annotation.security.RolesAllowed;
@@ -23,11 +24,19 @@ import java.util.UUID;
 public class ParticipantAdminEndpoint {
     private final ParticipantApi participantApi;
 
-    public @NonNull List<@NonNull ParticipantDetail> getParticipantDetails() {
+    public @NonNull List<@NonNull ParticipantDetail> findAll() {
         return participantApi.findAll();
+    }
+
+    public @NonNull ParticipantDetail findById(@NonNull UUID id) {
+        return participantApi.findById(id);
     }
 
     public void generateToken(UUID participantId) {
         participantApi.generateToken(participantId);
+    }
+
+    public @NonNull ParticipantDetail create(CreateParticipant createParticipant) {
+        return participantApi.create(createParticipant);
     }
 }
