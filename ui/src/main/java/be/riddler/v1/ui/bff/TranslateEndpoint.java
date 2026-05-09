@@ -1,7 +1,7 @@
 package be.riddler.v1.ui.bff;
 
-import be.riddler.v1.ui.api.Translation;
 import be.riddler.v1.ui.api.UiApi;
+import be.riddler.v1.ui.domain.Translation;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
 import lombok.AccessLevel;

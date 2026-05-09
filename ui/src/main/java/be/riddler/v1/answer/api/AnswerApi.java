@@ -1,5 +1,7 @@
 package be.riddler.v1.answer.api;
 
+import be.riddler.v1.answer.domain.Answer;
+import be.riddler.v1.answer.domain.CreateAnswer;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;

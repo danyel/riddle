@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import Question from "Frontend/generated/be/riddler/v1/question/api/Question";
+import Question from "Frontend/generated/be/riddler/v1/question/domain/Question";
 import {useNavigate} from "react-router";
 import {ParticipantEndpoint} from "Frontend/generated/endpoints";
 import {ViewDetailButton} from "Frontend/components/ui/button";

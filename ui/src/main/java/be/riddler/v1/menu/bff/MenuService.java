@@ -1,7 +1,7 @@
 package be.riddler.v1.menu.bff;
 
-import be.riddler.v1.menu.api.Menu;
 import be.riddler.v1.menu.api.MenuApi;
+import be.riddler.v1.menu.domain.Menu;
 import com.vaadin.hilla.BrowserCallable;
 import jakarta.annotation.security.PermitAll;
 import lombok.AccessLevel;

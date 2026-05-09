@@ -1,5 +1,7 @@
 package be.riddler.v1.activity.api;
 
+import be.riddler.v1.activity.domain.ActivityDetail;
+import be.riddler.v1.activity.domain.CreateActivity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;

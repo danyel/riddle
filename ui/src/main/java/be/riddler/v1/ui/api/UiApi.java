@@ -1,5 +1,6 @@
 package be.riddler.v1.ui.api;
 
+import be.riddler.v1.ui.domain.Translation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;

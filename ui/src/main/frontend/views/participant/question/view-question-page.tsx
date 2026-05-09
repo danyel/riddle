@@ -1,5 +1,5 @@
 import {useNavigate, useParams} from "react-router";
-import Question from "Frontend/generated/be/riddler/v1/question/api/Question";
+import Question from "Frontend/generated/be/riddler/v1/question/domain/Question";
 import {useEffect, useState} from "react";
 import {ParticipantEndpoint} from "Frontend/generated/endpoints";
 import {useActivityTracker} from "Frontend/views/participant/useActivityTracker";

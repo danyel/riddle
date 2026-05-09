@@ -1,5 +1,6 @@
 package be.riddler.v1.menu.api;
 
+import be.riddler.v1.menu.domain.Menu;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;

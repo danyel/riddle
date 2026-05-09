@@ -1,9 +1,16 @@
 package be.riddler.v1.question.api;
 
-import be.riddler.v1.question.port.QuestionOutPort;
+import be.riddler.v1.question.domain.CreateQuestion;
+import be.riddler.v1.question.domain.Question;
+import be.riddler.v1.question.domain.UpdateQuestion;
+import be.riddler.v1.question.domain.UpdateWithId;
+import be.riddler.v1.question.domain.feature.CreateQuestionFeature;
+import be.riddler.v1.question.domain.feature.DeleteQuestionByIdFeature;
+import be.riddler.v1.question.domain.feature.GetQuestionByIdFeature;
+import be.riddler.v1.question.domain.feature.GetQuestionsFeature;
+import be.riddler.v1.question.domain.feature.UpdateQuestionFeature;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,38 +27,34 @@ import java.util.UUID;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @RequestMapping(path = "/v1/questions")
 class QuestionResource implements QuestionApi {
-    private final QuestionOutPort questionOutPort;
+    private final CreateQuestionFeature createQuestionFeature;
+    private final GetQuestionsFeature questionsFeature;
+    private final DeleteQuestionByIdFeature deleteQuestionByIdFeature;
+    private final GetQuestionByIdFeature getQuestionByIdFeature;
+    private final UpdateQuestionFeature updateQuestionFeature;
 
     @Override
     public List<Question> getQuestions() {
-        return questionOutPort.getQuestions()
-                .stream()
-                .map(QuestionResource::map)
-                .toList();
-    }
-
-    private static @NonNull Question map(be.riddler.v1.question.domain.Question question) {
-        return new Question(question.getId(), question.getQuestion(), question.getType());
+        return questionsFeature.executeWithoutParameters();
     }
 
     @Override
     public Question findById(UUID uuid) {
-        return map(questionOutPort.findById(uuid));
+        return getQuestionByIdFeature.executeWithReturn(uuid);
     }
 
     @Override
     public Question create(CreateQuestion createQuestion) {
-        var question = new be.riddler.v1.question.domain.Question(createQuestion.question(), createQuestion.type());
-        return map(questionOutPort.create(question));
+        return createQuestionFeature.executeWithReturn(createQuestion);
     }
 
     @Override
     public void delete(UUID id) {
-        questionOutPort.delete(id);
+        deleteQuestionByIdFeature.execute(id);
     }
 
     @Override
     public Question update(UUID id, UpdateQuestion updateQuestion) {
-        return map(questionOutPort.update(new be.riddler.v1.question.domain.Question(id, updateQuestion.question(), updateQuestion.type())));
+        return updateQuestionFeature.executeWithReturn(new UpdateWithId(id, updateQuestion));
     }
 }

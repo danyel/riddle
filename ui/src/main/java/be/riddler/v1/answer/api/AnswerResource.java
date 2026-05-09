@@ -1,6 +1,10 @@
 package be.riddler.v1.answer.api;
 
-import be.riddler.v1.answer.port.AnswerOutPort;
+import be.riddler.v1.answer.domain.Answer;
+import be.riddler.v1.answer.domain.CreateAnswer;
+import be.riddler.v1.answer.domain.QuestionId;
+import be.riddler.v1.answer.domain.feature.CreateAnswerFeature;
+import be.riddler.v1.answer.domain.feature.GetAnswersByQuestionIdFeature;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,22 +23,17 @@ import java.util.UUID;
 @RequestMapping(path = "/v1/answers")
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 class AnswerResource implements AnswerApi {
-    private final AnswerOutPort answerOutPort;
+    private final CreateAnswerFeature createAnswerFeature;
+    private final GetAnswersByQuestionIdFeature getAnswersByQuestionIdFeature;
+
 
     @Override
     public List<Answer> findByQuestionId(UUID questionId) {
-        return answerOutPort.findByQuestion(questionId)
-                .stream()
-                .map(AnswerResource::toBff)
-                .toList();
+        return getAnswersByQuestionIdFeature.executeWithReturn(new QuestionId(questionId));
     }
 
     @Override
     public Answer create(CreateAnswer createAnswer) {
-        return toBff(answerOutPort.create(new be.riddler.v1.answer.domain.Answer(createAnswer.value(), createAnswer.questionId())));
-    }
-
-    private static Answer toBff(be.riddler.v1.answer.domain.Answer answer) {
-        return new Answer(answer.id(), answer.value(), answer.questionId());
+        return createAnswerFeature.executeWithReturn(createAnswer);
     }
 }

@@ -9,8 +9,8 @@ import IconsView from "Frontend/views/secured/icons/@index";
 import {createBrowserRouter, isRouteErrorResponse, useRouteError} from "react-router-dom";
 import QuestionDetailView from "Frontend/views/secured/question/{id}";
 import ParticipantLayout from "Frontend/views/participant/@layout";
-import ViewQuestionPage from "Frontend/views/participant/question/view-question-page";
-import ParticipantPage from "Frontend/views/participant/@index";
+import ParticipantQuestionsView from "Frontend/views/participant/question/view-question-page";
+import ParticipantView from "Frontend/views/participant/@index";
 
 function RootErrorBoundary() {
     const error = useRouteError();
@@ -45,6 +45,11 @@ export const routes = protectRoutes([
                 handle: {rolesAllowed: ['ROLE_ADMIN', 'ROLE_USER']}
             },
             {
+                path: '/participants',
+                element: <ParticipantView/>,
+                handle: {rolesAllowed: ['ROLE_ADMIN', 'ROLE_USER']} // Client-side check
+            },
+            {
                 path: '/questions',
                 element: <QuestionsView/>,
                 handle: {rolesAllowed: ['ROLE_ADMIN', 'ROLE_USER']} // Client-side check
@@ -67,11 +72,11 @@ export const routes = protectRoutes([
         children: [
             {
                 path: '/participant',
-                element: <ParticipantPage/>
+                element: <ParticipantView/>
             },
             {
                 path: '/participant/question/:id',
-                element: <ViewQuestionPage/>
+                element: <ParticipantQuestionsView/>
             }
         ]
     },

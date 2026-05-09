@@ -1,5 +1,8 @@
 package be.riddler.v1.question.api;
 
+import be.riddler.v1.question.domain.CreateQuestion;
+import be.riddler.v1.question.domain.Question;
+import be.riddler.v1.question.domain.UpdateQuestion;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;

@@ -1,6 +1,7 @@
 package be.riddler.v1.answer.adapter.repository;
 
 import be.riddler.common.repository.AbstractRepositoryTest;
+import be.riddler.v1.answer.repository.AnswerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

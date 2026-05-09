@@ -1,12 +1,13 @@
 package be.riddler.v1.question.domain;
 
-import be.riddler.v1.question.api.QuestionType;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jspecify.annotations.NonNull;
 
 import java.util.UUID;
+
+import static be.riddler.v1.question.domain.QuestionType.MULTIPLE_CHOICE;
+import static be.riddler.v1.question.domain.QuestionType.OPEN;
+import static be.riddler.v1.question.domain.QuestionType.SINGLE_CHOICE;
 
 /**
  * Question
@@ -14,28 +15,21 @@ import java.util.UUID;
  * @author dnoulet
  * @version 1.0.0 11/04/2026
  */
-@NoArgsConstructor
-@ToString
-@EqualsAndHashCode
-@Getter
-public class Question {
-    private UUID id;
-    private String question;
-    private QuestionType type;
-    private boolean multipleChoice;
-    private boolean singleChoice;
-    private boolean open;
-
-    public Question(String question, QuestionType type) {
-        this(null, question, type);
+public record Question(
+        UUID id,
+        @NonNull String question,
+        @NonNull QuestionType type,
+        @JsonProperty(value = "multiple_choice")
+        boolean multipleChoice,
+        @JsonProperty(value = "single_choice")
+        boolean singleChoice,
+        boolean open
+) {
+    public Question(@NonNull UUID id, @NonNull String question, @NonNull QuestionType type) {
+        this(id, question, type, MULTIPLE_CHOICE.equals(type), SINGLE_CHOICE.equals(type), OPEN.equals(type));
     }
 
-    public Question(UUID id, String question, QuestionType type) {
-        this.id = id;
-        this.question = question;
-        this.type = type;
-        multipleChoice = QuestionType.MULTIPLE_CHOICE.equals(type);
-        singleChoice = QuestionType.SINGLE_CHOICE.equals(type);
-        open = QuestionType.OPEN.equals(type);
+    public Question(@NonNull String question, @NonNull QuestionType type) {
+        this(null, question, type, MULTIPLE_CHOICE.equals(type), SINGLE_CHOICE.equals(type), OPEN.equals(type));
     }
 }

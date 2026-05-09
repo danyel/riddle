@@ -1,6 +1,7 @@
 package be.riddler.v1.menu.api;
 
-import be.riddler.v1.menu.port.MenuOutPort;
+import be.riddler.v1.menu.domain.Menu;
+import be.riddler.v1.menu.domain.feature.FindAllByUsernameFeature;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,13 +19,10 @@ import java.util.List;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @RequestMapping(path = "/v1/menus")
 class MenuResource implements MenuApi {
-    private final MenuOutPort menuOutPort;
+    private final FindAllByUsernameFeature findAllByUsernameFeature;
 
     @Override
     public List<Menu> menu(String username) {
-        return menuOutPort.findAll(username)
-                .stream()
-                .map(menu -> new Menu("%s".formatted(menu.getPath()), menu.getLabel(), menu.getIcon(), menu.getOrder()))
-                .toList();
+        return findAllByUsernameFeature.executeWithReturn(username);
     }
 }

@@ -3,9 +3,9 @@ import {Dialog, Grid, GridColumn, HorizontalLayout, TextArea} from "@vaadin/reac
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
 import {AnswerEndpoint} from "Frontend/generated/endpoints";
-import Answer from "Frontend/generated/be/riddler/v1/answer/api/Answer";
+import Answer from "Frontend/generated/be/riddler/v1/answer/domain/Answer";
 import {useSignal} from "@vaadin/hilla-react-signals";
-import CreateAnswer from "Frontend/generated/be/riddler/v1/answer/api/CreateAnswer";
+import CreateAnswer from "Frontend/generated/be/riddler/v1/answer/domain/CreateAnswer";
 import {CancelButton, CheckButton, CloseButton, PlusButton} from "Frontend/components/ui/button";
 
 export interface AnswersTableProperties {

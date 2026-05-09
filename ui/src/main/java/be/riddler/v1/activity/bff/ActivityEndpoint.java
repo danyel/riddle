@@ -1,7 +1,7 @@
 package be.riddler.v1.activity.bff;
 
 import be.riddler.v1.activity.api.ActivityApi;
-import be.riddler.v1.activity.api.CreateActivity;
+import be.riddler.v1.activity.domain.CreateActivity;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
 import lombok.AccessLevel;
@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @BrowserCallable
 @AnonymousAllowed
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class ActivityEndpoint {
     private final ActivityApi activityApi;
 

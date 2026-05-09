@@ -1,8 +1,8 @@
 package be.riddler.v1.answer.bff;
 
-import be.riddler.v1.answer.api.Answer;
 import be.riddler.v1.answer.api.AnswerApi;
-import be.riddler.v1.answer.api.CreateAnswer;
+import be.riddler.v1.answer.domain.Answer;
+import be.riddler.v1.answer.domain.CreateAnswer;
 import com.vaadin.hilla.BrowserCallable;
 import jakarta.annotation.security.PermitAll;
 import lombok.AccessLevel;

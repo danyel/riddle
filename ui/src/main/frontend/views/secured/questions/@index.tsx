@@ -6,7 +6,7 @@ import styles from 'Frontend/themes/riddler/common.module.css';
 // CRITICAL: You must import the iconset for the icons to render
 import '@vaadin/icons';
 import {useNavigate} from "react-router";
-import Question from "Frontend/generated/be/riddler/v1/question/api/Question";
+import Question from "Frontend/generated/be/riddler/v1/question/domain/Question";
 import {QuestionEndpoint} from "Frontend/generated/endpoints";
 import {ViewDetailButton} from "Frontend/components/ui/button";
 

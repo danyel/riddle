@@ -1,13 +1,13 @@
 import {useNavigate, useParams} from "react-router";
 import {useEffect, useState} from "react";
 import {QuestionEndpoint, QuestionTypeEndpoint} from "Frontend/generated/endpoints";
-import Question from "Frontend/generated/be/riddler/v1/question/api/Question";
+import Question from "Frontend/generated/be/riddler/v1/question/domain/Question";
 import AnswersTable from "Frontend/components/answers/answers-table.component";
 import {HorizontalLayout, Select, TextArea, VerticalLayout} from "@vaadin/react-components";
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css';
-import QuestionType from "Frontend/generated/be/riddler/v1/question/api/QuestionType";
-import UpdateQuestion from "Frontend/generated/be/riddler/v1/question/api/UpdateQuestion";
+import QuestionType from "Frontend/generated/be/riddler/v1/question/domain/QuestionType";
+import UpdateQuestion from "Frontend/generated/be/riddler/v1/question/domain/UpdateQuestion";
 import {CheckButton, CloseButton} from "Frontend/components/ui/button";
 
 
@@ -36,7 +36,7 @@ export default function QuestionDetailView() {
                         .then(() => navigate('/questions'));
                 }}/>
                 <CloseButton onClick={() => {
-                    QuestionEndpoint.delete(question.id)
+                    QuestionEndpoint.delete(question.id!!)
                         .then(() => navigate('/questions'));
                 }}/>
             </HorizontalLayout>
@@ -59,7 +59,7 @@ export default function QuestionDetailView() {
                             setQuestion(prev => prev ? {...prev, type: newType} : undefined);
                         }}
                     />
-                    <AnswersTable questionId={question.id}/>
+                    <AnswersTable questionId={question.id!!}/>
                 </VerticalLayout>
             </HorizontalLayout>
 

@@ -1,19 +1,19 @@
 package be.riddler.v1.ui.api;
 
-import be.riddler.v1.question.api.QuestionType;
+import be.riddler.v1.question.domain.QuestionType;
 import be.riddler.v1.ui.domain.SupportedLanguages;
-import be.riddler.v1.ui.port.IconNamesOutPort;
-import be.riddler.v1.ui.port.TranslateOutPort;
-import be.riddler.v1.ui.port.TranslationOutPort;
+import be.riddler.v1.ui.domain.Translation;
+import be.riddler.v1.ui.domain.TranslationProperty;
+import be.riddler.v1.ui.domain.feature.GetIconsFeature;
+import be.riddler.v1.ui.domain.feature.GetTranslationFeature;
+import be.riddler.v1.ui.domain.feature.GetTranslationsByLanguageFeature;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -27,13 +27,13 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @Slf4j
 public class UiResource implements UiApi {
-    private final TranslationOutPort translationOutPort;
-    private final IconNamesOutPort iconNamesOutPort;
-    private final TranslateOutPort translateOutPort;
+    private final GetIconsFeature getIconsFeature;
+    private final GetTranslationsByLanguageFeature getTranslationsByLanguageFeature;
+    private final GetTranslationFeature getTranslationFeature;
 
     @Override
     public List<String> icons() {
-        return iconNamesOutPort.iconNames();
+        return getIconsFeature.executeWithoutParameters();
     }
 
     @Override
@@ -48,18 +48,11 @@ public class UiResource implements UiApi {
 
     @Override
     public List<Translation> translations(String language) {
-        return translationOutPort.getTranslations(language)
-                .stream()
-                .map(translateMapperFunction())
-                .toList();
+        return getTranslationsByLanguageFeature.executeWithReturn(language);
     }
 
     @Override
     public Translation translate(String language, String key) {
-        return translateMapperFunction().apply(translateOutPort.translate(language, key));
-    }
-
-    private static @NonNull Function<be.riddler.v1.ui.domain.Translation, Translation> translateMapperFunction() {
-        return e -> new Translation(e.key(), e.value());
+        return getTranslationFeature.executeWithReturn(new TranslationProperty(language, key));
     }
 }

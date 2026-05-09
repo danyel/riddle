@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {AnswerEndpoint} from "Frontend/generated/endpoints";
-import Answer from "Frontend/generated/be/riddler/v1/answer/api/Answer";
+import Answer from "Frontend/generated/be/riddler/v1/answer/domain/Answer";
 
 export interface AnswerProperties {
     id: string;
