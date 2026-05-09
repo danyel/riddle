@@ -8,6 +8,9 @@ import LoginLayout from "Frontend/views/login/@layout";
 import IconsView from "Frontend/views/secured/icons/@index";
 import {createBrowserRouter} from "react-router-dom";
 import QuestionDetailView from "Frontend/views/secured/question/{id}";
+import ParticipantLayout from "Frontend/views/participant/@layout";
+import ViewQuestionPage from "Frontend/views/participant/question/view-question-page";
+import ParticipantPage from "Frontend/views/participant/@index";
 
 export const routes = protectRoutes([
     {
@@ -34,6 +37,19 @@ export const routes = protectRoutes([
                 handle: {rolesAllowed: ['ROLE_ADMIN']} // Client-side check
             },
         ],
+    },
+    {
+        element: <ParticipantLayout/>,
+        children: [
+            {
+                path: '/participant',
+                element: <ParticipantPage/>
+            },
+            {
+                path: '/participant/question/:id',
+                element: <ViewQuestionPage/>
+            }
+        ]
     },
     {
         element: <LoginLayout/>,

@@ -19,9 +19,6 @@ public class TestcontainersConfiguration {
         return new PostgreSQLContainer(DockerImageName.parse("postgres:latest"))
                 .withDatabaseName("riddler") // Sets the database name used in the JDBC URL
                 .withUsername("app_user")
-//                .withCreateContainerCmdModifier(cmd -> cmd.withHostConfig(
-//                        new HostConfig().withPortBindings(new PortBinding(Ports.Binding.bindPort(55432), new ExposedPort(5432)))
-//                ))
                 .withPassword("app_user_password");
     }
 }

@@ -1,17 +1,14 @@
 spring:
-  datasource:
-    # Remove URL/User/Password; @ServiceConnection handles this
-    hikari:
-      maximum-pool-size: 10
   jpa:
     properties:
       hibernate:
-        # Match this to whatever schema Liquibase is creating
         default_schema: public
     hibernate:
       ddl-auto: none
   liquibase:
     enabled: true
     contexts: lcl
-    # Default schema must match Hibernate's default_schema
     default-schema: public
+  datasource:
+    hikari:
+      maximum-pool-size: 10

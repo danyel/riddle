@@ -4,7 +4,7 @@ import {Icon} from "@vaadin/react-components";
 import '@vaadin/icons';
 import {useEffect, useState} from "react";
 import {UiService} from "Frontend/generated/endpoints";
-import {IconsConstant} from "Frontend/constant/constants";
+import {AbacusIcon} from "Frontend/components/ui/icons";
 
 export default function IconsView() {
     const [icons, setIcons] = useState<string[]>([]);
@@ -15,7 +15,7 @@ export default function IconsView() {
     }, []);
     return (
         <div>
-            <Icon icon={IconsConstant.ABACUS}/>
+            <AbacusIcon/>
             {icons.map((iconName) => (
                 <div key={iconName}>
                     <Icon icon={iconName}/>

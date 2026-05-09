@@ -1,6 +1,6 @@
 package be.riddler.common.resource;
 
-import be.riddler.DemoBackendApplication;
+import be.riddler.configuration.TestcontainersConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
@@ -25,7 +25,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ActiveProfiles("test")
 @AutoConfigureWebTestClient
-@Import(DemoBackendApplication.class)
+@Import({TestcontainersConfiguration.class})
 public abstract class AbstractResourceTest {
     @Autowired
     protected WebTestClient webTestClient;
