@@ -3,14 +3,14 @@ import styles from 'Frontend/themes/riddler/common.module.css';
 import {DrawerToggle} from "@vaadin/react-components/DrawerToggle";
 
 export interface NavigationProperties {
-    participant: boolean
+    noMenu: boolean
 }
 
 export default function Navigation(props: NavigationProperties) {
     return (
         <div slot="navbar" className={styles.navbar_container}>
             {
-                !props.participant && (
+                !props.noMenu && (
                     <DrawerToggle/>
                 )
             }

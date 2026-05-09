@@ -6,15 +6,38 @@ import HomeView from "Frontend/views/secured/@index";
 import LoginView from "Frontend/views/login/@index";
 import LoginLayout from "Frontend/views/login/@layout";
 import IconsView from "Frontend/views/secured/icons/@index";
-import {createBrowserRouter} from "react-router-dom";
+import {createBrowserRouter, isRouteErrorResponse, useRouteError} from "react-router-dom";
 import QuestionDetailView from "Frontend/views/secured/question/{id}";
 import ParticipantLayout from "Frontend/views/participant/@layout";
 import ViewQuestionPage from "Frontend/views/participant/question/view-question-page";
 import ParticipantPage from "Frontend/views/participant/@index";
 
+function RootErrorBoundary() {
+    const error = useRouteError();
+    console.error(error);
+
+    if (isRouteErrorResponse(error) && error.status === 404) {
+        return (
+            <div style={{padding: '2rem', textAlign: 'center'}}>
+                <h2>Oops! Page Not Found (404)</h2>
+                <p>The page you are looking for does not exist or has moved.</p>
+                <a href="/">Go back to Home</a>
+            </div>
+        );
+    }
+
+    return (
+        <div style={{padding: '2rem', textAlign: 'center'}}>
+            <h2>An Unexpected Error Occurred {isRouteErrorResponse(error)}</h2>
+            <p>Something went wrong. Please reload the app.</p>
+        </div>
+    );
+}
+
 export const routes = protectRoutes([
     {
         element: <MainLayout/>,
+        errorElement: <RootErrorBoundary/>,
         children: [
             {
                 path: '/',
@@ -40,6 +63,7 @@ export const routes = protectRoutes([
     },
     {
         element: <ParticipantLayout/>,
+        errorElement: <RootErrorBoundary/>,
         children: [
             {
                 path: '/participant',
@@ -60,6 +84,10 @@ export const routes = protectRoutes([
             }
         ]
     },
+    {
+        path: '*',
+        element: <RootErrorBoundary/>
+    }
 ]);
 
 export const router = createBrowserRouter(routes);

@@ -10,7 +10,7 @@ import Footer from "Frontend/components/footer/footer.component";
 export default function ParticipantLayout() {
     return (
         <AppLayout>
-            <Navigation participant={true}/>
+            <Navigation noMenu={true}/>
             <main className={`${styles.content_container} drawer-is-closed`}>
                 <VerticalLayout className={styles.content}>
                     <Outlet/>

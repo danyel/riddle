@@ -16,7 +16,7 @@ export default function MainLayout() {
                    drawerOpened={isOpened}
                    onDrawerOpenedChanged={({detail}) => setIsOpened(detail.value)}
         >
-            <Navigation participant={false}/>
+            <Navigation noMenu={false}/>
             <section slot={'drawer'} className={styles.side_bar}>
                 <SideBar/>
             </section>
