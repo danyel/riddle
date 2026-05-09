@@ -1,6 +1,7 @@
 package be.riddler.v1.question.bff;
 
 import be.riddler.v1.question.api.QuestionApi;
+import be.riddler.v1.question.domain.CreateQuestion;
 import be.riddler.v1.question.domain.Question;
 import be.riddler.v1.question.domain.UpdateQuestion;
 import com.vaadin.hilla.BrowserCallable;
@@ -39,5 +40,9 @@ public class QuestionEndpoint {
 
     public void delete(@NonNull UUID uuid) {
         questionApi.delete(uuid);
+    }
+
+    public Question create(CreateQuestion createQuestion) {
+        return questionApi.create(createQuestion);
     }
 }

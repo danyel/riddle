@@ -43,3 +43,4 @@ ui/src/main/bundles
 infrastructure/data/
 
 ui/node_modules
+ui/vite.generated.ts

@@ -7,5 +7,5 @@ package be.riddler.v1.question.domain;
  * @version 1.0.0 11/04/2026
  */
 public enum QuestionType {
-    OPEN, SINGLE_CHOICE, MULTIPLE_CHOICE
+    OPEN, SINGLE_CHOICE, MULTIPLE_CHOICE, REVIEW
 }
