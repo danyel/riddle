@@ -30,12 +30,12 @@ public class ActivityResource implements ActivityApi {
 
     @Override
     public List<ActivityDetail> getActivities(UUID activityId) {
-        return getActivitiesFeature.executeWithReturn(new GetActivities(activityId, Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName()));
+        return getActivitiesFeature.getActivities(new GetActivities(activityId, Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName()));
     }
 
     @Override
     public ActivityDetail create(CreateActivity createActivity) {
-        return createActivityFeature.executeWithReturn(createActivity);
+        return createActivityFeature.create(createActivity);
     }
 }
 

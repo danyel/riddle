@@ -4,9 +4,9 @@ import be.riddler.v1.answer.domain.Answer;
 import be.riddler.v1.answer.domain.QuestionId;
 import be.riddler.v1.answer.mapper.AnswerMapper;
 import be.riddler.v1.answer.repository.AnswerRepository;
-import be.riddler.v1.common.domain.feature.DomainFeature;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +20,11 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class GetAnswersByQuestionIdFeature implements DomainFeature<QuestionId, List<Answer>> {
+public class GetAnswersByQuestionIdFeature {
     private final AnswerRepository answerRepository;
 
     @Transactional
-    @Override
-    public List<Answer> executeWithReturn(QuestionId questionId) {
+    public @NonNull List<@NonNull Answer> byQuestionId(@NonNull QuestionId questionId) {
         return answerRepository.findAllByQuestionId(questionId.id())
                 .stream()
                 .map(AnswerMapper::fromAnswerEntity)

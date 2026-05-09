@@ -1,15 +1,14 @@
 package be.riddler.v1.question.domain.feature;
 
-import be.riddler.v1.common.domain.feature.DomainFeature;
 import be.riddler.v1.question.domain.Question;
+import be.riddler.v1.question.domain.QuestionId;
 import be.riddler.v1.question.mapper.QuestionMapper;
 import be.riddler.v1.question.repository.QuestionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 /**
  * CreateQuestionFeature
@@ -19,11 +18,10 @@ import java.util.UUID;
  */
 @Component
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class GetQuestionByIdFeature implements DomainFeature<UUID, Question> {
+public class GetQuestionByIdFeature {
     private final QuestionRepository questionRepository;
 
-    @Override
-    public Question executeWithReturn(UUID uuid) {
-        return questionRepository.findById(uuid).map(QuestionMapper::fromQuestionEntity).orElseThrow(EntityNotFoundException::new);
+    public @NonNull Question byQuestionId(@NonNull QuestionId questionId) {
+        return questionRepository.findById(questionId.id()).map(QuestionMapper::fromQuestionEntity).orElseThrow(EntityNotFoundException::new);
     }
 }

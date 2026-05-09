@@ -1,7 +1,7 @@
 package be.riddler.v1.ui.domain.feature;
 
-import be.riddler.v1.common.domain.feature.DomainFeature;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.stream.Stream;
  * @version 1.0.0 09/05/2026
  */
 @Component
-public class GetIconsFeature implements DomainFeature<Void, List<String>> {
+public class GetIconsFeature {
     private final List<String> noIcons = List.of(
             "vaadin:cog_o",
             "vaadin:cloud_upload",
@@ -390,8 +390,8 @@ public class GetIconsFeature implements DomainFeature<Void, List<String>> {
             "vaadin:corner_lower_right_0",
             "vaadin:compress_square"
     );
-    @Override
-    public List<String> executeWithoutParameters() {
+
+    public @NonNull List<@NonNull String> findAll() {
         return Stream.of(VaadinIcon.values())
                 .map(e -> "vaadin:%s".formatted(e.name().toLowerCase()))
                 .filter(e -> !noIcons.contains(e))

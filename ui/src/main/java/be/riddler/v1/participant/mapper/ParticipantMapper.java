@@ -1,7 +1,9 @@
 package be.riddler.v1.participant.mapper;
 
+import be.riddler.v1.participant.domain.CreateParticipant;
 import be.riddler.v1.participant.domain.ParticipantDetail;
 import be.riddler.v1.participant.entity.ParticipantEntity;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -12,7 +14,15 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class ParticipantMapper {
-    public static ParticipantDetail toParticipantDetail(ParticipantEntity participant) {
+    public static @NonNull ParticipantEntity fromCreateParticipant(@NonNull CreateParticipant createParticipant) {
+        return ParticipantEntity.builder()
+                .email(createParticipant.emailAddress())
+                .firstName(createParticipant.firstName())
+                .lastName(createParticipant.lastName())
+                .build();
+    }
+
+    public static @NonNull ParticipantDetail fromParticipantEntity(@NonNull ParticipantEntity participant) {
         return new ParticipantDetail(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getEmail(), participant.getStoredToken());
     }
 }

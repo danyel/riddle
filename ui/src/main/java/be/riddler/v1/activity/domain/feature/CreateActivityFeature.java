@@ -4,9 +4,9 @@ import be.riddler.v1.activity.domain.ActivityDetail;
 import be.riddler.v1.activity.domain.CreateActivity;
 import be.riddler.v1.activity.mapper.ActivityMapper;
 import be.riddler.v1.activity.repository.ActivityRepository;
-import be.riddler.v1.common.domain.feature.DomainFeature;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,11 +17,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class CreateActivityFeature implements DomainFeature<CreateActivity, ActivityDetail> {
+public class CreateActivityFeature {
     private final ActivityRepository activityRepository;
 
-    @Override
-    public ActivityDetail executeWithReturn(CreateActivity createActivity) {
+    public @NonNull ActivityDetail create(@NonNull CreateActivity createActivity) {
         var activityEntity = ActivityMapper.fromCreateActivity(createActivity);
         activityRepository.save(activityEntity);
         return ActivityMapper.fromActivityEntity(activityEntity);

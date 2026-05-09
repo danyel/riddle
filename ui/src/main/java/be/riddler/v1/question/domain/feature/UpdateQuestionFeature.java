@@ -1,6 +1,5 @@
 package be.riddler.v1.question.domain.feature;
 
-import be.riddler.v1.common.domain.feature.DomainFeature;
 import be.riddler.v1.question.domain.Question;
 import be.riddler.v1.question.domain.UpdateWithId;
 import be.riddler.v1.question.mapper.QuestionMapper;
@@ -8,6 +7,7 @@ import be.riddler.v1.question.repository.QuestionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,12 +18,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class UpdateQuestionFeature implements DomainFeature<UpdateWithId, Question> {
+public class UpdateQuestionFeature {
     private final QuestionRepository questionRepository;
 
-    @Override
-    public Question executeWithReturn(UpdateWithId updateWithId) {
-        var questionEntity = questionRepository.findById(updateWithId.id());
+    public @NonNull Question executeWithReturn(@NonNull UpdateWithId updateWithId) {
+        var questionEntity = questionRepository.findById(updateWithId.questionId().id());
         if (questionEntity.isPresent()) {
             questionEntity.ifPresent(e -> {
                 e.setQuestion(updateWithId.question().question());
@@ -32,7 +31,7 @@ public class UpdateQuestionFeature implements DomainFeature<UpdateWithId, Questi
             });
             return QuestionMapper.fromQuestionEntity(questionEntity.get());
         } else {
-            throw new EntityNotFoundException("Question with id " + updateWithId.id() + " not found");
+            throw new EntityNotFoundException("Question with id " + updateWithId.questionId().id() + " not found");
         }
     }
 }

@@ -33,7 +33,7 @@ public class UiResource implements UiApi {
 
     @Override
     public List<String> icons() {
-        return getIconsFeature.executeWithoutParameters();
+        return getIconsFeature.findAll();
     }
 
     @Override
@@ -48,11 +48,11 @@ public class UiResource implements UiApi {
 
     @Override
     public List<Translation> translations(String language) {
-        return getTranslationsByLanguageFeature.executeWithReturn(language);
+        return getTranslationsByLanguageFeature.findAll(language);
     }
 
     @Override
     public Translation translate(String language, String key) {
-        return getTranslationFeature.executeWithReturn(new TranslationProperty(language, key));
+        return getTranslationFeature.translateForProperties(new TranslationProperty(language, key));
     }
 }

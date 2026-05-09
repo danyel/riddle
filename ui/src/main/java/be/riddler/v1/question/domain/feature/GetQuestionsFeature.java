@@ -1,11 +1,11 @@
 package be.riddler.v1.question.domain.feature;
 
-import be.riddler.v1.common.domain.feature.DomainFeature;
 import be.riddler.v1.question.domain.Question;
 import be.riddler.v1.question.mapper.QuestionMapper;
 import be.riddler.v1.question.repository.QuestionRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,11 +18,10 @@ import java.util.List;
  */
 @Component
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class GetQuestionsFeature implements DomainFeature<Void, List<Question>> {
+public class GetQuestionsFeature {
     private final QuestionRepository questionRepository;
 
-    @Override
-    public List<Question> executeWithoutParameters() {
+    public @NonNull List<@NonNull Question> findAll() {
         return questionRepository.findAll()
                 .stream()
                 .map(QuestionMapper::fromQuestionEntity)

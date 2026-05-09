@@ -1,13 +1,12 @@
 package be.riddler.v1.question.domain.feature;
 
-import be.riddler.v1.common.domain.feature.DomainFeature;
+import be.riddler.v1.question.domain.QuestionId;
 import be.riddler.v1.question.repository.QuestionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 /**
  * CreateQuestionFeature
@@ -17,14 +16,13 @@ import java.util.UUID;
  */
 @Component
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class DeleteQuestionByIdFeature implements DomainFeature<UUID, Void> {
+public class DeleteQuestionByIdFeature {
     private final QuestionRepository questionRepository;
 
-    @Override
-    public void execute(UUID id) {
-        if (!questionRepository.existsById(id)) {
-            throw new EntityNotFoundException(id.toString());
+    public void execute(@NonNull QuestionId questionId) {
+        if (!questionRepository.existsById(questionId.id())) {
+            throw new EntityNotFoundException(questionId.id().toString());
         }
-        questionRepository.deleteById(id);
+        questionRepository.deleteById(questionId.id());
     }
 }

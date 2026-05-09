@@ -29,11 +29,11 @@ class AnswerResource implements AnswerApi {
 
     @Override
     public List<Answer> findByQuestionId(UUID questionId) {
-        return getAnswersByQuestionIdFeature.executeWithReturn(new QuestionId(questionId));
+        return getAnswersByQuestionIdFeature.byQuestionId(new QuestionId(questionId));
     }
 
     @Override
     public Answer create(CreateAnswer createAnswer) {
-        return createAnswerFeature.executeWithReturn(createAnswer);
+        return createAnswerFeature.create(createAnswer);
     }
 }

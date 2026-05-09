@@ -1,9 +1,12 @@
 package be.riddler.v1.participant.api;
 
+import be.riddler.v1.participant.domain.CreateParticipant;
 import be.riddler.v1.participant.domain.ParticipantDetail;
 import be.riddler.v1.participant.domain.ParticipantId;
+import be.riddler.v1.participant.domain.feature.CreateParticipantFeature;
 import be.riddler.v1.participant.domain.feature.FindAllParticipantsFeature;
 import be.riddler.v1.participant.domain.feature.FindByParticipantIdFeature;
+import be.riddler.v1.participant.domain.feature.GenerateTokenFeature;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
@@ -25,14 +28,26 @@ import java.util.UUID;
 class ParticipantResource implements ParticipantApi {
     private final FindByParticipantIdFeature findByParticipantIdFeature;
     private final FindAllParticipantsFeature findAllParticipantsFeature;
+    private final GenerateTokenFeature generateTokenFeature;
+    private final CreateParticipantFeature createParticipantFeature;
 
     @Override
     public @NonNull List<@NonNull ParticipantDetail> findAll() {
-        return findAllParticipantsFeature.executeWithoutParameters();
+        return findAllParticipantsFeature.findAll();
+    }
+
+    @Override
+    public void generateToken(@NonNull UUID participantId) {
+        generateTokenFeature.generate(ParticipantId.from(participantId));
     }
 
     @Override
     public @NonNull ParticipantDetail findById(@NonNull UUID participantId) {
-        return findByParticipantIdFeature.executeWithReturn(ParticipantId.from(participantId));
+        return findByParticipantIdFeature.findByParticipantId(ParticipantId.from(participantId));
+    }
+
+    @Override
+    public @NonNull ParticipantDetail create(@NonNull CreateParticipant participantDetail) {
+        return createParticipantFeature.create(participantDetail);
     }
 }

@@ -1,12 +1,12 @@
 package be.riddler.v1.menu.domain.feature;
 
-import be.riddler.v1.common.domain.feature.DomainFeature;
 import be.riddler.v1.menu.domain.Menu;
 import be.riddler.v1.menu.entity.MenuConfigurationEntity;
 import be.riddler.v1.menu.repository.MenuConfigurationRepository;
 import be.riddler.v1.menu.repository.MenuRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
@@ -20,12 +20,11 @@ import java.util.List;
  */
 @Component
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class FindAllByUsernameFeature implements DomainFeature<String, List<Menu>> {
+public class RetrieveMenuForUsernameFeature {
     private final MenuRepository menuRepository;
     private final MenuConfigurationRepository menuConfigurationRepository;
 
-    @Override
-    public List<Menu> executeWithReturn(String username) {
+    public @NonNull List<@NonNull Menu> retrieveMenu(@NonNull String username) {
         var menuConfigurations = menuConfigurationRepository.findAllByUsername(username);
         return menuRepository.findAllById(menuConfigurations.stream()
                         .map(MenuConfigurationEntity::getMenuId)

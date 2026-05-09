@@ -1,4 +1,4 @@
-import {useNavigate, useParams} from "react-router";
+import {useParams} from "react-router";
 import Question from "Frontend/generated/be/riddler/v1/question/domain/Question";
 import {useEffect, useState} from "react";
 import {ParticipantEndpoint} from "Frontend/generated/endpoints";
@@ -9,16 +9,9 @@ import {useSignal} from "@vaadin/hilla-react-signals";
 function ViewQuestionPage() {
     const [question, setQuestion] = useState<Question>();
     const params = useParams();
-    const questionId = params.id;
+    const questionId = params.id!!;
     const answerValue = useSignal('');
-    const navigate = useNavigate();
-
-    if (!questionId) {
-        navigate('/error/404');
-    }
-
-    // todo if questionId is null than go to page not found
-    const {track} = useActivityTracker(questionId!!);
+    const {track} = useActivityTracker(questionId);
 
     useEffect(() => {
         ParticipantEndpoint.get(questionId)

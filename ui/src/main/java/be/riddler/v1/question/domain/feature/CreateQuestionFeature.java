@@ -1,12 +1,12 @@
 package be.riddler.v1.question.domain.feature;
 
-import be.riddler.v1.common.domain.feature.DomainFeature;
 import be.riddler.v1.question.domain.CreateQuestion;
 import be.riddler.v1.question.domain.Question;
 import be.riddler.v1.question.mapper.QuestionMapper;
 import be.riddler.v1.question.repository.QuestionRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,11 +17,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class CreateQuestionFeature implements DomainFeature<CreateQuestion, Question> {
+public class CreateQuestionFeature {
     private final QuestionRepository questionRepository;
 
-    @Override
-    public Question executeWithReturn(CreateQuestion createQuestion) {
+    public @NonNull Question executeWithReturn(@NonNull CreateQuestion createQuestion) {
         var question = QuestionMapper.fromCreateQuestion(createQuestion);
         var questionEntity = QuestionMapper.fromQuestion(question);
         questionRepository.save(questionEntity);

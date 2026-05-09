@@ -2,6 +2,7 @@ package be.riddler.v1.question.api;
 
 import be.riddler.v1.question.domain.CreateQuestion;
 import be.riddler.v1.question.domain.Question;
+import be.riddler.v1.question.domain.QuestionId;
 import be.riddler.v1.question.domain.UpdateQuestion;
 import be.riddler.v1.question.domain.UpdateWithId;
 import be.riddler.v1.question.domain.feature.CreateQuestionFeature;
@@ -35,12 +36,12 @@ class QuestionResource implements QuestionApi {
 
     @Override
     public List<Question> getQuestions() {
-        return questionsFeature.executeWithoutParameters();
+        return questionsFeature.findAll();
     }
 
     @Override
     public Question findById(UUID uuid) {
-        return getQuestionByIdFeature.executeWithReturn(uuid);
+        return getQuestionByIdFeature.byQuestionId(QuestionId.fromQuestionId(uuid));
     }
 
     @Override
@@ -50,11 +51,11 @@ class QuestionResource implements QuestionApi {
 
     @Override
     public void delete(UUID id) {
-        deleteQuestionByIdFeature.execute(id);
+        deleteQuestionByIdFeature.execute(QuestionId.fromQuestionId(id));
     }
 
     @Override
     public Question update(UUID id, UpdateQuestion updateQuestion) {
-        return updateQuestionFeature.executeWithReturn(new UpdateWithId(id, updateQuestion));
+        return updateQuestionFeature.executeWithReturn(new UpdateWithId(QuestionId.fromQuestionId(id), updateQuestion));
     }
 }
