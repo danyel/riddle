@@ -24,9 +24,9 @@ public class GenerateTokenFeature {
 
     @Transactional
     public void generate(@NonNull ParticipantId participantId) {
-        var generateToken = tokenProvider.generateToken(participantId.id());
         participantRepository.findById(participantId.id())
                 .ifPresentOrElse(participant -> {
+                    var generateToken = tokenProvider.generateToken(participantId.id());
                     participant.setStoredToken(generateToken);
                     participantRepository.save(participant);
                 }, () -> {
