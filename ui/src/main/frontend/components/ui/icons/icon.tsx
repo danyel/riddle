@@ -12,6 +12,10 @@ export function CrossIcon() {
     return (<Icon icon='lumo:cross'/>);
 }
 
+export function GlobeIcon() {
+    return (<Icon icon='vaadin:globe'/>);
+}
+
 export function PlusIcon() {
     return (<Icon icon='vaadin:plus'/>);
 }
@@ -21,7 +25,7 @@ export function CloseIcon() {
 }
 
 export function CheckIcon() {
-    return (<Icon icon='vaadin:plus'/>);
+    return (<Icon icon='vaadin:check'/>);
 }
 
 export function AbacusIcon() {

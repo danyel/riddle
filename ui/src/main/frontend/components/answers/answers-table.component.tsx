@@ -31,27 +31,25 @@ export default function AnswersTable(props: AnswersTableProperties) {
                 <PlusButton onClick={() => setOpen(true)}/>
             </HorizontalLayout>
             {/* 1. We pass down a close handler to reset parent state */}
-            <CreateDialogModal
+            <CreateAnswerDialogModal
                 show={open}
                 questionId={props.questionId}
                 onAnswerCreated={fetchAnswers}
                 onClose={() => setOpen(false)}
             />
-            <Grid items={answers} className={styles.question_table} allRowsVisible={true}>
+            <Grid items={answers} className={styles.riddler_table} allRowsVisible={true}>
                 <GridColumn path="value" header="Answer Value"/>
             </Grid>
         </>
     );
 }
 
-interface CreateDialogModalProps {
+function CreateAnswerDialogModal(props: {
     show: boolean;
     questionId: string;
     onAnswerCreated: () => void;
     onClose: () => void;
-}
-
-function CreateDialogModal(props: CreateDialogModalProps) {
+}) {
     const answerValue = useSignal('');
 
     useEffect(() => {

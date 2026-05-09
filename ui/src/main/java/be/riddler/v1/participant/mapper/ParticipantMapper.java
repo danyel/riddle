@@ -5,6 +5,9 @@ import be.riddler.v1.participant.domain.ParticipantDetail;
 import be.riddler.v1.participant.entity.ParticipantEntity;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.Objects;
 
 /**
  * ParticipantMapper
@@ -19,6 +22,8 @@ public class ParticipantMapper {
                 .email(createParticipant.emailAddress())
                 .firstName(createParticipant.firstName())
                 .lastName(createParticipant.lastName())
+                .createdBy(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName())
+                .updatedBy(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName())
                 .build();
     }
 

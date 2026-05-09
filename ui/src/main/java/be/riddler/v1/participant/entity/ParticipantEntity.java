@@ -46,9 +46,9 @@ public class ParticipantEntity {
     @CreatedBy
     private String createdBy;
     @CreatedDate
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
     @LastModifiedBy
-    private String lastModifiedBy;
+    private String updatedBy;
     @LastModifiedDate
-    private LocalDateTime lastModifiedDate;
+    private LocalDateTime updatedAt;
 }

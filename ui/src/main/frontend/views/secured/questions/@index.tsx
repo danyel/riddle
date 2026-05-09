@@ -23,7 +23,7 @@ export default function QuestionsView() {
     };
 
     return (
-        <Grid key={"id"} items={questions} className={styles.question_table} allRowsVisible={true}>
+        <Grid key={"id"} items={questions} className={styles.riddler_table} allRowsVisible={true}>
             <GridColumn key={"question"} path={"question"}/>
             <GridColumn key={"type"} path={"type"}/>
             <GridColumn header={'Action'} renderer={answerRenderer}/>
