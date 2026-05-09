@@ -2,11 +2,12 @@ package be.riddler.v1.security.api;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Objects;
 
 /**
  * SecurityResource
@@ -21,9 +22,8 @@ class SecurityResource implements SecurityApi {
     private final UserDetailsService userDetailsService;
 
     @Override
-    public Authentication authenticate(String username, String password) {
-        // TODO do better authentication control and check if the password is correct.
+    public UserInfo authenticate(String username, String password) {
         var userDetails = userDetailsService.loadUserByUsername(username);
-        return new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
+        return new UserInfo(userDetails.getUsername(), userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).filter(Objects::nonNull).toList());
     }
 }

@@ -10,6 +10,7 @@
     </parent>
     <modules>
         <module>ui</module>
+        <module>riddler-client</module>
     </modules>
     <modelVersion>4.0.0</modelVersion>
 
@@ -24,6 +25,7 @@
         <spring-modulith.version>2.0.5</spring-modulith.version>
         <vaadin.version>25.1.0</vaadin.version>
         <java.version>25</java.version>
+        <openapi-ui.version>3.0.2</openapi-ui.version>
     </properties>
     <dependencies>
         <dependency>
@@ -57,6 +59,16 @@
                 <version>${spring-modulith.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${openapi-ui.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>be.riddler.api</groupId>
+                <artifactId>riddler-client</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

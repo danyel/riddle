@@ -1,7 +1,7 @@
 package be.riddler.v1.menu.api;
 
 import be.riddler.v1.menu.domain.Menu;
-import be.riddler.v1.menu.domain.feature.RetrieveMenuForUsernameFeature;
+import be.riddler.v1.menu.feature.RetrieveMenuForUsernameFeature;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;

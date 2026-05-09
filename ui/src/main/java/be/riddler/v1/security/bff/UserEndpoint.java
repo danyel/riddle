@@ -10,8 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.util.Assert;
 
 import java.util.Objects;
 
@@ -29,29 +30,22 @@ public class UserEndpoint {
 
     public @NonNull UserInfo getAuthenticatedUser() {
         var auth = SecurityContextHolder.getContext().getAuthentication();
-        //noinspection NullableProblems,DataFlowIssue
+        Assert.isTrue(auth != null, "Cannot pass null");
         return new UserInfo(
                 auth.getName(),
                 auth.getAuthorities()
                         .stream()
                         .map(GrantedAuthority::getAuthority)
+                        .filter(Objects::nonNull)
                         .toList()
         );
     }
 
     public UserInfo authenticate(String username, String password) {
         var authentication = securityApi.authenticate(username, password);
-        if (authentication instanceof UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) {
-            var user = usernamePasswordAuthenticationToken.getPrincipal();
-            if (Objects.isNull(user)) {
-                throw new Unauthorized("Incorrect username and/or password");
-            }
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            //noinspection NullableProblems,DataFlowIssue
-            return new UserInfo(((User) user).getUsername(), ((User) user).getAuthorities()
-                    .stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .toList());
+        if (authentication instanceof UserInfo userInfo) {
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userInfo, password, userInfo.roles().stream().map(SimpleGrantedAuthority::new).toList()));
+            return authentication;
         }
         throw new Unauthorized("Incorrect username and/or password");
     }
