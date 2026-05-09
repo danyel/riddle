@@ -4,7 +4,7 @@ import {useAuth} from 'Frontend/auth';
 import {useNavigate} from "react-router"; // Import from your new auth.ts
 
 export default function LoginView() {
-    const {state, login} = useAuth(); // 'authenticate' updates the AuthProvider state
+    const {login} = useAuth(); // 'authenticate' updates the AuthProvider state
     const [error, setError] = useState(false);
     const navigate = useNavigate();
     const loginOverlayRef = useRef<LoginOverlayElement>(null);

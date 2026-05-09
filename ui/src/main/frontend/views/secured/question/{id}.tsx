@@ -1,6 +1,6 @@
 import {useNavigate, useParams} from "react-router";
 import {useEffect, useState} from "react";
-import {QuestionEndpoint, QuestionTypeEndpoint, TranslateEndpoint} from "Frontend/generated/endpoints";
+import {QuestionEndpoint, QuestionTypeEndpoint} from "Frontend/generated/endpoints";
 import Question from "Frontend/generated/be/riddler/v1/question/api/Question";
 import AnswersTable from "Frontend/components/answers/answers-table.component";
 import {HorizontalLayout, Select, TextArea, VerticalLayout} from "@vaadin/react-components";
@@ -13,7 +13,6 @@ import {CheckButton, CloseButton} from "Frontend/components/ui/button";
 
 export default function QuestionDetailView() {
     const [question, setQuestion] = useState<Question>();
-    const [translatedType, setTranslatedType] = useState<string>('');
     const [items, setItems] = useState<{ label: string, value: string }[]>([]);
     const {id} = useParams();
     const navigate = useNavigate();
@@ -28,17 +27,6 @@ export default function QuestionDetailView() {
                 }));
             });
     }, [id]);
-
-    useEffect(() => {
-        if (question?.type) {
-            TranslateEndpoint.translate('en', `label.${question.type}`)
-                .then(e => {
-                    if (e && e.value) {
-                        setTranslatedType(e.value);
-                    }
-                });
-        }
-    }, [question?.type]);
 
     return question && (<>
             <HorizontalLayout className={styles.question_menu_bar}>
