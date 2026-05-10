@@ -27,7 +27,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @RequestMapping(path = "/v1/questions")
-class QuestionResource implements QuestionApi {
+class QuestionResource implements QuestionClient {
     private final CreateQuestionFeature createQuestionFeature;
     private final GetQuestionsFeature questionsFeature;
     private final DeleteQuestionByIdFeature deleteQuestionByIdFeature;

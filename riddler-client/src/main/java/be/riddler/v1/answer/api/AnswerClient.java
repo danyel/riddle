@@ -29,7 +29,7 @@ import java.util.UUID;
  * @version 1.0.0 26/04/2026
  */
 @Tag(name = "answers")
-public interface AnswerApi {
+public interface AnswerClient {
     @SuppressWarnings("SpringMvcPathVariableDeclarationInspection")
     @Operation(
             method = "GET",

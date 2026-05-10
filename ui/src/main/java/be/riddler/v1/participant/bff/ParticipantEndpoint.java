@@ -1,8 +1,8 @@
 package be.riddler.v1.participant.bff;
 
-import be.riddler.v1.participant.api.ParticipantApi;
+import be.riddler.v1.participant.api.ParticipantClient;
 import be.riddler.v1.participant.domain.ParticipantDetail;
-import be.riddler.v1.question.api.QuestionApi;
+import be.riddler.v1.question.api.QuestionClient;
 import be.riddler.v1.question.domain.Question;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
@@ -24,8 +24,8 @@ import java.util.UUID;
 @AnonymousAllowed
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class ParticipantEndpoint {
-    private final QuestionApi questionApi;
-    private final ParticipantApi participantApi;
+    private final QuestionClient questionApi;
+    private final ParticipantClient participantClient;
 
     public @NonNull List<@NonNull Question> getQuestions() {
         return questionApi.getQuestions();
@@ -36,6 +36,6 @@ public class ParticipantEndpoint {
     }
 
     public @NonNull ParticipantDetail findById(@NonNull UUID uuid) {
-        return participantApi.findById(uuid);
+        return participantClient.findById(uuid);
     }
 }

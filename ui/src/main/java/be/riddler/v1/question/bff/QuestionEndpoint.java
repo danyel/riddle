@@ -1,6 +1,6 @@
 package be.riddler.v1.question.bff;
 
-import be.riddler.v1.question.api.QuestionApi;
+import be.riddler.v1.question.api.QuestionClient;
 import be.riddler.v1.question.domain.CreateQuestion;
 import be.riddler.v1.question.domain.Question;
 import be.riddler.v1.question.domain.UpdateQuestion;
@@ -23,7 +23,7 @@ import java.util.UUID;
 @RolesAllowed("ADMIN")
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class QuestionEndpoint {
-    private final QuestionApi questionApi;
+    private final QuestionClient questionApi;
 
     public @NonNull List<@NonNull Question> getQuestions() {
         return questionApi.getQuestions();

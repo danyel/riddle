@@ -1,6 +1,6 @@
 package be.riddler.v1.ui.bff;
 
-import be.riddler.v1.ui.api.UiApi;
+import be.riddler.v1.ui.api.UiClient;
 import be.riddler.v1.ui.domain.Translation;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
@@ -18,9 +18,9 @@ import org.jspecify.annotations.NonNull;
 @BrowserCallable
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class TranslateEndpoint {
-    private final UiApi uiApi;
+    private final UiClient uiClient;
 
     public @NonNull Translation translate(String language, String key) {
-        return uiApi.translate(language, key);
+        return uiClient.translate(language, key);
     }
 }

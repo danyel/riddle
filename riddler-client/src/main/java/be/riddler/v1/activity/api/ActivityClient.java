@@ -27,7 +27,7 @@ import java.util.UUID;
  * @version 1.0.0 09/05/2026
  */
 @Tag(name = "activity")
-public interface ActivityApi {
+public interface ActivityClient {
     @Operation(
             method = "GET",
             tags = "activity",

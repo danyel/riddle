@@ -22,7 +22,7 @@ import java.util.List;
  * @version 1.0.0 26/04/2026
  */
 @Tag(name = "menu")
-public interface MenuApi {
+public interface MenuClient {
     @Operation(
             method = "GET",
             tags = "menu",

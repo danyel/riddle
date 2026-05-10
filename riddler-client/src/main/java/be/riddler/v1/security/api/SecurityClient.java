@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @version 1.0.0 26/04/2026
  */
 @Tag(name = "security")
-public interface SecurityApi {
+public interface SecurityClient {
     @SuppressWarnings("SpringMvcPathVariableDeclarationInspection")
     @Operation(
             method = "GET",

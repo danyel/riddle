@@ -24,7 +24,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(path = "/v1/answers")
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-class AnswerResource implements AnswerApi {
+class AnswerResource implements AnswerClient {
     private final CreateAnswerFeature createAnswerFeature;
     private final GetAnswersByQuestionIdFeature getAnswersByQuestionIdFeature;
     private final UpdateAnswerFeature updateAnswerFeature;

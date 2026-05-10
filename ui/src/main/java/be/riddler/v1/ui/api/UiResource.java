@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 @RequestMapping(path = "/v1/ui")
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @Slf4j
-public class UiResource implements UiApi {
+public class UiResource implements UiClient {
     private final GetIconsFeature getIconsFeature;
     private final GetTranslationsByLanguageFeature getTranslationsByLanguageFeature;
     private final GetTranslationFeature getTranslationFeature;

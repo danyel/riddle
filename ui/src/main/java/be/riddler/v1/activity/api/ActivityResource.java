@@ -24,7 +24,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @RequestMapping(path = "/v1/activities")
-public class ActivityResource implements ActivityApi {
+public class ActivityResource implements ActivityClient {
     private final CreateActivityFeature createActivityFeature;
     private final GetActivitiesFeature getActivitiesFeature;
 

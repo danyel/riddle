@@ -25,7 +25,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/v1/participants")
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-class ParticipantResource implements ParticipantApi {
+class ParticipantResource implements ParticipantClient {
     private final FindByParticipantIdFeature findByParticipantIdFeature;
     private final FindAllParticipantsFeature findAllParticipantsFeature;
     private final GenerateTokenFeature generateTokenFeature;

@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @RequestMapping(path = "/v1/menus")
-class MenuResource implements MenuApi {
+class MenuResource implements MenuClient {
     private final RetrieveMenuForUsernameFeature retrieveMenuForUsernameFeature;
 
     @Override

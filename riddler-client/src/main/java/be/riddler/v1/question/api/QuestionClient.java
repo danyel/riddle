@@ -33,7 +33,7 @@ import java.util.UUID;
  */
 
 @Tag(name = "questions")
-public interface QuestionApi {
+public interface QuestionClient {
     @Operation(
             method = "GET",
             tags = "questions",

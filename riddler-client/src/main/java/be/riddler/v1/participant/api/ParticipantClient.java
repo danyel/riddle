@@ -27,7 +27,7 @@ import java.util.UUID;
  * @author dnoulet
  * @version 1.0.0 09/05/2026
  */
-public interface ParticipantApi {
+public interface ParticipantClient {
     @Operation(
             method = "GET",
             tags = "participants",

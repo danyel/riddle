@@ -1,7 +1,7 @@
 package be.riddler.v1.security.bff;
 
 import be.riddler.v1.common.http.Unauthorized;
-import be.riddler.v1.security.api.SecurityApi;
+import be.riddler.v1.security.api.SecurityClient;
 import be.riddler.v1.security.api.UserInfo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
@@ -26,7 +26,7 @@ import java.util.Objects;
 @AnonymousAllowed
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class UserEndpoint {
-    private final SecurityApi securityApi;
+    private final SecurityClient securityClient;
 
     public @NonNull UserInfo getAuthenticatedUser() {
         var auth = SecurityContextHolder.getContext().getAuthentication();
@@ -42,7 +42,7 @@ public class UserEndpoint {
     }
 
     public UserInfo authenticate(String username, String password) {
-        var authentication = securityApi.authenticate(username, password);
+        var authentication = securityClient.authenticate(username, password);
         if (authentication instanceof UserInfo userInfo) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userInfo, password, userInfo.roles().stream().map(SimpleGrantedAuthority::new).toList()));
             return authentication;

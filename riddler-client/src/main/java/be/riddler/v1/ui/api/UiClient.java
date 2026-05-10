@@ -25,7 +25,7 @@ import java.util.List;
  * @version 1.0.0 26/04/2026
  */
 @Tag(name = "ui")
-public interface UiApi {
+public interface UiClient {
     @Operation(
             method = "GET",
             tags = "ui",

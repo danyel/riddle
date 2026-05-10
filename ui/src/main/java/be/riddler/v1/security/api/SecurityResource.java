@@ -18,7 +18,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping(path = "/v1/security")
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-class SecurityResource implements SecurityApi {
+class SecurityResource implements SecurityClient {
     private final UserDetailsService userDetailsService;
 
     @Override

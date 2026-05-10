@@ -1,6 +1,6 @@
 package be.riddler.v1.answer.bff;
 
-import be.riddler.v1.answer.api.AnswerApi;
+import be.riddler.v1.answer.api.AnswerClient;
 import be.riddler.v1.answer.domain.Answer;
 import be.riddler.v1.answer.domain.CreateAnswer;
 import be.riddler.v1.answer.domain.UpdateAnswer;
@@ -23,17 +23,17 @@ import java.util.UUID;
 @BrowserCallable
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class AnswerEndpoint {
-    private final AnswerApi answerApi;
+    private final AnswerClient answerClient;
 
     public @NonNull List<@NonNull Answer> findByQuestion(UUID questionId) {
-        return answerApi.findByQuestionId(questionId);
+        return answerClient.findByQuestionId(questionId);
     }
 
     public @NonNull Answer create(@NonNull CreateAnswer createAnswer) {
-        return answerApi.create(createAnswer);
+        return answerClient.create(createAnswer);
     }
 
     public @NonNull Answer update(@NonNull UUID answerId, @NonNull UpdateAnswer updateAnswer) {
-        return answerApi.update(answerId, updateAnswer);
+        return answerClient.update(answerId, updateAnswer);
     }
 }
