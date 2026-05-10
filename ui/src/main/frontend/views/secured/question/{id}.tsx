@@ -8,9 +8,10 @@ import {Dialog, HorizontalLayout, Select, TextArea, VerticalLayout} from "@vaadi
 import styles from 'Frontend/themes/riddler/common.module.css';
 import QuestionType from "Frontend/generated/be/riddler/v1/question/domain/QuestionType";
 import UpdateQuestion from "Frontend/generated/be/riddler/v1/question/domain/UpdateQuestion";
-import {BanButton, ButtonTypes, CheckButton, CloseButton} from "Frontend/components/ui/button";
+import {BanButton, CheckButton, CloseButton} from "Frontend/components/ui/button";
 import {useSignal} from "@vaadin/hilla-react-signals";
 import {Button} from "@vaadin/react-components/Button.js";
+import {ElementStylingTypes} from "Frontend/constant";
 
 
 export default function QuestionDetailView() {
@@ -65,7 +66,7 @@ export default function QuestionDetailView() {
                 }}
                 footer={
                     <>
-                        <Button theme={ButtonTypes.PRIMARY_ERROR} onClick={deleteQuestion}
+                        <Button theme={ElementStylingTypes.PRIMARY_ERROR} onClick={deleteQuestion}
                                 style={{marginRight: 'auto'}}>
                             Delete
                         </Button>

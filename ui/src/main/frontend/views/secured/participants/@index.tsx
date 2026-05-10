@@ -1,5 +1,5 @@
 import ParticipantDetail from "Frontend/generated/be/riddler/v1/participant/domain/ParticipantDetail";
-import {Dialog, Grid, GridColumn, HorizontalLayout, TextField} from "@vaadin/react-components";
+import {Dialog, Grid, GridColumn, HorizontalLayout, Notification, TextField} from "@vaadin/react-components";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
 import {useEffect, useState} from "react";
@@ -8,6 +8,7 @@ import {useSignal} from "@vaadin/hilla-react-signals";
 import {CancelButton, CheckButton, CloseButton, GenerateToken, PlusButton} from "Frontend/components/ui/button";
 import CreateParticipant from "Frontend/generated/be/riddler/v1/participant/domain/CreateParticipant";
 import {CheckIcon, CloseIcon} from "Frontend/components/ui/icons";
+import {ElementStylingTypes} from "Frontend/constant";
 
 function ParticipantTable() {
     const [open, setOpen] = useState(false);
@@ -25,6 +26,7 @@ function ParticipantTable() {
     const tokenGeneration = ({item}: { item: ParticipantDetail }) => {
         return <GenerateToken onClick={() => ParticipantAdminEndpoint.generateToken(item.id).then(e => {
             fetchParticipants();
+            Notification.show('Token generated', {position: 'top-end', theme: ElementStylingTypes.SUCCESS});
         })}/>;
     };
 
