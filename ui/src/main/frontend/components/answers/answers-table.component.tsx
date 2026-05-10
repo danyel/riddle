@@ -28,7 +28,7 @@ export default function AnswersTable(props: AnswersTableProperties) {
         fetchAnswers();
     }, [props.questionId]);
 
-    const answerActions = ({item}: { item: Answer }) => {
+    const answerActions = () => {
         return <ViewDetailButton onClick={() => {
             setAnswer(answer);
             setOpen(false);
@@ -38,8 +38,10 @@ export default function AnswersTable(props: AnswersTableProperties) {
 
     return (
         <>
-            <HorizontalLayout className={styles.answers_menu_bar}>
-                <PlusButton onClick={() => setOpen(true)}/>
+            <HorizontalLayout className={styles.full_width_layout}>
+                <div className={styles.menu_bar_layout}>
+                    <PlusButton onClick={() => setOpen(true)}/>
+                </div>
             </HorizontalLayout>
             {/* 1. We pass down a close handler to reset parent state */}
             <CreateAnswerDialogModal
@@ -55,10 +57,12 @@ export default function AnswersTable(props: AnswersTableProperties) {
                 answer={answer?.value!!}
                 answerId={answer?.id!!}
             />
-            <Grid items={answers} className={styles.riddler_table} allRowsVisible={true}>
-                <GridColumn path="value" header="Answer Value"/>
-                <GridColumn header={'Action'} renderer={answerActions}/>
-            </Grid>
+            <HorizontalLayout className={styles.full_width_layout}>
+                <Grid items={answers} className={styles.riddler_table} allRowsVisible={true}>
+                    <GridColumn path="value" header="Answer Value"/>
+                    <GridColumn header={'Action'} renderer={answerActions}/>
+                </Grid>
+            </HorizontalLayout>
         </>
     );
 }

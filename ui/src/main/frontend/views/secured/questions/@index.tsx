@@ -140,8 +140,10 @@ export default function QuestionsView() {
 
     return (
         <>
-            <HorizontalLayout className={styles.answers_menu_bar}>
+            <HorizontalLayout className={styles.full_width_layout}>
+                <div className={styles.menu_bar_layout}>
                 <PlusButton onClick={() => setOpen(true)}/>
+                </div>
             </HorizontalLayout>
             <CreateQuestionDialogModal show={open}
                                        onParticipantCreated={fetchQuestions}

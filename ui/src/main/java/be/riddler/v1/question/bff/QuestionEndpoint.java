@@ -26,7 +26,7 @@ public class QuestionEndpoint {
     private final QuestionClient questionApi;
 
     public @NonNull List<@NonNull Question> getQuestions() {
-        return questionApi.getQuestions();
+        return questionApi.getQuestionsById(List.of());
     }
 
 

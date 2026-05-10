@@ -1,4 +1,4 @@
-package be.riddler.v1.participant.domain;
+package be.riddler.v1.participant.client.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

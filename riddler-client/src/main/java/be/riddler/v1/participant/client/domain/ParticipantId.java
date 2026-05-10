@@ -1,4 +1,4 @@
-package be.riddler.v1.participant.domain;
+package be.riddler.v1.participant.client.domain;
 
 import java.util.UUID;
 

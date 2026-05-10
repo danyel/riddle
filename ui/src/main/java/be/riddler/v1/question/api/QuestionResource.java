@@ -8,6 +8,7 @@ import be.riddler.v1.question.domain.UpdateWithId;
 import be.riddler.v1.question.feature.CreateQuestionFeature;
 import be.riddler.v1.question.feature.DeleteQuestionByIdFeature;
 import be.riddler.v1.question.feature.GetQuestionByIdFeature;
+import be.riddler.v1.question.feature.GetQuestionsByIdsFeature;
 import be.riddler.v1.question.feature.GetQuestionsFeature;
 import be.riddler.v1.question.feature.UpdateQuestionFeature;
 import lombok.AccessLevel;
@@ -33,11 +34,7 @@ class QuestionResource implements QuestionClient {
     private final DeleteQuestionByIdFeature deleteQuestionByIdFeature;
     private final GetQuestionByIdFeature getQuestionByIdFeature;
     private final UpdateQuestionFeature updateQuestionFeature;
-
-    @Override
-    public List<Question> getQuestions() {
-        return questionsFeature.findAll();
-    }
+    private final GetQuestionsByIdsFeature getQuestionsByIdsFeature;
 
     @Override
     public Question findById(UUID uuid) {
@@ -57,5 +54,13 @@ class QuestionResource implements QuestionClient {
     @Override
     public Question update(UUID id, UpdateQuestion updateQuestion) {
         return updateQuestionFeature.executeWithReturn(new UpdateWithId(QuestionId.fromQuestionId(id), updateQuestion));
+    }
+
+    @Override
+    public List<Question> getQuestionsById(List<UUID> questionIds) {
+        if (questionIds.isEmpty()) {
+            return questionsFeature.findAll();
+        }
+        return getQuestionsByIdsFeature.findAll(questionIds);
     }
 }

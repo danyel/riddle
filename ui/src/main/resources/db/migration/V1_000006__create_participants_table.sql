@@ -6,6 +6,8 @@ CREATE TABLE participants
     first_name   VARCHAR(255) NOT NULL,
     last_name    VARCHAR(255) NOT NULL,
     email        VARCHAR(255) NOT NULL,
+    PHOTO bytea,
+    cv    bytea,
     stored_token VARCHAR(255) NULL,
     created_by   VARCHAR(50)  NOT NULL,
     updated_by   VARCHAR(50),

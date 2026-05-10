@@ -45,18 +45,20 @@ export default function QuestionDetailView() {
     }, [id]);
 
     return question && (<>
-            <HorizontalLayout className={styles.question_menu_bar}>
-                <CheckButton onClick={() => {
-                    const updateQuestion: UpdateQuestion = {question: question?.question!!, type: question?.type!!};
-                    QuestionEndpoint.update(question?.id!!, updateQuestion)
-                        .then(() => navigate('/questions'));
-                }}/>
-                <BanButton onClick={() => {
-                    open();
-                }}/>
-                <CloseButton onClick={() => {
-                    navigate('/questions');
-                }}/>
+            <HorizontalLayout className={styles.full_width_layout}>
+                <div className={styles.menu_bar_layout}>
+                    <CheckButton onClick={() => {
+                        const updateQuestion: UpdateQuestion = {question: question?.question!!, type: question?.type!!};
+                        QuestionEndpoint.update(question?.id!!, updateQuestion)
+                            .then(() => navigate('/questions'));
+                    }}/>
+                    <BanButton onClick={() => {
+                        open();
+                    }}/>
+                    <CloseButton onClick={() => {
+                        navigate('/questions');
+                    }}/>
+                </div>
             </HorizontalLayout>
             <Dialog
                 headerTitle={`Delete user "${question.question}"?`}
@@ -78,25 +80,29 @@ export default function QuestionDetailView() {
             >
                 Are you sure you want to delete this user permanently?
             </Dialog>
-            <HorizontalLayout className={styles.question_content}>
+            <HorizontalLayout className={styles.full_width_layout}>
                 <VerticalLayout style={{width: '100%'}}>
-                    <TextArea value={question.question}
-                              className={styles.question_text_area}
-                              onChange={(e) => {
-                                  setQuestion(prev => prev ? {...prev, question: e.target.value} : undefined);
-                              }}
-                    />
-                    <Select
-                        label="Question Type"
-                        items={items}
-                        value={question.type}
-                        onValueChanged={(e) => {
-                            const newType = e.detail.value as QuestionType; // String to QuestionType conversion
+                    <HorizontalLayout className={styles.full_width_layout}>
+                        <TextArea value={question.question}
+                                  className={styles.text_area_full}
+                                  onChange={(e) => {
+                                      setQuestion(prev => prev ? {...prev, question: e.target.value} : undefined);
+                                  }}
+                        />
+                    </HorizontalLayout>
+                    <HorizontalLayout className={styles.full_width_layout}>
+                        <Select
+                            label="Question Type"
+                            items={items}
+                            value={question.type}
+                            onValueChanged={(e) => {
+                                const newType = e.detail.value as QuestionType; // String to QuestionType conversion
 
-                            // Mutate state correctly using the updater function
-                            setQuestion(prev => prev ? {...prev, type: newType} : undefined);
-                        }}
-                    />
+                                // Mutate state correctly using the updater function
+                                setQuestion(prev => prev ? {...prev, type: newType} : undefined);
+                            }}
+                        />
+                    </HorizontalLayout>
                     <AnswersTable questionId={question.id!!}/>
                 </VerticalLayout>
             </HorizontalLayout>

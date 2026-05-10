@@ -1,13 +1,12 @@
 package be.riddler.v1.participant.mapper;
 
-import be.riddler.v1.participant.domain.CreateParticipant;
-import be.riddler.v1.participant.domain.ParticipantDetail;
+import be.riddler.v1.participant.client.domain.CreateParticipant;
+import be.riddler.v1.participant.client.domain.ParticipantDetail;
 import be.riddler.v1.participant.entity.ParticipantEntity;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.Objects;
+import java.util.Base64;
 
 /**
  * ParticipantMapper
@@ -22,12 +21,19 @@ public class ParticipantMapper {
                 .email(createParticipant.emailAddress())
                 .firstName(createParticipant.firstName())
                 .lastName(createParticipant.lastName())
-                .createdBy(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName())
-                .updatedBy(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName())
                 .build();
     }
 
     public static @NonNull ParticipantDetail fromParticipantEntity(@NonNull ParticipantEntity participant) {
-        return new ParticipantDetail(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getEmail(), participant.getStoredToken());
+        String photo = null;
+        String cv = null;
+        if (participant.getPhoto() != null) {
+            photo = Base64.getEncoder().encodeToString(participant.getPhoto());
+        }
+        if (participant.getCv() != null) {
+            cv = Base64.getEncoder().encodeToString(participant.getCv());
+        }
+
+        return new ParticipantDetail(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getEmail(), participant.getStoredToken(), photo, cv);
     }
 }

@@ -1,6 +1,7 @@
-package be.riddler.v1.participant.domain;
+package be.riddler.v1.participant.client.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jspecify.annotations.NonNull;
 
 import java.util.UUID;
 
@@ -11,14 +12,16 @@ import java.util.UUID;
  * @version 1.0.0 09/05/2026
  */
 public record ParticipantDetail(
-        UUID id,
+        @NonNull UUID id,
         @JsonProperty("first_name")
-        String firstName,
+        @NonNull String firstName,
         @JsonProperty("last_name")
-        String lastName,
+        @NonNull String lastName,
         @JsonProperty("email_address")
-        String emailAddress,
+        @NonNull String emailAddress,
         @JsonProperty("stored_token")
-        String storedToken
+        String storedToken,
+        String photo,
+        String cv
 ) {
 }

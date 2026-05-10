@@ -60,7 +60,7 @@ class SecurityConfiguration {
             ).permitAll();
             auth.requestMatchers(
                     "/question/**", "/questions/**", "/icons/**"
-            ).authenticated();
+            ).permitAll();
             auth.requestMatchers(
                     "/", "/login"
             ).permitAll();

@@ -1,17 +1,17 @@
 import {useRef} from 'react';
 import {useAuth} from 'Frontend/auth';
-import {Navigate, useNavigate} from "react-router";
+import {useNavigate} from "react-router";
 import {LoginOverlay, LoginOverlayElement} from "@vaadin/react-components";
 
 export default function LoginView() {
-    const {state, login} = useAuth(); // 'authenticate' updates the AuthProvider state
+    const {login} = useAuth(); // 'authenticate' updates the AuthProvider state
     const navigate = useNavigate();
     const loginOverlayRef = useRef<LoginOverlayElement>(null);
-
-    // If already logged in, redirect to home
-    if (state.user) {
-        return <Navigate to="/" replace/>;
-    }
+    //
+    // // If already logged in, redirect to home
+    // if (state.user) {
+    //     return <Navigate to="/" replace/>;
+    // }
 
     return (
         <LoginOverlay

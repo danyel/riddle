@@ -1,18 +1,27 @@
 package be.riddler.v1.participant.api;
 
-import be.riddler.v1.participant.domain.CreateParticipant;
-import be.riddler.v1.participant.domain.ParticipantDetail;
-import be.riddler.v1.participant.domain.ParticipantId;
+import be.riddler.v1.participant.client.ParticipantClient;
+import be.riddler.v1.participant.client.domain.CreateParticipant;
+import be.riddler.v1.participant.client.domain.ParticipantDetail;
+import be.riddler.v1.participant.client.domain.ParticipantId;
 import be.riddler.v1.participant.feature.CreateParticipantFeature;
 import be.riddler.v1.participant.feature.FindAllParticipantsFeature;
 import be.riddler.v1.participant.feature.FindByParticipantIdFeature;
 import be.riddler.v1.participant.feature.GenerateTokenFeature;
+import be.riddler.v1.participant.feature.UploadCvFeature;
+import be.riddler.v1.participant.feature.UploadPhotoFeature;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +39,8 @@ class ParticipantResource implements ParticipantClient {
     private final FindAllParticipantsFeature findAllParticipantsFeature;
     private final GenerateTokenFeature generateTokenFeature;
     private final CreateParticipantFeature createParticipantFeature;
+    private final UploadPhotoFeature uploadPhotoFeature;
+    private final UploadCvFeature uploadCvFeature;
 
     @Override
     public @NonNull List<@NonNull ParticipantDetail> findAll() {
@@ -49,5 +60,26 @@ class ParticipantResource implements ParticipantClient {
     @Override
     public @NonNull ParticipantDetail create(@NonNull CreateParticipant participantDetail) {
         return createParticipantFeature.create(participantDetail);
+    }
+
+    @PostMapping(path = "/{id}/photo")
+    @ResponseStatus(HttpStatus.OK)
+    public void uploadPhoto(@PathVariable(name = "id") UUID participantId, HttpServletRequest request) {
+        try {
+            uploadPhotoFeature.uploadPhoto(participantId, request.getInputStream().readAllBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @PostMapping(path = "/{id}/cv")
+    @ResponseStatus(HttpStatus.OK)
+    public void uploadCv(@PathVariable(name = "id") UUID participantId, HttpServletRequest request) {
+        try {
+            uploadCvFeature.uploadCv(participantId, request.getInputStream().readAllBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

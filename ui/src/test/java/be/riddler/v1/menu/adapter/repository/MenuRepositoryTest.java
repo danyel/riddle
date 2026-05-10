@@ -31,9 +31,9 @@ class MenuRepositoryTest extends AbstractRepositoryTest {
         assertEquals("Questions", menuOne.getLabel());
         assertEquals(0, menuOne.getOrder());
         assertEquals(UUID.fromString("095a7040-3fec-4675-924d-2515f777305c"), menuTwo.getId());
-        assertEquals("vaadin:eye", menuTwo.getIcon());
-        assertEquals("/icons", menuTwo.getPath());
-        assertEquals("Icons", menuTwo.getLabel());
+        assertEquals("vaadin:user-clock", menuTwo.getIcon());
+        assertEquals("/participants", menuTwo.getPath());
+        assertEquals("Participants", menuTwo.getLabel());
         assertEquals(1, menuTwo.getOrder());
     }
 }

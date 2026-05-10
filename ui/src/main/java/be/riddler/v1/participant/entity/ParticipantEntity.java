@@ -1,5 +1,6 @@
 package be.riddler.v1.participant.entity;
 
+import be.riddler.v1.common.entity.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,12 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -30,12 +26,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Getter
 @Setter
 @Entity
 @Table(name = "participants")
-public class ParticipantEntity {
+public class ParticipantEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -43,12 +39,6 @@ public class ParticipantEntity {
     private String lastName;
     private String email;
     private String storedToken;
-    @CreatedBy
-    private String createdBy;
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedBy
-    private String updatedBy;
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
+    private byte[] photo;
+    private byte[] cv;
 }

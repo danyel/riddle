@@ -12,6 +12,7 @@ import ParticipantLayout from "Frontend/views/participant/@layout";
 import ParticipantQuestionsView from "Frontend/views/participant/question/view-question-page";
 import ParticipantView from "Frontend/views/participant/@index";
 import ParticipantsView from "Frontend/views/secured/participants/@index";
+import {ParticipantDetailView} from "Frontend/views/secured/participants/participant-detail-view";
 
 function RootErrorBoundary() {
     const error = useRouteError();
@@ -48,6 +49,11 @@ export const routes = protectRoutes([
             {
                 path: '/participants',
                 element: <ParticipantsView/>,
+                handle: {rolesAllowed: ['ROLE_ADMIN', 'ROLE_USER']} // Client-side check
+            },
+            {
+                path: '/participants/:id',
+                element: <ParticipantDetailView/>,
                 handle: {rolesAllowed: ['ROLE_ADMIN', 'ROLE_USER']} // Client-side check
             },
             {

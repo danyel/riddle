@@ -1,36 +1,16 @@
 package be.riddler.v1.participant.feature;
 
-import be.riddler.v1.participant.codec.TokenProvider;
-import be.riddler.v1.participant.domain.ParticipantId;
-import be.riddler.v1.participant.repository.ParticipantRepository;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
+import be.riddler.v1.participant.client.domain.ParticipantId;
 import org.jspecify.annotations.NonNull;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * GenerateTokenFeature
  *
  * @author dnoulet
- * @version 1.0.0 09/05/2026
+ * @version 1.0.0 10/05/2026
  */
-@Service
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class GenerateTokenFeature {
-    private final ParticipantRepository participantRepository;
-    private final TokenProvider tokenProvider;
-
+public interface GenerateTokenFeature {
     @Transactional
-    public void generate(@NonNull ParticipantId participantId) {
-        participantRepository.findById(participantId.id())
-                .ifPresentOrElse(participant -> {
-                    var generateToken = tokenProvider.generateToken(participantId.id());
-                    participant.setStoredToken(generateToken);
-                    participantRepository.save(participant);
-                }, () -> {
-                    throw new EntityNotFoundException("Participant not found with id: %s".formatted(participantId));
-                });
-    }
+    void generate(@NonNull ParticipantId participantId);
 }

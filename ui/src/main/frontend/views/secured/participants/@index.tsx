@@ -1,18 +1,27 @@
-import ParticipantDetail from "Frontend/generated/be/riddler/v1/participant/domain/ParticipantDetail";
+import ParticipantDetail from "Frontend/generated/be/riddler/v1/participant/client/domain/ParticipantDetail";
 import {Dialog, Grid, GridColumn, HorizontalLayout, Notification, TextField} from "@vaadin/react-components";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
 import {useEffect, useState} from "react";
 import {ParticipantAdminEndpoint} from "Frontend/generated/endpoints";
 import {useSignal} from "@vaadin/hilla-react-signals";
-import {CancelButton, CheckButton, CloseButton, GenerateToken, PlusButton} from "Frontend/components/ui/button";
-import CreateParticipant from "Frontend/generated/be/riddler/v1/participant/domain/CreateParticipant";
+import {
+    CancelButton,
+    CheckButton,
+    CloseButton,
+    GenerateToken,
+    PlusButton,
+    ViewDetailButton
+} from "Frontend/components/ui/button";
+import CreateParticipant from "Frontend/generated/be/riddler/v1/participant/client/domain/CreateParticipant";
 import {CheckIcon, CloseIcon} from "Frontend/components/ui/icons";
 import {ElementStylingTypes} from "Frontend/constant";
+import {useNavigate} from "react-router";
 
 function ParticipantTable() {
     const [open, setOpen] = useState(false);
     const [participants, setParticipants] = useState<ParticipantDetail[]>([]);
+    const navigate = useNavigate();
 
     function fetchParticipants() {
         ParticipantAdminEndpoint.findAll()
@@ -23,11 +32,18 @@ function ParticipantTable() {
         fetchParticipants();
     }, []);
 
-    const tokenGeneration = ({item}: { item: ParticipantDetail }) => {
-        return <GenerateToken onClick={() => ParticipantAdminEndpoint.generateToken(item.id).then(e => {
-            fetchParticipants();
-            Notification.show('Token generated', {position: 'top-end', theme: ElementStylingTypes.SUCCESS});
-        })}/>;
+    const actionButtons = ({item}: { item: ParticipantDetail }) => {
+        return (
+            <>
+                <GenerateToken onClick={() => ParticipantAdminEndpoint.generateToken(item.id).then(_ => {
+                    fetchParticipants();
+                    Notification.show('Token generated', {position: 'top-end', theme: ElementStylingTypes.SUCCESS});
+                })}/>
+                <ViewDetailButton onClick={() => {
+                    navigate(`/participants/${item.id}`);
+                }}/>
+            </>
+        );
     };
 
     const tokenIndicator = ({item}: { item: ParticipantDetail }) => {
@@ -41,19 +57,23 @@ function ParticipantTable() {
 
     return (
         <>
-            <HorizontalLayout className={styles.answers_menu_bar}>
-                <PlusButton onClick={() => setOpen(true)}/>
+            <HorizontalLayout className={styles.full_width_layout}>
+                <div className={styles.menu_bar_layout}>
+                    <PlusButton onClick={() => setOpen(true)}/>
+                </div>
             </HorizontalLayout>
             <CreateParticipantDialogModal show={open}
                                           onParticipantCreated={fetchParticipants}
                                           onClose={() => setOpen(false)}/>
-            <Grid key={"id"} items={participants} className={styles.riddler_table} allRowsVisible={true}>
-                <GridColumn key={"first_name"} header={'First Name'} path={"first_name"}/>
-                <GridColumn key={"last_name"} header={'Last Name'} path={"last_name"}/>
-                <GridColumn key={"email_address"} header={'Email'} path={"email_address"}/>
-                <GridColumn key={"stored_token"} header={'Token'} renderer={tokenIndicator}/>
-                <GridColumn header={'Actions'} renderer={tokenGeneration}/>
-            </Grid>
+            <HorizontalLayout className={styles.full_width_layout}>
+                <Grid key={"id"} items={participants} className={styles.riddler_table} allRowsVisible={true}>
+                    <GridColumn key={"first_name"} header={'First Name'} path={"first_name"}/>
+                    <GridColumn key={"last_name"} header={'Last Name'} path={"last_name"}/>
+                    <GridColumn key={"email_address"} header={'Email'} path={"email_address"}/>
+                    <GridColumn key={"stored_token"} header={'Token'} renderer={tokenIndicator}/>
+                    <GridColumn header={'Actions'} renderer={actionButtons}/>
+                </Grid>
+            </HorizontalLayout>
         </>
     );
 }

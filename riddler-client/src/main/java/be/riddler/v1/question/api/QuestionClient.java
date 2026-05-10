@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
@@ -37,8 +38,8 @@ public interface QuestionClient {
     @Operation(
             method = "GET",
             tags = "questions",
-            summary = "Retrieves all the questions",
-            operationId = "getQuestions",
+            summary = "Retrieves all the questions by ids",
+            operationId = "getQuestionsById",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -52,7 +53,9 @@ public interface QuestionClient {
     )
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    List<Question> getQuestions();
+    List<Question> getQuestionsById(@Parameter(description = "Optional list of question UUIDs to filter by")
+                                    @RequestParam(name = "ids", required = false) List<UUID> questionIds);
+
 
     @SuppressWarnings("SpringMvcPathVariableDeclarationInspection")
     @Operation(
