@@ -3,12 +3,14 @@ import {useEffect, useState} from "react";
 import {QuestionEndpoint, QuestionTypeEndpoint} from "Frontend/generated/endpoints";
 import Question from "Frontend/generated/be/riddler/v1/question/domain/Question";
 import AnswersTable from "Frontend/components/answers/answers-table.component";
-import {HorizontalLayout, Select, TextArea, VerticalLayout} from "@vaadin/react-components";
+import {Dialog, HorizontalLayout, Select, TextArea, VerticalLayout} from "@vaadin/react-components";
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css';
 import QuestionType from "Frontend/generated/be/riddler/v1/question/domain/QuestionType";
 import UpdateQuestion from "Frontend/generated/be/riddler/v1/question/domain/UpdateQuestion";
-import {CheckButton, CloseButton} from "Frontend/components/ui/button";
+import {BanButton, ButtonTypes, CheckButton, CloseButton} from "Frontend/components/ui/button";
+import {useSignal} from "@vaadin/hilla-react-signals";
+import {Button} from "@vaadin/react-components/Button.js";
 
 
 export default function QuestionDetailView() {
@@ -16,9 +18,22 @@ export default function QuestionDetailView() {
     const [items, setItems] = useState<{ label: string, value: string }[]>([]);
     const {id} = useParams();
     const navigate = useNavigate();
+    const dialogOpened = useSignal(false);
+
+    function open() {
+        dialogOpened.value = true;
+    }
+
+    function close() {
+        dialogOpened.value = false;
+    }
+
+    function deleteQuestion() {
+        QuestionEndpoint.delete(id!!)
+            .then(() => navigate('/questions'));
+    }
 
     useEffect(() => {
-        console.log(`Trying to fetch ${id}`);
         QuestionEndpoint.get(id).then(setQuestion);
         QuestionTypeEndpoint.questionTypes()
             .then((questionTypes: string[]) => {
@@ -35,11 +50,33 @@ export default function QuestionDetailView() {
                     QuestionEndpoint.update(question?.id!!, updateQuestion)
                         .then(() => navigate('/questions'));
                 }}/>
+                <BanButton onClick={() => {
+                    open();
+                }}/>
                 <CloseButton onClick={() => {
-                    QuestionEndpoint.delete(question.id!!)
-                        .then(() => navigate('/questions'));
+                    navigate('/questions');
                 }}/>
             </HorizontalLayout>
+            <Dialog
+                headerTitle={`Delete user "${question.question}"?`}
+                opened={dialogOpened.value}
+                onClosed={() => {
+                    dialogOpened.value = false;
+                }}
+                footer={
+                    <>
+                        <Button theme={ButtonTypes.PRIMARY_ERROR} onClick={deleteQuestion}
+                                style={{marginRight: 'auto'}}>
+                            Delete
+                        </Button>
+                        <Button theme="tertiary" onClick={close}>
+                            Cancel
+                        </Button>
+                    </>
+                }
+            >
+                Are you sure you want to delete this user permanently?
+            </Dialog>
             <HorizontalLayout className={styles.question_content}>
                 <VerticalLayout style={{width: '100%'}}>
                     <TextArea value={question.question}
@@ -62,7 +99,6 @@ export default function QuestionDetailView() {
                     <AnswersTable questionId={question.id!!}/>
                 </VerticalLayout>
             </HorizontalLayout>
-
         </>
     );
 }

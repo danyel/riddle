@@ -3,6 +3,7 @@ package be.riddler.v1.answer.bff;
 import be.riddler.v1.answer.api.AnswerApi;
 import be.riddler.v1.answer.domain.Answer;
 import be.riddler.v1.answer.domain.CreateAnswer;
+import be.riddler.v1.answer.domain.UpdateAnswer;
 import com.vaadin.hilla.BrowserCallable;
 import jakarta.annotation.security.PermitAll;
 import lombok.AccessLevel;
@@ -30,5 +31,9 @@ public class AnswerEndpoint {
 
     public @NonNull Answer create(@NonNull CreateAnswer createAnswer) {
         return answerApi.create(createAnswer);
+    }
+
+    public @NonNull Answer update(@NonNull UUID answerId, @NonNull UpdateAnswer updateAnswer) {
+        return answerApi.update(answerId, updateAnswer);
     }
 }

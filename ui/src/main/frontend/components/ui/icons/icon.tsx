@@ -16,6 +16,10 @@ export function GlobeIcon() {
     return (<Icon icon='vaadin:globe'/>);
 }
 
+export function BanIcon() {
+    return (<Icon icon='vaadin:ban'/>);
+}
+
 export function PlusIcon() {
     return (<Icon icon='vaadin:plus'/>);
 }

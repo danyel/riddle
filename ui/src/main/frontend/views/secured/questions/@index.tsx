@@ -1,5 +1,14 @@
 import {useEffect, useState} from 'react';
-import {Dialog, Grid, GridColumn, HorizontalLayout, Select, TextField} from "@vaadin/react-components";
+import {
+    Dialog,
+    FormLayout,
+    FormRow,
+    Grid,
+    GridColumn,
+    HorizontalLayout,
+    Select,
+    TextField
+} from "@vaadin/react-components";
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css';
 
@@ -51,7 +60,7 @@ function CreateQuestionDialogModal(props: {
         const payload: CreateQuestion = {
             question: createQuestion.value.question,
             type: createQuestion.value.type,
-        }
+        };
         QuestionEndpoint.create(payload)
             .then(() => {
                 props.onParticipantCreated();
@@ -79,27 +88,47 @@ function CreateQuestionDialogModal(props: {
                 </>
             )}
         >
-
-            <div>
-                <TextField
-                    label="Last Name"
-                    value={createQuestion.value.question}
-                    onValueChanged={(e) => (createQuestion.value.question = e.detail.value)}
-                    className={styles.text_area_full}
-                />
-            </div>
-
-            <div>
-                <Select label="Sort by" items={dropDown} value={createQuestion.value.type}/>
-            </div>
+            <FormLayout
+                style={{width: '100%'}}
+                autoResponsive
+                columnWidth="8em"
+                expandColumns
+                expandFields
+            >
+                <FormRow>
+                    <TextField
+                        label="Question"
+                        value={createQuestion.value.question}
+                        onValueChanged={(e) => createQuestion.value.question = e.detail.value}
+                        className={styles.text_area_full}
+                    />
+                </FormRow>
+                <FormRow>
+                    <Select label="Type" items={dropDown}
+                            onValueChanged={(e) => createQuestion.value.type = e.detail.value as QuestionType}/>
+                </FormRow>
+            </FormLayout>
         </Dialog>
+    );
+}
+
+function QuestionTable(props: { questions: Question[] }) {
+    const navigate = useNavigate();
+    const showQuestion = ({item}: { item: Question }) => {
+        return <ViewDetailButton onClick={() => navigate(`/question/${item.id}`)}/>;
+    };
+    return (
+        <Grid key={"id"} items={props.questions} className={styles.riddler_table} allRowsVisible={true}>
+            <GridColumn key={"question"} path={"question"}/>
+            <GridColumn key={"type"} path={"type"}/>
+            <GridColumn header={'Action'} renderer={showQuestion}/>
+        </Grid>
     );
 }
 
 export default function QuestionsView() {
     const [open, setOpen] = useState(false);
     const [questions, setQuestions] = useState<Question[]>([]);
-    const navigate = useNavigate();
 
     function fetchQuestions() {
         QuestionEndpoint.getQuestions().then(setQuestions);
@@ -109,11 +138,6 @@ export default function QuestionsView() {
         fetchQuestions();
     }, []);
 
-    const showQuestion = ({item}: { item: Question }) => {
-        return <ViewDetailButton onClick={() => navigate(`/question/${item.id}`)}/>;
-
-    };
-
     return (
         <>
             <HorizontalLayout className={styles.answers_menu_bar}>
@@ -122,12 +146,9 @@ export default function QuestionsView() {
             <CreateQuestionDialogModal show={open}
                                        onParticipantCreated={fetchQuestions}
                                        onClose={() => setOpen(false)}/>
-            <Grid key={"id"} items={questions} className={styles.riddler_table} allRowsVisible={true}>
-                <GridColumn key={"question"} path={"question"}/>
-                <GridColumn key={"type"} path={"type"}/>
-                <GridColumn header={'Action'} renderer={showQuestion}/>
-            </Grid>
-
+            <HorizontalLayout className={styles.div_full}>
+                <QuestionTable questions={questions}/>
+            </HorizontalLayout>
         </>
     );
 }

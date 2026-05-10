@@ -3,8 +3,10 @@ package be.riddler.v1.answer.api;
 import be.riddler.v1.answer.domain.Answer;
 import be.riddler.v1.answer.domain.CreateAnswer;
 import be.riddler.v1.answer.domain.QuestionId;
+import be.riddler.v1.answer.domain.UpdateAnswer;
 import be.riddler.v1.answer.feature.CreateAnswerFeature;
 import be.riddler.v1.answer.feature.GetAnswersByQuestionIdFeature;
+import be.riddler.v1.answer.feature.UpdateAnswerFeature;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +27,7 @@ import java.util.UUID;
 class AnswerResource implements AnswerApi {
     private final CreateAnswerFeature createAnswerFeature;
     private final GetAnswersByQuestionIdFeature getAnswersByQuestionIdFeature;
-
+    private final UpdateAnswerFeature updateAnswerFeature;
 
     @Override
     public List<Answer> findByQuestionId(UUID questionId) {
@@ -35,5 +37,10 @@ class AnswerResource implements AnswerApi {
     @Override
     public Answer create(CreateAnswer createAnswer) {
         return createAnswerFeature.create(createAnswer);
+    }
+
+    @Override
+    public Answer update(UUID answerId, UpdateAnswer updateAnswer) {
+        return updateAnswerFeature.update(answerId, updateAnswer);
     }
 }

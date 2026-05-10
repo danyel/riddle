@@ -1,6 +1,6 @@
 import {Button, ButtonProps} from "@vaadin/react-components/Button.js";
 import {ReactNode} from "react";
-import {CheckIcon, CloseIcon, CrossIcon, EyeIcon, GlobeIcon, PlusIcon} from "Frontend/components/ui/icons";
+import {BanIcon, CheckIcon, CloseIcon, CrossIcon, EyeIcon, GlobeIcon, PlusIcon} from "Frontend/components/ui/icons";
 
 /*
 primary Recommended for the most important action in a view
@@ -75,6 +75,16 @@ export function ViewDetailButton(props: { onClick: () => void }) {
             icon={EyeIcon()}
             onClick={props.onClick}
             theme={ButtonTypes.TERTIARY_INLINE}
+        />
+    );
+}
+
+export function BanButton(props: { onClick: () => void }) {
+    return (
+        <BaseButton
+            icon={BanIcon()}
+            onClick={props.onClick}
+            theme={ButtonTypes.ERROR}
         />
     );
 }

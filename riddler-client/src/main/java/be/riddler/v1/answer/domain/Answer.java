@@ -13,7 +13,7 @@ import java.util.UUID;
  * @version 1.0.0 11/04/2026
  */
 public record Answer(
-        @Valid UUID id,
+        @NonNull @Valid UUID id,
         @NonNull @Valid String value,
         @NonNull @Valid @JsonProperty(value = "question_id") UUID questionId
 ) {

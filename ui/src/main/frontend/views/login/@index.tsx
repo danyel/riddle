@@ -1,26 +1,24 @@
 import {useRef} from 'react';
 import {useAuth} from 'Frontend/auth';
-import {useNavigate} from "react-router";
+import {Navigate, useNavigate} from "react-router";
 import {LoginOverlay, LoginOverlayElement} from "@vaadin/react-components";
 
 export default function LoginView() {
-    const {login} = useAuth(); // 'authenticate' updates the AuthProvider state
+    const {state, login} = useAuth(); // 'authenticate' updates the AuthProvider state
     const navigate = useNavigate();
     const loginOverlayRef = useRef<LoginOverlayElement>(null);
 
-    // // If already logged in, redirect to home
-    // if (state.user) {
-    //     return <Navigate to="/" replace/>;
-    // }
+    // If already logged in, redirect to home
+    if (state.user) {
+        return <Navigate to="/" replace/>;
+    }
 
     return (
         <LoginOverlay
             ref={loginOverlayRef}
             opened
-
             noForgotPassword
             title="Riddler App"
-            description="Please log in to continue"
             onLogin={async (e) => {
                 const {username, password} = e.detail;
 
@@ -33,7 +31,7 @@ export default function LoginView() {
                         loginOverlayRef.current.disabled = false;
                     }
                 } else {
-                    navigate('/')
+                    navigate('/');
                 }
             }}
         />
