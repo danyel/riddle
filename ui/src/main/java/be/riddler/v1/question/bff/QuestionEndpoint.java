@@ -1,9 +1,9 @@
 package be.riddler.v1.question.bff;
 
-import be.riddler.v1.question.api.QuestionClient;
-import be.riddler.v1.question.domain.CreateQuestion;
-import be.riddler.v1.question.domain.Question;
-import be.riddler.v1.question.domain.UpdateQuestion;
+import be.riddler.v1.question.client.QuestionClient;
+import be.riddler.v1.question.client.model.CreateQuestion;
+import be.riddler.v1.question.client.model.Question;
+import be.riddler.v1.question.client.model.UpdateQuestion;
 import com.vaadin.hilla.BrowserCallable;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AccessLevel;

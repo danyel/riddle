@@ -1,7 +1,7 @@
 package be.riddler.v1.participant.mapper;
 
-import be.riddler.v1.participant.client.domain.CreateParticipant;
-import be.riddler.v1.participant.client.domain.ParticipantDetail;
+import be.riddler.v1.participant.client.model.CreateParticipant;
+import be.riddler.v1.participant.client.model.ParticipantDetail;
 import be.riddler.v1.participant.entity.ParticipantEntity;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;

@@ -1,5 +1,7 @@
 package be.riddler.v1.security.api;
 
+import be.riddler.v1.security.client.SecurityClient;
+import be.riddler.v1.security.client.model.UserInfo;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

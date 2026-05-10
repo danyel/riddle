@@ -1,9 +1,10 @@
 package be.riddler.v1.ui.api;
 
-import be.riddler.v1.question.domain.QuestionType;
-import be.riddler.v1.ui.domain.SupportedLanguages;
-import be.riddler.v1.ui.domain.Translation;
-import be.riddler.v1.ui.domain.TranslationProperty;
+import be.riddler.v1.question.client.model.QuestionType;
+import be.riddler.v1.ui.client.UiClient;
+import be.riddler.v1.ui.client.model.SupportedLanguages;
+import be.riddler.v1.ui.client.model.Translation;
+import be.riddler.v1.ui.client.model.TranslationProperty;
 import be.riddler.v1.ui.feature.GetIconsFeature;
 import be.riddler.v1.ui.feature.GetTranslationFeature;
 import be.riddler.v1.ui.feature.GetTranslationsByLanguageFeature;

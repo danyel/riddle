@@ -1,9 +1,9 @@
 package be.riddler.v1.participant.bff;
 
 import be.riddler.v1.participant.client.ParticipantClient;
-import be.riddler.v1.participant.client.domain.ParticipantDetail;
-import be.riddler.v1.question.api.QuestionClient;
-import be.riddler.v1.question.domain.Question;
+import be.riddler.v1.participant.client.model.ParticipantDetail;
+import be.riddler.v1.question.client.QuestionClient;
+import be.riddler.v1.question.client.model.Question;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
 import lombok.AccessLevel;

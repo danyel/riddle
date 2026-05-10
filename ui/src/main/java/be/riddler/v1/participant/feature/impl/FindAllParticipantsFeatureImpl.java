@@ -1,6 +1,6 @@
 package be.riddler.v1.participant.feature.impl;
 
-import be.riddler.v1.participant.client.domain.ParticipantDetail;
+import be.riddler.v1.participant.client.model.ParticipantDetail;
 import be.riddler.v1.participant.feature.FindAllParticipantsFeature;
 import be.riddler.v1.participant.mapper.ParticipantMapper;
 import be.riddler.v1.participant.repository.ParticipantRepository;

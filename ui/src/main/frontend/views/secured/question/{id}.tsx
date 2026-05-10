@@ -1,13 +1,13 @@
 import {useNavigate, useParams} from "react-router";
 import {useEffect, useState} from "react";
 import {QuestionEndpoint, QuestionTypeEndpoint} from "Frontend/generated/endpoints";
-import Question from "Frontend/generated/be/riddler/v1/question/domain/Question";
+import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
 import AnswersTable from "Frontend/components/answers/answers-table.component";
 import {Dialog, HorizontalLayout, Select, TextArea, VerticalLayout} from "@vaadin/react-components";
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css';
-import QuestionType from "Frontend/generated/be/riddler/v1/question/domain/QuestionType";
-import UpdateQuestion from "Frontend/generated/be/riddler/v1/question/domain/UpdateQuestion";
+import QuestionType from "Frontend/generated/be/riddler/v1/question/client/model/QuestionType";
+import UpdateQuestion from "Frontend/generated/be/riddler/v1/question/client/model/UpdateQuestion";
 import {BanButton, CheckButton, CloseButton} from "Frontend/components/ui/button";
 import {useSignal} from "@vaadin/hilla-react-signals";
 import {Button} from "@vaadin/react-components/Button.js";

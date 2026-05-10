@@ -1,6 +1,6 @@
 import {useEffect, useRef} from 'react';
 import {ActivityEndpoint} from 'Frontend/generated/endpoints';
-import CreateActivity from "Frontend/generated/be/riddler/v1/activity/domain/CreateActivity";
+import CreateActivity from "Frontend/generated/be/riddler/v1/activity/client/model/CreateActivity";
 
 export function useActivityTracker(questionId: string) {
     const queue = useRef<CreateActivity[]>([]);

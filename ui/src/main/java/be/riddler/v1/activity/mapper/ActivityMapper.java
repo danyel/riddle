@@ -1,7 +1,7 @@
 package be.riddler.v1.activity.mapper;
 
-import be.riddler.v1.activity.domain.ActivityDetail;
-import be.riddler.v1.activity.domain.CreateActivity;
+import be.riddler.v1.activity.client.model.ActivityDetail;
+import be.riddler.v1.activity.client.model.CreateActivity;
 import be.riddler.v1.activity.entity.ActivityEntity;
 import lombok.experimental.UtilityClass;
 import org.springframework.security.core.context.SecurityContextHolder;

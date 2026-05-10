@@ -1,6 +1,6 @@
 package be.riddler.v1.participant.feature;
 
-import be.riddler.v1.participant.client.domain.ParticipantId;
+import be.riddler.v1.participant.client.model.ParticipantId;
 import org.jspecify.annotations.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 

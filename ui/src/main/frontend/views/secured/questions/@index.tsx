@@ -15,12 +15,12 @@ import styles from 'Frontend/themes/riddler/common.module.css';
 // CRITICAL: You must import the iconset for the icons to render
 import '@vaadin/icons';
 import {useNavigate} from "react-router";
-import Question from "Frontend/generated/be/riddler/v1/question/domain/Question";
-import CreateQuestion from "Frontend/generated/be/riddler/v1/question/domain/CreateQuestion";
+import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
+import CreateQuestion from "Frontend/generated/be/riddler/v1/question/client/model/CreateQuestion";
 import {QuestionEndpoint} from "Frontend/generated/endpoints";
 import {CancelButton, CheckButton, CloseButton, PlusButton, ViewDetailButton} from "Frontend/components/ui/button";
 import {useSignal} from "@vaadin/hilla-react-signals";
-import QuestionType from "Frontend/generated/be/riddler/v1/question/domain/QuestionType";
+import QuestionType from "Frontend/generated/be/riddler/v1/question/client/model/QuestionType";
 
 
 function CreateQuestionDialogModal(props: {

@@ -1,7 +1,7 @@
 package be.riddler.v1.answer.feature;
 
-import be.riddler.v1.answer.domain.Answer;
-import be.riddler.v1.answer.domain.QuestionId;
+import be.riddler.v1.answer.client.model.Answer;
+import be.riddler.v1.answer.client.model.QuestionId;
 import be.riddler.v1.answer.mapper.AnswerMapper;
 import be.riddler.v1.answer.repository.AnswerRepository;
 import lombok.AccessLevel;

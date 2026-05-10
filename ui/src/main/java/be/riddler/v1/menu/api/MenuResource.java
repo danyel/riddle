@@ -1,6 +1,7 @@
 package be.riddler.v1.menu.api;
 
-import be.riddler.v1.menu.domain.Menu;
+import be.riddler.v1.menu.client.MenuClient;
+import be.riddler.v1.menu.client.model.Menu;
 import be.riddler.v1.menu.feature.RetrieveMenuForUsernameFeature;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

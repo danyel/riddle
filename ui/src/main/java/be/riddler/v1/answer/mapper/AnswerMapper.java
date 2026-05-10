@@ -1,7 +1,7 @@
 package be.riddler.v1.answer.mapper;
 
-import be.riddler.v1.answer.domain.Answer;
-import be.riddler.v1.answer.domain.CreateAnswer;
+import be.riddler.v1.answer.client.model.Answer;
+import be.riddler.v1.answer.client.model.CreateAnswer;
 import be.riddler.v1.answer.entity.AnswerEntity;
 import lombok.experimental.UtilityClass;
 

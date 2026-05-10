@@ -1,7 +1,7 @@
 package be.riddler.v1.question.feature.impl;
 
-import be.riddler.v1.question.domain.Question;
-import be.riddler.v1.question.domain.QuestionId;
+import be.riddler.v1.question.client.model.Question;
+import be.riddler.v1.question.client.model.QuestionId;
 import be.riddler.v1.question.feature.GetQuestionByIdFeature;
 import be.riddler.v1.question.mapper.QuestionMapper;
 import be.riddler.v1.question.repository.QuestionRepository;

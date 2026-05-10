@@ -1,8 +1,9 @@
 package be.riddler.v1.activity.api;
 
-import be.riddler.v1.activity.domain.ActivityDetail;
-import be.riddler.v1.activity.domain.CreateActivity;
-import be.riddler.v1.activity.domain.GetActivities;
+import be.riddler.v1.activity.client.ActivityClient;
+import be.riddler.v1.activity.client.model.ActivityDetail;
+import be.riddler.v1.activity.client.model.CreateActivity;
+import be.riddler.v1.activity.client.model.GetActivities;
 import be.riddler.v1.activity.feature.CreateActivityFeature;
 import be.riddler.v1.activity.feature.GetActivitiesFeature;
 import lombok.AccessLevel;

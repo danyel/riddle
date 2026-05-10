@@ -1,6 +1,6 @@
 package be.riddler.v1.participant.feature;
 
-import be.riddler.v1.participant.client.domain.ParticipantDetail;
+import be.riddler.v1.participant.client.model.ParticipantDetail;
 import org.jspecify.annotations.NonNull;
 
 import java.util.List;

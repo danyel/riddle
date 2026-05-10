@@ -1,4 +1,4 @@
-import ParticipantDetail from "Frontend/generated/be/riddler/v1/participant/client/domain/ParticipantDetail";
+import ParticipantDetail from "Frontend/generated/be/riddler/v1/participant/client/model/ParticipantDetail";
 import {Dialog, Grid, GridColumn, HorizontalLayout, Notification, TextField} from "@vaadin/react-components";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
@@ -13,7 +13,7 @@ import {
     PlusButton,
     ViewDetailButton
 } from "Frontend/components/ui/button";
-import CreateParticipant from "Frontend/generated/be/riddler/v1/participant/client/domain/CreateParticipant";
+import CreateParticipant from "Frontend/generated/be/riddler/v1/participant/client/model/CreateParticipant";
 import {CheckIcon, CloseIcon} from "Frontend/components/ui/icons";
 import {ElementStylingTypes} from "Frontend/constant";
 import {useNavigate} from "react-router";

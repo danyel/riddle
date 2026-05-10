@@ -1,7 +1,7 @@
 package be.riddler.v1.participant.client;
 
-import be.riddler.v1.participant.client.domain.CreateParticipant;
-import be.riddler.v1.participant.client.domain.ParticipantDetail;
+import be.riddler.v1.participant.client.model.CreateParticipant;
+import be.riddler.v1.participant.client.model.ParticipantDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;

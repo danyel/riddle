@@ -5,7 +5,7 @@ import be.riddler.v1.question.repository.QuestionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static be.riddler.v1.question.domain.QuestionType.OPEN;
+import static be.riddler.v1.question.client.model.QuestionType.OPEN;
 import static java.util.UUID.fromString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

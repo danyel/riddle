@@ -1,6 +1,6 @@
 package be.riddler.v1.participant.feature.impl;
 
-import be.riddler.v1.participant.client.domain.ParticipantId;
+import be.riddler.v1.participant.client.model.ParticipantId;
 import be.riddler.v1.participant.codec.TokenProvider;
 import be.riddler.v1.participant.feature.GenerateTokenFeature;
 import be.riddler.v1.participant.repository.ParticipantRepository;

@@ -3,11 +3,11 @@ import {Dialog, FormLayout, FormRow, Grid, GridColumn, HorizontalLayout, TextAre
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
 import {AnswerEndpoint} from "Frontend/generated/endpoints";
-import Answer from "Frontend/generated/be/riddler/v1/answer/domain/Answer";
+import Answer from "Frontend/generated/be/riddler/v1/answer/client/model/Answer";
 import {useSignal} from "@vaadin/hilla-react-signals";
-import CreateAnswer from "Frontend/generated/be/riddler/v1/answer/domain/CreateAnswer";
+import CreateAnswer from "Frontend/generated/be/riddler/v1/answer/client/model/CreateAnswer";
 import {CancelButton, CheckButton, CloseButton, PlusButton, ViewDetailButton} from "Frontend/components/ui/button";
-import UpdateAnswer from "Frontend/generated/be/riddler/v1/answer/domain/UpdateAnswer";
+import UpdateAnswer from "Frontend/generated/be/riddler/v1/answer/client/model/UpdateAnswer";
 
 export interface AnswersTableProperties {
     questionId: string;

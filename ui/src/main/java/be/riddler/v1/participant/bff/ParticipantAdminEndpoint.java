@@ -1,8 +1,8 @@
 package be.riddler.v1.participant.bff;
 
 import be.riddler.v1.participant.client.ParticipantClient;
-import be.riddler.v1.participant.client.domain.CreateParticipant;
-import be.riddler.v1.participant.client.domain.ParticipantDetail;
+import be.riddler.v1.participant.client.model.CreateParticipant;
+import be.riddler.v1.participant.client.model.ParticipantDetail;
 import com.vaadin.hilla.BrowserCallable;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AccessLevel;

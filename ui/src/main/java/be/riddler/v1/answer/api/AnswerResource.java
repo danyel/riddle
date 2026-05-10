@@ -1,9 +1,10 @@
 package be.riddler.v1.answer.api;
 
-import be.riddler.v1.answer.domain.Answer;
-import be.riddler.v1.answer.domain.CreateAnswer;
-import be.riddler.v1.answer.domain.QuestionId;
-import be.riddler.v1.answer.domain.UpdateAnswer;
+import be.riddler.v1.answer.client.AnswerClient;
+import be.riddler.v1.answer.client.model.Answer;
+import be.riddler.v1.answer.client.model.CreateAnswer;
+import be.riddler.v1.answer.client.model.QuestionId;
+import be.riddler.v1.answer.client.model.UpdateAnswer;
 import be.riddler.v1.answer.feature.CreateAnswerFeature;
 import be.riddler.v1.answer.feature.GetAnswersByQuestionIdFeature;
 import be.riddler.v1.answer.feature.UpdateAnswerFeature;

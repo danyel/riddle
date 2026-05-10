@@ -1,6 +1,6 @@
 package be.riddler.v1.menu.feature;
 
-import be.riddler.v1.menu.domain.Menu;
+import be.riddler.v1.menu.client.model.Menu;
 import be.riddler.v1.menu.entity.MenuConfigurationEntity;
 import be.riddler.v1.menu.repository.MenuConfigurationRepository;
 import be.riddler.v1.menu.repository.MenuRepository;

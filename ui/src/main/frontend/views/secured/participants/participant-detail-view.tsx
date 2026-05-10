@@ -11,7 +11,7 @@ import {
 import {useParams} from "react-router";
 import {useEffect, useState} from "react";
 import {InvitationEndpoint, ParticipantAdminEndpoint} from "Frontend/generated/endpoints";
-import ParticipantDetail from "Frontend/generated/be/riddler/v1/participant/client/domain/ParticipantDetail";
+import ParticipantDetail from "Frontend/generated/be/riddler/v1/participant/client/model/ParticipantDetail";
 import InvitationDetail from "Frontend/generated/be/riddler/v1/invitation/client/model/InvitationDetail";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";

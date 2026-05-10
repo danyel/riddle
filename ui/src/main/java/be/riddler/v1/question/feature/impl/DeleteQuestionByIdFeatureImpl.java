@@ -1,6 +1,6 @@
 package be.riddler.v1.question.feature.impl;
 
-import be.riddler.v1.question.domain.QuestionId;
+import be.riddler.v1.question.client.model.QuestionId;
 import be.riddler.v1.question.feature.DeleteQuestionByIdFeature;
 import be.riddler.v1.question.repository.QuestionRepository;
 import jakarta.persistence.EntityNotFoundException;

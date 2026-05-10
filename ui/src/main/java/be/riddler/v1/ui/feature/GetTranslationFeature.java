@@ -1,7 +1,7 @@
 package be.riddler.v1.ui.feature;
 
-import be.riddler.v1.ui.domain.Translation;
-import be.riddler.v1.ui.domain.TranslationProperty;
+import be.riddler.v1.ui.client.model.Translation;
+import be.riddler.v1.ui.client.model.TranslationProperty;
 import be.riddler.v1.ui.repository.KeyRepository;
 import be.riddler.v1.ui.repository.TranslationRepository;
 import lombok.AccessLevel;

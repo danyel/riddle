@@ -1,6 +1,6 @@
 package be.riddler.v1.question.feature;
 
-import be.riddler.v1.question.domain.QuestionId;
+import be.riddler.v1.question.client.model.QuestionId;
 import org.jspecify.annotations.NonNull;
 
 /**

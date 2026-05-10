@@ -1,6 +1,6 @@
 package be.riddler.v1.question.entity;
 
-import be.riddler.v1.question.domain.QuestionType;
+import be.riddler.v1.question.client.model.QuestionType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

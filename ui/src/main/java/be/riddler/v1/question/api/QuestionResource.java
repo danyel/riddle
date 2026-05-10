@@ -1,10 +1,11 @@
 package be.riddler.v1.question.api;
 
-import be.riddler.v1.question.domain.CreateQuestion;
-import be.riddler.v1.question.domain.Question;
-import be.riddler.v1.question.domain.QuestionId;
-import be.riddler.v1.question.domain.UpdateQuestion;
-import be.riddler.v1.question.domain.UpdateWithId;
+import be.riddler.v1.question.client.QuestionClient;
+import be.riddler.v1.question.client.model.CreateQuestion;
+import be.riddler.v1.question.client.model.Question;
+import be.riddler.v1.question.client.model.QuestionId;
+import be.riddler.v1.question.client.model.UpdateQuestion;
+import be.riddler.v1.question.client.model.UpdateWithId;
 import be.riddler.v1.question.feature.CreateQuestionFeature;
 import be.riddler.v1.question.feature.DeleteQuestionByIdFeature;
 import be.riddler.v1.question.feature.GetQuestionByIdFeature;

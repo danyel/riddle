@@ -1,7 +1,7 @@
 package be.riddler.v1.activity.bff;
 
-import be.riddler.v1.activity.api.ActivityClient;
-import be.riddler.v1.activity.domain.CreateActivity;
+import be.riddler.v1.activity.client.ActivityClient;
+import be.riddler.v1.activity.client.model.CreateActivity;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
 import lombok.AccessLevel;

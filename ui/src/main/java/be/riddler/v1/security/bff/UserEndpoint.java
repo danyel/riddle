@@ -1,8 +1,8 @@
 package be.riddler.v1.security.bff;
 
 import be.riddler.v1.common.http.Unauthorized;
-import be.riddler.v1.security.api.SecurityClient;
-import be.riddler.v1.security.api.UserInfo;
+import be.riddler.v1.security.client.SecurityClient;
+import be.riddler.v1.security.client.model.UserInfo;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
 import lombok.AccessLevel;

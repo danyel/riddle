@@ -1,9 +1,9 @@
 package be.riddler.v1.participant.api;
 
 import be.riddler.v1.participant.client.ParticipantClient;
-import be.riddler.v1.participant.client.domain.CreateParticipant;
-import be.riddler.v1.participant.client.domain.ParticipantDetail;
-import be.riddler.v1.participant.client.domain.ParticipantId;
+import be.riddler.v1.participant.client.model.CreateParticipant;
+import be.riddler.v1.participant.client.model.ParticipantDetail;
+import be.riddler.v1.participant.client.model.ParticipantId;
 import be.riddler.v1.participant.feature.CreateParticipantFeature;
 import be.riddler.v1.participant.feature.FindAllParticipantsFeature;
 import be.riddler.v1.participant.feature.FindByParticipantIdFeature;

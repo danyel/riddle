@@ -1,7 +1,7 @@
 package be.riddler.v1.activity.feature;
 
-import be.riddler.v1.activity.domain.ActivityDetail;
-import be.riddler.v1.activity.domain.CreateActivity;
+import be.riddler.v1.activity.client.model.ActivityDetail;
+import be.riddler.v1.activity.client.model.CreateActivity;
 import be.riddler.v1.activity.mapper.ActivityMapper;
 import be.riddler.v1.activity.repository.ActivityRepository;
 import lombok.AccessLevel;
