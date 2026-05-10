@@ -39,6 +39,26 @@ export function ParticipantDetailView() {
                 .then(setParticipant)
 
             fetchInvitations();
+            requestAnimationFrame(() => {
+                // noinspection CssInvalidHtmlTagReference
+                const overlay = document.querySelector('vaadin-dialog-overlay');
+                if (overlay) {
+                    // Pierce the component parts to strip padding and force absolute fullscreen dimensions
+                    const partOverlay = overlay.shadowRoot?.querySelector('[part="overlay"]') as HTMLElement;
+                    const partContent = overlay.shadowRoot?.querySelector('[part="content"]') as HTMLElement;
+
+                    if (partOverlay) {
+                        partOverlay.style.setProperty('width', '80vw', 'important');
+                        partOverlay.style.setProperty('height', '80vh', 'important');
+                        partOverlay.style.setProperty('max-width', '80vw', 'important');
+                        partOverlay.style.setProperty('max-height', '80vh', 'important');
+                    }
+                    if (partContent) {
+                        // Strips default padding around your iframe container box
+                        partContent.style.setProperty('padding', '40', 'important');
+                    }
+                }
+            });
         }
     }, [params.id]);
 
@@ -62,34 +82,31 @@ export function ParticipantDetailView() {
             <Dialog
                 headerTitle="Curriculum Vitae Preview"
                 opened={cvOpen}
-                ref={(el) => {
-                    if (el) {
-                        // Force Vaadin's underlying overlay container to stretch to full viewport width/height
-                        el.style.setProperty('--vaadin-dialog-width', '100vw');
-                        el.style.setProperty('--vaadin-dialog-height', '100vh');
-                    }
-                }}
+                // 💡 Removed the old inline ref block completely
                 onClosed={() => setCvOpen(false)}
-                // 1. Force the dialog window to expand significantly on the viewport surface
                 footer={
-                    <Button theme="tertiary" onClick={() => setCvOpen(false)}>
+                    <Button theme="tertiary" onClick={() => setCvOpen(false)} style={{margin: 'var(--lumo-space-m)'}}>
                         Close
                     </Button>
                 }
             >
-                {/* 2. Wrap the viewer frame container inside a flex box layout */}
-                <div style={{width: '100%', height: '100%', display: 'flex', boxSizing: 'border-box'}}>
+                {/* Flex configuration forces iframe to consume 100% of the newly expanded overlay space */}
+                <div style={{
+                    width: '90vw',
+                    height: 'calc(90vh - 120px)', // Account for the header and footer bar heights
+                    display: 'flex',
+                    flexDirection: 'column',
+                    boxSizing: 'border-box'
+                }}>
                     {cvOpen && participant?.cv && (
                         <iframe
-                            // 💡 Pass the base64 string directly as an application/pdf Data URL context scheme
                             src={`data:application/pdf;base64,${participant.cv}`}
                             title="CV Document Viewer"
                             style={{
                                 width: '100%',
                                 height: '100%',
-                                minHeight: '68vh',
-                                border: 'none',
-                                borderRadius: 'var(--lumo-space-s)'
+                                flex: '1 1 auto',
+                                border: 'none'
                             }}
                         />
                     )}
@@ -126,9 +143,7 @@ export function ParticipantDetailView() {
                                 onUploadBefore={(e: UploadBeforeEvent) => {
                                     const csrfToken = getCookie('XSRF-TOKEN');
                                     if (csrfToken) {
-                                        // 💡 Inject the CSRF token into the h <Button theme="secondary" onClick={() => setCvOpen(true)}>
-                                        //                                     View CV Document
-                                        //                                 </Button>eader to satisfy Spring Security 7.0
+                                        // 💡 FIXED: Cleaned up the broken inline button comment text block
                                         e.detail.xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);
                                     }
                                 }}
@@ -143,7 +158,6 @@ export function ParticipantDetailView() {
                                 onUploadBefore={(e: UploadBeforeEvent) => {
                                     const csrfToken = getCookie('XSRF-TOKEN');
                                     if (csrfToken) {
-                                        // 💡 Inject the CSRF token into the header to satisfy Spring Security 7.0
                                         e.detail.xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);
                                     }
                                 }}
@@ -153,7 +167,7 @@ export function ParticipantDetailView() {
                 </VerticalLayout>
             </HorizontalLayout>
             <Dialog
-                headerTitle={`Create invitation"?`}
+                headerTitle="Create invitation"
                 opened={open}
                 onClosed={() => {
                     setOpen(false);
@@ -166,13 +180,13 @@ export function ParticipantDetailView() {
                                 style={{marginRight: 'auto'}}>
                             Create Invitation
                         </Button>
-                        <Button theme="tertiary" onClick={close}>
+                        <Button theme="tertiary" onClick={() => setOpen(false)}>
                             Cancel
                         </Button>
                     </>
                 }
             >
-                Are you sure you want to delete this user permanently?
+                Are you sure you want to create an invitation for this user?
             </Dialog>
             <HorizontalLayout className={styles.full_width_layout}>
                 <div className={styles.menu_bar_layout}>
