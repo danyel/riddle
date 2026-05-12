@@ -6,13 +6,14 @@ import HomeView from "Frontend/views/secured/@index";
 import LoginView from "Frontend/views/login/@index";
 import LoginLayout from "Frontend/views/login/@layout";
 import IconsView from "Frontend/views/secured/icons/@index";
-import {createBrowserRouter, isRouteErrorResponse, useRouteError} from "react-router-dom";
+import {createHashRouter, isRouteErrorResponse, useRouteError} from "react-router-dom";
 import QuestionDetailView from "Frontend/views/secured/question/{id}";
 import ParticipantLayout from "Frontend/views/participant/@layout";
 import ParticipantQuestionsView from "Frontend/views/participant/question/view-question-page";
 import ParticipantView from "Frontend/views/participant/@index";
 import ParticipantsView from "Frontend/views/secured/participants/@index";
 import {ParticipantDetailView} from "Frontend/views/secured/participants/participant-detail-view";
+
 
 function RootErrorBoundary() {
     const error = useRouteError();
@@ -102,5 +103,5 @@ export const routes = protectRoutes([
     }
 ]);
 
-export const router = createBrowserRouter(routes);
+export const router = createHashRouter(routes);
 export default router;

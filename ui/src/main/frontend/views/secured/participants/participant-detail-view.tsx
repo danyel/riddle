@@ -18,6 +18,7 @@ import styles from "Frontend/themes/riddler/common.module.css";
 import {PlusButton} from "Frontend/components/ui/button";
 import {Button} from "@vaadin/react-components/Button";
 import {ElementStylingTypes} from "Frontend/constant";
+import {useSignal} from "@vaadin/hilla-react-signals";
 
 export function ParticipantDetailView() {
     const [cvOpen, setCvOpen] = useState(false);
@@ -61,6 +62,14 @@ export function ParticipantDetailView() {
             });
         }
     }, [params.id]);
+
+    const uploadI18n = useSignal({
+        addFiles: { one: 'Upload Report...' },
+        dropFiles: { one: 'Drop report here' },
+        error: {
+            incorrectFileType: 'The provided file does not have the correct format (PDF document).',
+        },
+    });
 
     function getCookie(name: string): string | null {
         const value = `; ${document.cookie}`;
@@ -117,8 +126,24 @@ export function ParticipantDetailView() {
                     <HorizontalLayout className={styles.full_width_layout}>
                         <Card>
                             {participant?.photo != undefined && (
-                                <img slot="media" width="100" src={`data:image/png;base64,${participant?.photo}`}
-                                     alt={"Photo"}/>)}
+                                <HorizontalLayout>
+                                    <img slot="media" width="100" src={`data:image/png;base64,${participant?.photo}`}
+                                         alt={"Photo"}/>
+                                    <Upload
+                                        accept="image/*"
+                                        target={"/v1/participants/" + params.id!! + "/photo"}
+                                        maxFileSize={20000000}
+                                        i18n={uploadI18n.value}
+                                        nodrop
+                                        onUploadBefore={(e: UploadBeforeEvent) => {
+                                            const csrfToken = getCookie('XSRF-TOKEN');
+                                            if (csrfToken) {
+                                                // 💡 FIXED: Cleaned up the broken inline button comment text block
+                                                e.detail.xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);
+                                            }
+                                        }}
+                                    />
+                                </HorizontalLayout>)}
                             <div>{participant?.first_name}</div>
                             <div>{participant?.last_name}</div>
                             <div>{participant?.email_address}</div>
@@ -134,21 +159,6 @@ export function ParticipantDetailView() {
                         </Card>
                     </HorizontalLayout>
                     <VerticalLayout className={styles.full_width_layout}>
-                        <HorizontalLayout className={styles.full_width_layout}>
-                            <Upload
-                                accept="image/*"
-                                target={"/v1/participants/" + params.id!! + "/photo"}
-                                maxFileSize={20000000}
-                                nodrop
-                                onUploadBefore={(e: UploadBeforeEvent) => {
-                                    const csrfToken = getCookie('XSRF-TOKEN');
-                                    if (csrfToken) {
-                                        // 💡 FIXED: Cleaned up the broken inline button comment text block
-                                        e.detail.xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);
-                                    }
-                                }}
-                            />
-                        </HorizontalLayout>
                         <HorizontalLayout className={styles.full_width_layout}>
                             <Upload
                                 accept="application/pdf"

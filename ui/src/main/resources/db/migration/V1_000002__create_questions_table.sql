@@ -3,7 +3,7 @@
 CREATE TABLE questions
 (
     ID         UUID PRIMARY KEY,
-    QUESTION   VARCHAR(255) NOT NULL,
+    QUESTION   text         NOT NULL,
     TYPE       VARCHAR(100) NOT NULL,
     CREATED_AT TIMESTAMP default now(),
     UPDATED_AT TIMESTAMP

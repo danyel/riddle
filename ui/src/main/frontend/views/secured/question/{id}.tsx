@@ -103,7 +103,7 @@ export default function QuestionDetailView() {
                             }}
                         />
                     </HorizontalLayout>
-                    <AnswersTable questionId={question.id!!}/>
+                    {question.type !== "REVIEW" && (<AnswersTable questionId={question.id!!}/>)}
                 </VerticalLayout>
             </HorizontalLayout>
         </>

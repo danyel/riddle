@@ -5,9 +5,7 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.UUID;
 
-import static be.riddler.v1.question.client.model.QuestionType.MULTIPLE_CHOICE;
-import static be.riddler.v1.question.client.model.QuestionType.OPEN;
-import static be.riddler.v1.question.client.model.QuestionType.SINGLE_CHOICE;
+import static be.riddler.v1.question.client.model.QuestionType.*;
 
 /**
  * Question
@@ -23,13 +21,14 @@ public record Question(
         boolean multipleChoice,
         @JsonProperty(value = "single_choice")
         boolean singleChoice,
-        boolean open
+        boolean open,
+        boolean review
 ) {
     public Question(@NonNull UUID id, @NonNull String question, @NonNull QuestionType type) {
-        this(id, question, type, MULTIPLE_CHOICE.equals(type), SINGLE_CHOICE.equals(type), OPEN.equals(type));
+        this(id, question, type, MULTIPLE_CHOICE.equals(type), SINGLE_CHOICE.equals(type), OPEN.equals(type), REVIEW.equals(type));
     }
 
     public Question(@NonNull String question, @NonNull QuestionType type) {
-        this(null, question, type, MULTIPLE_CHOICE.equals(type), SINGLE_CHOICE.equals(type), OPEN.equals(type));
+        this(null, question, type, MULTIPLE_CHOICE.equals(type), SINGLE_CHOICE.equals(type), OPEN.equals(type), REVIEW.equals(type));
     }
 }
