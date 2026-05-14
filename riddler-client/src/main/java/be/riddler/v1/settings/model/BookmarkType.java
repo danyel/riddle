@@ -8,5 +8,6 @@ package be.riddler.v1.settings.model;
  */
 public enum BookmarkType {
     PARTICIPANTS,
-    QUESTIONS
+    QUESTIONS,
+    ADMINISTRATIONS
 }

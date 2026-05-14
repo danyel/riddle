@@ -14,6 +14,7 @@ import ParticipantPage from "Frontend/views/participant/@index";
 import AdminParticipantsPage from "Frontend/views/secured/participants/@index";
 import {AdminParticipant} from "./views/secured/participants/participant";
 import ProfilePage from "Frontend/views/secured/profile/@index";
+import AdministrationPage from "Frontend/views/secured/administration/@index";
 
 
 function RootErrorBoundary() {
@@ -77,6 +78,11 @@ export const routes = protectRoutes([
                 path: '/profile',
                 element: <ProfilePage/>,
                 handle: {rolesAllowed: ['ROLE_ADMIN', 'ROLE_USER']} // Client-side check
+            },
+            {
+                path: '/administrations',
+                element: <AdministrationPage/>,
+                handle: {rolesAllowed: ['ROLE_ADMIN']} // Client-side check
             },
         ],
     },
