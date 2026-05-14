@@ -1,6 +1,15 @@
 import {Button, ButtonProps} from "@vaadin/react-components/Button.js";
 import {ReactNode} from "react";
-import {BanIcon, CheckIcon, CloseIcon, CrossIcon, EyeIcon, GlobeIcon, PlusIcon} from "Frontend/components/ui/icons";
+import {
+    BanIcon,
+    CheckIcon,
+    CloseIcon,
+    CrossIcon,
+    EyeIcon,
+    GlobeIcon,
+    PlusIcon,
+    SettingsIcon
+} from "Frontend/components/ui/icons";
 import {ElementStylingTypes} from "Frontend/constant";
 
 /*
@@ -79,8 +88,18 @@ export function BanButton(props: { onClick: () => void }) {
 
 export function GenerateToken(props: { onClick: () => void }) {
     return (
-        <BaseButton
+        <><BaseButton
             icon={GlobeIcon()}
+            onClick={props.onClick}
+            theme={ElementStylingTypes.TERTIARY_INLINE}
+        /></>
+    );
+}
+
+export function SettingsButton(props: { onClick: () => void }) {
+    return (
+        <BaseButton
+            icon={SettingsIcon()}
             onClick={props.onClick}
             theme={ElementStylingTypes.TERTIARY_INLINE}
         />

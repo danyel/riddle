@@ -5,12 +5,21 @@ import {AppLayout} from '@vaadin/react-components/AppLayout.js';
 import {Outlet} from 'react-router';
 import Navigation from "Frontend/components/navigation/Navigation";
 import {VerticalLayout} from "@vaadin/react-components";
-import {useState} from "react";
-import SideBar from "Frontend/components/navigation/side-bar.component";
+import {useEffect, useState} from "react";
 import Footer from "Frontend/components/footer/footer.component";
+import {SettingsStateProvider, useSettingsState} from "Frontend/views/secured/settings-context-provider";
+import {SettingsEndpoint} from "Frontend/generated/endpoints";
+import {SideBar} from "Frontend/components";
 
-export default function MainLayout() {
+function MainLayoutContent() {
     const [isOpened, setIsOpened] = useState(true);
+    const {setSettings} = useSettingsState();
+
+    useEffect(() => {
+        SettingsEndpoint.getSettings()
+            .then(setSettings)
+    }, []);
+
     return (
         <AppLayout primarySection="navbar"
                    drawerOpened={isOpened}
@@ -30,3 +39,10 @@ export default function MainLayout() {
     );
 }
 
+export default function MainLayout() {
+    return (
+        <SettingsStateProvider>
+            <MainLayoutContent/>
+        </SettingsStateProvider>
+    )
+}

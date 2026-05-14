@@ -35,3 +35,7 @@ export function CheckIcon() {
 export function AbacusIcon() {
     return (<Icon icon='vaadin:abacus'/>);
 }
+
+export function SettingsIcon() {
+    return (<Icon icon='vaadin:cog'/>);
+}

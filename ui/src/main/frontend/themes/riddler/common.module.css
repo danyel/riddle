@@ -6,15 +6,32 @@
     width: 100%;
 }
 
+
 .navbar_container {
     display: flex;
     align-items: center;
     width: 100%;
+    padding: 0 16px; /* Clean gutter padding on navbar edges */
+    box-sizing: border-box;
 }
 
 .banner {
-    margin: 0 var(--lumo-space-m);
-    font-size: var(--lumo-font-size-l);
+    margin: 0;
+}
+
+/* Container block pushed to the far right side */
+.profile_menu {
+    margin-left: auto; /* Magnet effect to lock container to the right edge */
+    display: flex; /* Turns profile menu items into a horizontal row */
+    align-items: center; /* Vertically aligns button and username centered */
+    gap: 12px; /* Consistent layout gap between button and name */
+}
+
+/* Clear styling for text presentation */
+.profile_menu > span {
+    font-weight: 500;
+    color: var(--lumo-body-text-color, #232d3d);
+    user-select: none; /* Prevents accidental text highlight highlighting on double-clicks */
 }
 
 .content_container {

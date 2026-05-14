@@ -24,6 +24,6 @@ class MenuResource implements MenuClient {
 
     @Override
     public List<Menu> menu(String username) {
-        return retrieveMenuForUsernameFeature.retrieveMenu(username);
+        return retrieveMenuForUsernameFeature.retrieveMenu();
     }
 }
