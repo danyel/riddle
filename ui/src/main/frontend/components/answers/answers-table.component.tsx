@@ -141,7 +141,6 @@ function EditAnswerDialogModal(props: {
     const answerValue = useSignal<string>('');
 
     useEffect(() => {
-        console.log(props.answer);
         answerValue.value = props.answer;
     }, [props.answer]);
 

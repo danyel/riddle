@@ -57,7 +57,6 @@ public interface QuestionClient {
                                     @RequestParam(name = "ids", required = false) List<UUID> questionIds);
 
 
-    @SuppressWarnings("SpringMvcPathVariableDeclarationInspection")
     @Operation(
             method = "GET",
             tags = "questions",
@@ -76,7 +75,7 @@ public interface QuestionClient {
     )
     @GetMapping(path = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    Question findById(@PathVariable(name = "id") UUID id);
+    Question findById(@PathVariable(name = "id") UUID questionId);
 
     @Operation(
             method = "POST",
@@ -106,7 +105,6 @@ public interface QuestionClient {
     @ResponseStatus(HttpStatus.CREATED)
     Question create(@RequestBody CreateQuestion createQuestion);
 
-    @SuppressWarnings("SpringMvcPathVariableDeclarationInspection")
     @Operation(
             method = "PUT",
             tags = "questions",
@@ -140,10 +138,9 @@ public interface QuestionClient {
     )
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    Question update(@PathVariable(name = "id") UUID id, @RequestBody UpdateQuestion updateQuestion);
+    Question update(@PathVariable(name = "id") UUID questionId, @RequestBody UpdateQuestion updateQuestion);
 
 
-    @SuppressWarnings("SpringMvcPathVariableDeclarationInspection")
     @Operation(
             method = "DELETE",
             tags = "questions",
@@ -169,5 +166,5 @@ public interface QuestionClient {
     )
     @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    void delete(@PathVariable(name = "id") UUID id);
+    void delete(@PathVariable(name = "id") UUID questionId);
 }

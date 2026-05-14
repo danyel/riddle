@@ -1,6 +1,12 @@
 import {Icon, SideNav, SideNavItem} from "@vaadin/react-components";
 import {useEffect, useMemo, useState} from "react";
-import {BookmarkEndpoint, MenuService, ParticipantAdminEndpoint, SettingsEndpoint} from "Frontend/generated/endpoints";
+import {
+    BookmarkEndpoint,
+    MenuService,
+    ParticipantAdminEndpoint,
+    QuestionEndpoint,
+    SettingsEndpoint
+} from "Frontend/generated/endpoints";
 import Menu from "Frontend/generated/be/riddler/v1/menu/client/model/Menu";
 import {useLocation, useNavigate, useParams} from "react-router";
 import ParticipantDetail from "Frontend/generated/be/riddler/v1/participant/client/model/ParticipantDetail";
@@ -9,10 +15,12 @@ import {Button} from "@vaadin/react-components/Button.js";
 import {ElementStylingTypes} from "Frontend/constant";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import {useSettingsState} from "Frontend/views/secured/settings-context-provider";
+import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
 
 export function SideBar() {
     const [menus, setMenus] = useState<Menu[]>([]);
     const [participant, setParticipant] = useState<ParticipantDetail>();
+    const [question, setQuestion] = useState<Question>();
     const [, setBookmarkTypes] = useState<String[]>([]);
     const {settings, setSettings} = useSettingsState();
     const navigate = useNavigate();
@@ -20,9 +28,12 @@ export function SideBar() {
     const params = useParams();
 
     const isParticipantDetail = () => {
-        return !!(params.id && location.pathname.startsWith('/participants/'));
+        return !!(params.id && location.pathname.startsWith(`/${BookmarkType.PARTICIPANTS.toLocaleLowerCase()}/`));
     };
 
+    const isQuestionDetail = () => {
+        return !!(params.id && location.pathname.startsWith(`/${BookmarkType.QUESTIONS.toLocaleLowerCase()}/`));
+    };
     useEffect(() => {
         MenuService.menu().then(setMenus);
         BookmarkEndpoint.bookmarkTypes().then(setBookmarkTypes);
@@ -31,9 +42,20 @@ export function SideBar() {
     useEffect(() => {
         if (isParticipantDetail()) {
             searchParticipant();
+        } else {
+            setParticipant(undefined);
+        }
+
+        if (isQuestionDetail()) {
+            searchQuestion();
+        } else {
+            setQuestion(undefined);
         }
     }, [params.id, location.pathname]);
 
+    const searchQuestion = () => {
+        QuestionEndpoint.get(params.id!!).then(setQuestion);
+    };
     const searchParticipant = () => {
         ParticipantAdminEndpoint.findById(params.id!!).then(setParticipant);
     };
@@ -42,6 +64,9 @@ export function SideBar() {
     const menusJsonString = JSON.stringify(menus);
     const participantName = participant
         ? decodeURIComponent(`${participant.first_name} ${participant.last_name}`)
+        : "Loading...";
+    const questionTitle = question
+        ? decodeURIComponent(question.title || `Question #${params.id}`)
         : "Loading...";
 
     const mappedMenuData = useMemo(() => {
@@ -57,13 +82,20 @@ export function SideBar() {
             });
             let activeChildrenList: Bookmark[] = filtered;
             const currentDetailPath = `/${menu.bookmark_type.toLocaleLowerCase()}/${params.id}`;
+            let label = "Loading...";
+
+            if (menu.bookmark_type === BookmarkType.PARTICIPANTS) {
+                label = `${participant?.first_name} ${participant?.last_name}`;
+            } else if (menu.bookmark_type === BookmarkType.QUESTIONS) {
+                label = question?.title!!;
+            }
 
             if (!filtered.find(b => b.path === currentDetailPath)) {
                 if (params.id && currentDetailPath === location.pathname) {
                     const ephemeralBookmark: Bookmark = {
                         bookmarkType: menu.bookmark_type,
                         path: currentDetailPath,
-                        label: participantName
+                        label: label
                     };
                     activeChildrenList = [ephemeralBookmark, ...filtered];
                 }
@@ -80,7 +112,7 @@ export function SideBar() {
                 activeChildrenList
             };
         });
-    }, [menusJsonString, bookmarksJsonString, params.id, location.pathname, location.hash, participantName]);
+    }, [menusJsonString, bookmarksJsonString, params.id, location.pathname, location.hash, participantName, questionTitle]);
 
     const createBookmark = (bookmark: Bookmark) => {
         BookmarkEndpoint.bookmark({

@@ -3,7 +3,15 @@ import {useEffect, useState} from "react";
 import {QuestionEndpoint, QuestionTypeEndpoint} from "Frontend/generated/endpoints";
 import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
 import AnswersTable from "Frontend/components/answers/answers-table.component";
-import {Dialog, HorizontalLayout, Notification, Select, TextArea, VerticalLayout} from "@vaadin/react-components";
+import {
+    Dialog,
+    HorizontalLayout,
+    Notification,
+    Select,
+    TextArea,
+    TextField,
+    VerticalLayout
+} from "@vaadin/react-components";
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css';
 import QuestionType from "Frontend/generated/be/riddler/v1/question/client/model/QuestionType";
@@ -18,7 +26,8 @@ export default function QuestionDetailPage() {
     const [question, setQuestion] = useState<Question>();
     const [updateQuestion, setUpdateQuestion] = useState<UpdateQuestion>({
         question: '',
-        type: QuestionType.OPEN
+        type: QuestionType.OPEN,
+        title: ''
     });
     const [items, setItems] = useState<{ label: string, value: string }[]>([]);
     const {id} = useParams();
@@ -48,7 +57,7 @@ export default function QuestionDetailPage() {
     useEffect(() => {
         QuestionEndpoint.get(id).then(question => {
             setQuestion(question);
-            setUpdateQuestion({question: question.question, type: question.type});
+            setUpdateQuestion({question: question.question, type: question.type, title: question.title});
         });
         QuestionTypeEndpoint.questionTypes()
             .then((questionTypes: string[]) => {
@@ -62,7 +71,11 @@ export default function QuestionDetailPage() {
             <HorizontalLayout className={styles.full_width_layout}>
                 <div className={styles.menu_bar_layout}>
                     <CheckButton onClick={() => {
-                        const updateQuestion: UpdateQuestion = {question: question?.question!!, type: question?.type!!};
+                        const updateQuestion: UpdateQuestion = {
+                            question: question.question,
+                            type: question.type,
+                            title: question.title
+                        };
                         QuestionEndpoint.update(question?.id!!, updateQuestion)
                             .then(() => {
                                 Notification.show('Question saved', {
@@ -72,7 +85,11 @@ export default function QuestionDetailPage() {
                                 navigate('/questions');
                             });
                     }} disabled={isSame()}/>
-                    <RefreshButton onClick={() => setUpdateQuestion({question: question.question, type: question.type})}
+                    <RefreshButton onClick={() => setUpdateQuestion({
+                        title: question.title,
+                        question: question.question,
+                        type: question.type
+                    })}
                                    disabled={isSame()}/>
                     <BanButton onClick={() => {
                         open();
@@ -104,6 +121,14 @@ export default function QuestionDetailPage() {
             </Dialog>
             <HorizontalLayout className={styles.full_width_layout}>
                 <VerticalLayout style={{width: '100%'}}>
+                    <HorizontalLayout className={styles.full_width_layout}>
+                        <TextField value={question.title}
+                                   className={styles.text_area_full}
+                                   onValueChanged={(e) => {
+                                       setQuestion(prev => prev ? {...prev, title: e.detail.value} : undefined);
+                                   }}
+                        />
+                    </HorizontalLayout>
                     <HorizontalLayout className={styles.full_width_layout}>
                         <TextArea value={question.question}
                                   className={styles.text_area_full}

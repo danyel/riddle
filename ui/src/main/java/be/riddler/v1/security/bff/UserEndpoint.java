@@ -3,6 +3,7 @@ package be.riddler.v1.security.bff;
 import be.riddler.v1.common.http.Unauthorized;
 import be.riddler.v1.security.client.SecurityClient;
 import be.riddler.v1.security.client.model.UserInfo;
+import be.riddler.v1.settings.constants.UserContext;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
 import lombok.AccessLevel;
@@ -14,6 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.Assert;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -39,6 +41,10 @@ public class UserEndpoint {
                         .filter(Objects::nonNull)
                         .toList()
         );
+    }
+
+    public @NonNull List<@NonNull String> getAuthorities() {
+        return UserContext.availableRoles();
     }
 
     public UserInfo authenticate(String username, String password) {

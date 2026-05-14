@@ -8,8 +8,7 @@ import {
     EyeIcon,
     KeyIcon,
     PlusIcon,
-    RotateLeftIcon,
-    SettingsIcon
+    RotateLeftIcon
 } from "Frontend/components/ui/icons";
 import {ElementStylingTypes} from "Frontend/constant";
 
@@ -101,10 +100,10 @@ export function RefreshButton(props: ButtonDecorationProps) {
     );
 }
 
-export function SettingsButton(props: ButtonDecorationProps) {
+export function DeleteButton(props: ButtonDecorationProps) {
     return (
         <BaseButton
-            icon={SettingsIcon()}
+            icon={CloseIcon()}
             onClick={props.onClick}
             theme={ElementStylingTypes.TERTIARY_INLINE}
             disabled={props.disabled}

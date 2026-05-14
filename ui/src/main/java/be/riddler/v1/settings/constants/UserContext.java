@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * UserContext
@@ -17,6 +18,9 @@ import java.util.Objects;
  */
 @UtilityClass
 public class UserContext {
+
+    public static final Stream<String> AVAILABLE_ROLES = Stream.of("ROLE_USER", "ROLE_ADMIN", "ROLE_PARTICIPANT", "ROLE_TEST");
+
     public static @NonNull List<@NonNull String> roles() {
         List<String> roles = new ArrayList<>();
 
@@ -29,5 +33,9 @@ public class UserContext {
 
     public static @NonNull String username() {
         return Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName();
+    }
+
+    public static @NonNull List<@NonNull String> availableRoles() {
+        return AVAILABLE_ROLES.filter(e -> roles().contains(e)).toList();
     }
 }

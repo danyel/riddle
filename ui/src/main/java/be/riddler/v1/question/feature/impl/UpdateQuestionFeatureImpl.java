@@ -29,6 +29,7 @@ class UpdateQuestionFeatureImpl implements UpdateQuestionFeature {
             questionEntity.ifPresent(e -> {
                 e.setQuestion(updateWithId.question().question());
                 e.setType(updateWithId.question().type());
+                e.setTitle(updateWithId.question().title());
                 questionRepository.save(e);
             });
             return QuestionMapper.fromQuestionEntity(questionEntity.get());

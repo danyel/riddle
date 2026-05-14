@@ -3,6 +3,7 @@
 CREATE TABLE questions
 (
     ID         UUID PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
     QUESTION   text         NOT NULL,
     TYPE       VARCHAR(100) NOT NULL,
     CREATED_AT TIMESTAMP default now(),
@@ -10,14 +11,14 @@ CREATE TABLE questions
 );
 
 --changeset dnoulet:V1_000001_create_questions_data context:lcl
-INSERT INTO questions (id, question, type)
-VALUES ('6d2c7dee-740a-47f1-99b0-4e4167182ae7', 'Question 1', 'SINGLE_CHOICE');
-INSERT INTO questions (id, question, type)
-VALUES ('3cee42fb-d8da-4127-8f0e-3ddfab263f34', 'Question 2', 'OPEN');
-INSERT INTO questions (id, question, type)
-VALUES ('a2b20b03-9d96-41d4-8e83-a35b21c21fe7', 'Question 3', 'MULTIPLE_CHOICE');
-INSERT INTO riddler.questions (id, question, type)
-VALUES ('98b96a1f-731f-47f2-871c-99f8cbd12126', e'package be.riddler.v1.menu.entity;
+INSERT INTO questions (id, title, question, type)
+VALUES ('6d2c7dee-740a-47f1-99b0-4e4167182ae7', 'What is the following', 'Question 1', 'SINGLE_CHOICE');
+INSERT INTO questions (id, title, question, type)
+VALUES ('3cee42fb-d8da-4127-8f0e-3ddfab263f34', 'What do you thing about a', 'Question 2', 'OPEN');
+INSERT INTO questions (id, title, question, type)
+VALUES ('a2b20b03-9d96-41d4-8e83-a35b21c21fe7', 'Chopse one or more', 'Question 3', 'MULTIPLE_CHOICE');
+INSERT INTO questions (id, title, question, type)
+VALUES ('98b96a1f-731f-47f2-871c-99f8cbd12126', 'Review MenuEntity', 'package be.riddler.v1.menu.entity;
 
 import be.riddler.v1.common.entity.BaseEntity;
 import be.riddler.v1.settings.model.BookmarkType;
@@ -65,8 +66,8 @@ public class MenuEntity extends BaseEntity {
     private Integer order;
 }
 ', 'REVIEW');
-INSERT INTO riddler.questions (id, question, type)
-VALUES ('b43d40ad-5373-4e1f-a833-da079da904ec', e'package be.riddler.v1.menu.feature.impl;
+INSERT INTO questions (id, title, question, type)
+VALUES ('b43d40ad-5373-4e1f-a833-da079da904ec', 'Review FindAllUsernameFeature', 'package be.riddler.v1.menu.feature.impl;
 
 import be.riddler.v1.menu.client.model.Menu;
 import be.riddler.v1.menu.entity.MenuConfigurationEntity;

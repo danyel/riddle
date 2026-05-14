@@ -27,7 +27,11 @@ function CreateQuestionDialogModal(props: {
     onParticipantCreated: () => void;
     onClose: () => void;
 }) {
-    const [createQuestion, setCreateQuestion] = useState<CreateQuestion>({type: QuestionType.OPEN, question: ''});
+    const [createQuestion, setCreateQuestion] = useState<CreateQuestion>({
+        type: QuestionType.OPEN,
+        question: '',
+        title: ''
+    });
     const dropDown: { label: string, value: QuestionType }[] = [
         {
             label: 'Open',
@@ -52,6 +56,7 @@ function CreateQuestionDialogModal(props: {
             // Clear input value when the modal opens
             createQuestion.type = QuestionType.OPEN;
             createQuestion.question = '';
+            createQuestion.title = '';
         }
     }, [props.show]);
 
@@ -59,6 +64,7 @@ function CreateQuestionDialogModal(props: {
         const payload: CreateQuestion = {
             question: createQuestion.question,
             type: createQuestion.type,
+            title: createQuestion.title,
         };
         QuestionEndpoint.create(payload)
             .then(() => {
@@ -129,10 +135,11 @@ function CreateQuestionDialogModal(props: {
 function QuestionTable(props: { questions: Question[] }) {
     const navigate = useNavigate();
     const showQuestion = ({item}: { item: Question }) => {
-        return <ViewDetailButton onClick={() => navigate(`/question/${item.id}`)}/>;
+        return <ViewDetailButton onClick={() => navigate(`/questions/${item.id}`)}/>;
     };
     return (
         <Grid key={"id"} items={props.questions} className={styles.riddler_table} allRowsVisible={true}>
+            <GridColumn key={"title"} path={"title"}/>
             <GridColumn key={"question"} path={"question"}/>
             <GridColumn key={"type"} path={"type"}/>
             <GridColumn header={'Action'} renderer={showQuestion}/>

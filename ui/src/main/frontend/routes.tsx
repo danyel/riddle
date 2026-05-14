@@ -64,7 +64,7 @@ export const routes = protectRoutes([
                 handle: {rolesAllowed: ['ROLE_ADMIN', 'ROLE_USER']} // Client-side check
             },
             {
-                path: '/question/:id',
+                path: '/questions/:id',
                 element: <AdminQuestionPage/>,
                 handle: {rolesAllowed: ['ROLE_ADMIN', 'ROLE_USER']} // Client-side check
             },

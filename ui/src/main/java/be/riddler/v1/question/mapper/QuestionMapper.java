@@ -14,14 +14,14 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class QuestionMapper {
     public static Question fromCreateQuestion(CreateQuestion createQuestion) {
-        return new Question(createQuestion.question(), createQuestion.type());
+        return new Question(createQuestion.title(), createQuestion.question(), createQuestion.type());
     }
 
     public static QuestionEntity fromQuestion(Question question) {
-        return QuestionEntity.builder().question(question.question()).type(question.type()).build();
+        return QuestionEntity.builder().title(question.title()).question(question.question()).type(question.type()).build();
     }
 
     public static Question fromQuestionEntity(QuestionEntity questionEntity) {
-        return new Question(questionEntity.getId(), questionEntity.getQuestion(), questionEntity.getType());
+        return new Question(questionEntity.getId(), questionEntity.getTitle(), questionEntity.getQuestion(), questionEntity.getType());
     }
 }

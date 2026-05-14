@@ -40,6 +40,7 @@ public class QuestionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    private String title;
     private String question;
     @Enumerated(EnumType.STRING)
     private QuestionType type;
