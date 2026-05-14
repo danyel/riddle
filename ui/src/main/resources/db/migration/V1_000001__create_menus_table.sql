@@ -22,9 +22,9 @@ CREATE TABLE menu_configurations
 
 --changeset dnoulet:V1_000001_create_menus_data context:lcl
 INSERT INTO menus (id, label, icon, path, order_index)
-VALUES ('bfc25c06-5a0a-42e3-9828-ae2ec16570b9', 'Questions', 'vaadin:dashboard', '/questions', 0);
+VALUES ('bfc25c06-5a0a-42e3-9828-ae2ec16570b9', 'Questions', 'vaadin:dashboard', '/#/questions', 0);
 INSERT INTO menus (id, label, icon, path, order_index)
-VALUES ('095a7040-3fec-4675-924d-2515f777305c', 'Participants', 'vaadin:user-clock', '/participants', 1);
+VALUES ('095a7040-3fec-4675-924d-2515f777305c', 'Participants', 'vaadin:user-clock', '/#/participants', 1);
 INSERT INTO menu_configurations(id, menu_id, username)
 VALUES ('4709ebc1-139a-4e9f-be70-8003f13a634f', 'bfc25c06-5a0a-42e3-9828-ae2ec16570b9', 'dnoulet');
 INSERT INTO menu_configurations(id, menu_id, username)
