@@ -7,7 +7,7 @@ import {
     GridColumn,
     HorizontalLayout,
     Select,
-    TextField
+    TextArea
 } from "@vaadin/react-components";
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css';
@@ -19,7 +19,6 @@ import Question from "Frontend/generated/be/riddler/v1/question/client/model/Que
 import CreateQuestion from "Frontend/generated/be/riddler/v1/question/client/model/CreateQuestion";
 import {QuestionEndpoint} from "Frontend/generated/endpoints";
 import {CancelButton, CheckButton, CloseButton, PlusButton, ViewDetailButton} from "Frontend/components/ui/button";
-import {useSignal} from "@vaadin/hilla-react-signals";
 import QuestionType from "Frontend/generated/be/riddler/v1/question/client/model/QuestionType";
 
 
@@ -28,7 +27,7 @@ function CreateQuestionDialogModal(props: {
     onParticipantCreated: () => void;
     onClose: () => void;
 }) {
-    const createQuestion = useSignal<CreateQuestion>({type: QuestionType.OPEN, question: ''});
+    const [createQuestion, setCreateQuestion] = useState<CreateQuestion>({type: QuestionType.OPEN, question: ''});
     const dropDown: { label: string, value: QuestionType }[] = [
         {
             label: 'Open',
@@ -51,15 +50,15 @@ function CreateQuestionDialogModal(props: {
     useEffect(() => {
         if (props.show) {
             // Clear input value when the modal opens
-            createQuestion.value.type = QuestionType.OPEN;
-            createQuestion.value.question = '';
+            createQuestion.type = QuestionType.OPEN;
+            createQuestion.question = '';
         }
     }, [props.show]);
 
     function saveQuestion() {
         const payload: CreateQuestion = {
-            question: createQuestion.value.question,
-            type: createQuestion.value.type,
+            question: createQuestion.question,
+            type: createQuestion.type,
         };
         QuestionEndpoint.create(payload)
             .then(() => {
@@ -95,17 +94,32 @@ function CreateQuestionDialogModal(props: {
                 expandColumns
                 expandFields
             >
-                <FormRow>
-                    <TextField
-                        label="Question"
-                        value={createQuestion.value.question}
-                        onValueChanged={(e) => createQuestion.value.question = e.detail.value}
-                        className={styles.text_area_full}
-                    />
-                </FormRow>
+
                 <FormRow>
                     <Select label="Type" items={dropDown}
-                            onValueChanged={(e) => createQuestion.value.type = e.detail.value as QuestionType}/>
+                            onValueChanged={(e) => {
+
+                                setCreateQuestion(prevState => {
+                                    return {
+                                        ...prevState,
+                                        type: e.detail.value as QuestionType
+                                    }
+                                });
+                            }}/>
+                </FormRow>
+                <FormRow>
+                    <TextArea value={createQuestion.question}
+                              className={styles.text_area_full}
+                              onValueChanged={(e) => {
+                                  setCreateQuestion(prev => {
+                                      return {
+                                          ...prev,
+                                          question: e.detail.value as QuestionType
+                                      }
+                                  });
+                              }}
+                    />
+
                 </FormRow>
             </FormLayout>
         </Dialog>
@@ -142,7 +156,7 @@ export default function QuestionsView() {
         <>
             <HorizontalLayout className={styles.full_width_layout}>
                 <div className={styles.menu_bar_layout}>
-                <PlusButton onClick={() => setOpen(true)}/>
+                    <PlusButton onClick={() => setOpen(true)}/>
                 </div>
             </HorizontalLayout>
             <CreateQuestionDialogModal show={open}

@@ -1,5 +1,6 @@
 import {Icon} from "@vaadin/react-components/Icon";
 
+// https://vaadin.com/docs/latest/components/icons/default-icons
 export function EyeIcon() {
     return (<Icon icon='vaadin:eye'/>);
 }
@@ -14,6 +15,14 @@ export function CrossIcon() {
 
 export function GlobeIcon() {
     return (<Icon icon='vaadin:globe'/>);
+}
+
+export function KeyIcon() {
+    return (<Icon icon='vaadin:key'/>);
+}
+
+export function RotateLeftIcon() {
+    return (<Icon icon='vaadin:rotate-left'/>);
 }
 
 export function BanIcon() {

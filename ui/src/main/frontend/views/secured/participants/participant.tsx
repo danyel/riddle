@@ -4,6 +4,7 @@ import {
     Grid,
     GridColumn,
     HorizontalLayout,
+    Notification,
     Upload,
     UploadBeforeEvent,
     VerticalLayout
@@ -81,6 +82,7 @@ export function AdminParticipant() {
     function createInvitation(participantId: string) {
         InvitationEndpoint.create({participantId: participantId})
             .then(() => {
+                Notification.show('Invitation created', {position: 'top-end', theme: ElementStylingTypes.SUCCESS});
                 fetchInvitations();
                 setOpen(false);
             });

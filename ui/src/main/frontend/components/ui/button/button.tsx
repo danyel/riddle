@@ -6,104 +6,115 @@ import {
     CloseIcon,
     CrossIcon,
     EyeIcon,
-    GlobeIcon,
+    KeyIcon,
     PlusIcon,
+    RotateLeftIcon,
     SettingsIcon
 } from "Frontend/components/ui/icons";
 import {ElementStylingTypes} from "Frontend/constant";
 
-/*
-primary Recommended for the most important action in a view
-tertiary Recommended for lower-importance actions
-tertiary-inline Recommended for embedding a Button as part of text content
-icon Used to reduce the white space on either side of the icon
-small Reduces the button size
-large Increases the button size
-contrast Recommended as an additional color option
-success Recommended as an additional color option
-error Recommended for dangerous or irreversible actions
-warning Recommended for actions related to warnings
- */
-
-
-export function CheckButton(props: { onClick: () => void }) {
+export function CheckButton(props: ButtonDecorationProps) {
     return (
         <BaseButton
             icon={CheckIcon()}
             onClick={props.onClick}
             theme={ElementStylingTypes.PRIMARY}
+            disabled={props.disabled}
         />
     );
 }
 
-export function CloseButton(props: { onClick: () => void }) {
+export function CloseButton(props: ButtonDecorationProps) {
     return (
         <BaseButton
             icon={CloseIcon()}
             onClick={props.onClick}
             theme={ElementStylingTypes.PRIMARY_ERROR}
+            disabled={props.disabled}
         />
     );
 }
 
-export function PlusButton(props: { onClick: () => void }) {
+export function PlusButton(props: ButtonDecorationProps) {
     return (
         <BaseButton
             icon={PlusIcon()}
             onClick={props.onClick}
             theme={ElementStylingTypes.PRIMARY}
+            disabled={props.disabled}
         />
     );
 }
 
-export function CancelButton(props: { onClick: () => void }) {
+export function CancelButton(props: ButtonDecorationProps) {
     return (
         <BaseButton
             icon={CrossIcon()}
             onClick={props.onClick}
             theme={ElementStylingTypes.TERTIARY_INLINE}
+            disabled={props.disabled}
         />
     );
 }
 
-export function ViewDetailButton(props: { onClick: () => void }) {
+export function ViewDetailButton(props: ButtonDecorationProps) {
     return (
         <BaseButton
             icon={EyeIcon()}
             onClick={props.onClick}
             theme={ElementStylingTypes.TERTIARY_INLINE}
+            disabled={props.disabled}
         />
     );
 }
 
-export function BanButton(props: { onClick: () => void }) {
+export function BanButton(props: ButtonDecorationProps) {
     return (
         <BaseButton
             icon={BanIcon()}
             onClick={props.onClick}
             theme={ElementStylingTypes.ERROR}
+            disabled={props.disabled}
         />
     );
 }
 
-export function GenerateToken(props: { onClick: () => void }) {
+export function GenerateToken(props: ButtonDecorationProps) {
     return (
-        <><BaseButton
-            icon={GlobeIcon()}
+        <BaseButton
+            icon={KeyIcon()}
             onClick={props.onClick}
             theme={ElementStylingTypes.TERTIARY_INLINE}
-        /></>
+            disabled={props.disabled}
+        />
     );
 }
 
-export function SettingsButton(props: { onClick: () => void }) {
+export function RefreshButton(props: ButtonDecorationProps) {
+    return (
+        <BaseButton
+            icon={RotateLeftIcon()}
+            onClick={props.onClick}
+            theme={ElementStylingTypes.TERTIARY_INLINE}
+            disabled={props.disabled}
+        />
+    );
+}
+
+export function SettingsButton(props: ButtonDecorationProps) {
     return (
         <BaseButton
             icon={SettingsIcon()}
             onClick={props.onClick}
             theme={ElementStylingTypes.TERTIARY_INLINE}
+            disabled={props.disabled}
         />
     );
+}
+
+interface ButtonDecorationProps extends ButtonProps {
+    onClick: () => void;
+    disabled?: boolean;
 }
 
 interface BaseButtonProps extends ButtonProps {

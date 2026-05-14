@@ -10,7 +10,6 @@ export default function IconsView() {
     const [icons, setIcons] = useState<string[]>([]);
 
     useEffect(() => {
-        console.log('hello?')
         UiService.icons().then(setIcons);
     }, []);
     return (
