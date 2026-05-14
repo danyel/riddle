@@ -1,18 +1,18 @@
 // frontend/routes.tsx
 import {protectRoutes} from '@vaadin/hilla-react-auth';
 import MainLayout from "Frontend/views/secured/@layout";
-import QuestionsView from "Frontend/views/secured/questions/@index";
+import AdminQuestionsPage from "Frontend/views/secured/questions/@index";
 import HomeView from "Frontend/views/secured/@index";
-import LoginView from "Frontend/views/login/@index";
+import LoginPage from "Frontend/views/login/@index";
 import LoginLayout from "Frontend/views/login/@layout";
-import IconsView from "Frontend/views/secured/icons/@index";
+import AdminIconsPage from "Frontend/views/secured/icons/@index";
 import {createHashRouter, isRouteErrorResponse, useRouteError} from "react-router-dom";
-import QuestionDetailView from "Frontend/views/secured/question/{id}";
+import AdminQuestionPage from "Frontend/views/secured/question/{id}";
 import ParticipantLayout from "Frontend/views/participant/@layout";
-import ParticipantQuestionsView from "Frontend/views/participant/question/view-question-page";
-import ParticipantView from "Frontend/views/participant/@index";
-import ParticipantsView from "Frontend/views/secured/participants/@index";
-import {ParticipantDetailView} from "Frontend/views/secured/participants/participant-detail-view";
+import ParticipantQuestionsPage from "Frontend/views/participant/question/view-question-page";
+import ParticipantPage from "Frontend/views/participant/@index";
+import AdminParticipantsPage from "Frontend/views/secured/participants/@index";
+import {AdminParticipant} from "./views/secured/participants/participant";
 
 
 function RootErrorBoundary() {
@@ -49,27 +49,27 @@ export const routes = protectRoutes([
             },
             {
                 path: '/participants',
-                element: <ParticipantsView/>,
+                element: <AdminParticipantsPage/>,
                 handle: {rolesAllowed: ['ROLE_ADMIN', 'ROLE_USER']} // Client-side check
             },
             {
                 path: '/participants/:id',
-                element: <ParticipantDetailView/>,
+                element: <AdminParticipant/>,
                 handle: {rolesAllowed: ['ROLE_ADMIN', 'ROLE_USER']} // Client-side check
             },
             {
                 path: '/questions',
-                element: <QuestionsView/>,
+                element: <AdminQuestionsPage/>,
                 handle: {rolesAllowed: ['ROLE_ADMIN', 'ROLE_USER']} // Client-side check
             },
             {
                 path: '/question/:id',
-                element: <QuestionDetailView/>,
+                element: <AdminQuestionPage/>,
                 handle: {rolesAllowed: ['ROLE_ADMIN', 'ROLE_USER']} // Client-side check
             },
             {
                 path: '/icons',
-                element: <IconsView/>,
+                element: <AdminIconsPage/>,
                 handle: {rolesAllowed: ['ROLE_ADMIN']} // Client-side check
             },
         ],
@@ -80,11 +80,11 @@ export const routes = protectRoutes([
         children: [
             {
                 path: '/participant',
-                element: <ParticipantView/>
+                element: <ParticipantPage/>
             },
             {
                 path: '/participant/question/:id',
-                element: <ParticipantQuestionsView/>
+                element: <ParticipantQuestionsPage/>
             }
         ]
     },
@@ -93,7 +93,7 @@ export const routes = protectRoutes([
         children: [
             {
                 path: '/login',
-                element: <LoginView/>
+                element: <LoginPage/>
             }
         ]
     },

@@ -14,7 +14,7 @@ import {Button} from "@vaadin/react-components/Button.js";
 import {ElementStylingTypes} from "Frontend/constant";
 
 
-export default function QuestionDetailView() {
+export default function QuestionDetailPage() {
     const [question, setQuestion] = useState<Question>();
     const [items, setItems] = useState<{ label: string, value: string }[]>([]);
     const {id} = useParams();

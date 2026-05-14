@@ -20,7 +20,7 @@ import {Button} from "@vaadin/react-components/Button";
 import {ElementStylingTypes} from "Frontend/constant";
 import {useSignal} from "@vaadin/hilla-react-signals";
 
-export function ParticipantDetailView() {
+export function AdminParticipant() {
     const [cvOpen, setCvOpen] = useState(false);
     const [open, setOpen] = useState(false);
     const params = useParams();
