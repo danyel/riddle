@@ -12,11 +12,12 @@ import {useLocation, useNavigate, useParams} from "react-router";
 import ParticipantDetail from "Frontend/generated/be/riddler/v1/participant/client/model/ParticipantDetail";
 import Bookmark from "Frontend/generated/be/riddler/v1/settings/model/Bookmark";
 import {Button} from "@vaadin/react-components/Button.js";
-import {ElementStylingTypes} from "Frontend/constant";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import {useSettingsState} from "Frontend/views/secured/settings-context-provider";
 import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
-import {Collections, Logs, Objects, Strings, Urls} from "Frontend/util";
+import {Logs, Notify, Objects, Strings, Urls} from "Frontend/util";
+// @ts-ignore
+import styles from 'Frontend/themes/riddler/common.module.css';
 
 export function SideBar() {
     const [menus, setMenus] = useState<Menu[]>([]);
@@ -28,6 +29,7 @@ export function SideBar() {
     const navigate = useNavigate();
     const location = useLocation();
     const params = useParams();
+    const logger = new Logs("SideBar");
 
     const isParticipantDetail = () => {
         return !!(params.id && location.pathname.startsWith(`/${BookmarkType.PARTICIPANTS.toLocaleLowerCase()}/`));
@@ -42,12 +44,13 @@ export function SideBar() {
     };
 
     useEffect(() => {
+        logger.debug('useEffect: {} {}', params.id, location.pathname);
         MenuService.menu().then(setMenus);
         BookmarkEndpoint.bookmarkTypes().then(setBookmarkTypes);
     }, []);
 
     useEffect(() => {
-        Logs.debug('Sidebar.useEffect', 'On init: {} {}', params.id, location.pathname);
+        logger.debug('useEffect [params.id, location.pathname]: {} {}', params.id, location.pathname);
         if (isParticipantDetail()) {
             searchParticipant();
         } else {
@@ -68,12 +71,30 @@ export function SideBar() {
     }, [params.id, location.pathname]);
 
     const searchQuestion = () => {
+        logger.debug('Fetching question {}', params.id);
         QuestionEndpoint.get(params.id!!).then(setQuestion);
     };
     const searchParticipant = () => {
+        logger.debug('Fetching participant {}', params.id);
         ParticipantAdminEndpoint.findById(params.id!!).then(setParticipant);
     };
 
+    const addBookmark = (activeChildrenList: Bookmark[], bookmarkType: BookmarkType, label: string): Bookmark[] => {
+        logger.debug('AddBookmark: activeChildrenList: {} , bookmarkType: {} , label: {} , location.pathname: {} , Urls.makePath(bookmarkType, params.id): {}', activeChildrenList, bookmarkType, label, location.pathname, Urls.makePath(bookmarkType, params.id));
+        if (params.id && Urls.isSamePath(location.pathname, Urls.makePath(bookmarkType, params.id))) {
+            const bookmark: Bookmark = {
+                bookmark_type: bookmarkType,
+                path: Urls.makePath(bookmarkType, params.id!!),
+                label: label
+            };
+            if (!activeChildrenList.find(e => e.path === bookmark.path)) {
+                activeChildrenList.push(bookmark);
+            }
+            const tmp = activeChildrenList.filter(e => e.path !== bookmark.path);
+            return [bookmark, ...tmp];
+        }
+        return activeChildrenList;
+    };
     const searchAdministration = () => {
         setAdministration('administration');
     }
@@ -82,10 +103,12 @@ export function SideBar() {
     const menusJsonString = JSON.stringify(menus);
     const participantName = participant
         ? decodeURIComponent(`${participant.first_name} ${participant.last_name}`)
-        : "Loading...";
+        : "";
     const questionTitle = question
         ? decodeURIComponent(question.title || `Question #${params.id}`)
-        : "Loading...";
+        : "";
+
+    logger.debug('Participant: {} Question: {}', participantName, questionTitle);
 
     const mappedMenuData = useMemo(() => {
         const parsedMenus: Menu[] = JSON.parse(menusJsonString);
@@ -95,11 +118,10 @@ export function SideBar() {
             const menuPath = menu.path!!;
             const cleanMenuHash = menuPath.startsWith('/#') ? menuPath.substring(1) : menuPath;
             const routingPath = cleanMenuHash.replace(/^#/, '');
-            const filtered = parsedBookmarks.filter((b): b is Bookmark => {
-                return Objects.isNotNullAndNotUndefined(b) && b.bookmarkType === menu.bookmark_type;
+            let activeChildrenList: Bookmark[] = parsedBookmarks.filter((b): b is Bookmark => {
+                logger.debug('parsedBookmarks.filter: isNotNullAndNotUndefined[{}] b.bookmark_type[{}] menu.bookmark_type[{}]', Objects.isNotNullAndNotUndefined(b), b.bookmark_type, menu.bookmark_type);
+                return Objects.isNotNullAndNotUndefined(b) && Objects.isEqual(b.bookmark_type, menu.bookmark_type);
             });
-            let activeChildrenList: Bookmark[] = filtered;
-            const currentDetailPath = Urls.makePath(menu.bookmark_type, params.id);
             let label = "Loading...";
 
             if (menu.bookmark_type === BookmarkType.PARTICIPANTS) {
@@ -110,20 +132,11 @@ export function SideBar() {
                 label = administration;
             }
 
-            if (!filtered.find(b => b.path === currentDetailPath)) {
-                if (params.id && currentDetailPath === location.pathname) {
-                    const ephemeralBookmark: Bookmark = {
-                        bookmarkType: menu.bookmark_type,
-                        path: currentDetailPath,
-                        label: label
-                    };
-                    activeChildrenList = Collections.putElementAtIndex(ephemeralBookmark, filtered, 0);
-                }
-            }
-
+            activeChildrenList = addBookmark(activeChildrenList, menu.bookmark_type, label);
+            logger.debug('activeChildrenList  {} for type {}', activeChildrenList, menu.bookmark_type);
             const isCurrent = (location.hash || '#/') === cleanMenuHash;
             const shouldBeExpanded = activeChildrenList.length > 0;
-            let mappedDataReturn = {
+            return {
                 menu,
                 menuPath,
                 routingPath,
@@ -131,7 +144,6 @@ export function SideBar() {
                 shouldBeExpanded,
                 activeChildrenList
             };
-            return mappedDataReturn;
         });
     }, [menusJsonString, bookmarksJsonString, params.id, location.pathname, location.hash, participantName, questionTitle]);
 
@@ -139,14 +151,16 @@ export function SideBar() {
         BookmarkEndpoint.bookmark({
             path: bookmark.path,
             label: bookmark.label,
-            bookmarkType: bookmark.bookmarkType
+            bookmark_type: bookmark.bookmark_type
         }).then(settings => {
+            Notify.success('Bookmark {} created', bookmark.path)
             setSettings(settings);
         });
     };
 
     const deleteBookmark = (bookmark: Bookmark) => {
         BookmarkEndpoint.deleteBookmark(bookmark).then(() => {
+            Notify.success('Bookmark {} deleted', bookmark.path)
             SettingsEndpoint.getSettings().then(setSettings);
         });
     };
@@ -154,8 +168,8 @@ export function SideBar() {
     const isBookmarked = (path: string | undefined): boolean => {
         const currentBookmarks: Bookmark[] = JSON.parse(bookmarksJsonString);
         return currentBookmarks.some(b => {
-            Logs.debug('Sidebar.isBookmarked', 'isBookmarked', path, b.path)
-            return Urls.isSamePath(b.path!!, path);
+            logger.debug('isBookmarked', path, b.path, Urls.isSamePath(b.path, path));
+            return Urls.isSamePath(b.path, path);
         });
     };
 
@@ -166,16 +180,12 @@ export function SideBar() {
                     key={menuPath}
                     ref={(el) => {
                         if (el) {
-                            if (isCurrent) {
-                                el.setAttribute('current', '');
-                            } else {
-                                el.removeAttribute('current');
-                            }
-
-                            if (shouldBeExpanded) {
-                                el.setAttribute('expanded', '');
-                            } else {
-                                el.removeAttribute('expanded');
+                            if (el) {
+                                if (isCurrent) {
+                                    el.setAttribute('current', '');
+                                } else {
+                                    el.removeAttribute('current');
+                                }
                             }
                         }
                     }}
@@ -184,15 +194,25 @@ export function SideBar() {
                         navigate(routingPath);
                     }}
                 >
-                    <Icon icon={menu.icon} slot="prefix"/>
-                    {menu.label}
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        width: '100%',
+                        minWidth: 0
+                    }}>
+                        <span onClick={() => navigate(routingPath)} style={{cursor: 'pointer', flexGrow: 1}}>
+                            {menu.label}
+                        </span>
+                    </div>
 
-                    {activeChildrenList.map(bookmark => {
-                        const isChildCurrent = location.pathname === bookmark.path;
-
+                    {activeChildrenList.map(childBookmark => {
+                        const isChildCurrent = location.pathname === childBookmark.path;
+                        const bookmarked = isBookmarked(childBookmark.path);
+                        logger.debug('Printing side navigation item: {}, {}, {}, {}', menu.bookmark_type, location.pathname, childBookmark.path, bookmarked);
                         return (
                             <SideNavItem
-                                key={bookmark.path}
+                                key={childBookmark.path}
                                 slot="children"
                                 ref={(el) => {
                                     if (el) {
@@ -206,38 +226,45 @@ export function SideBar() {
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     e.preventDefault();
-                                    navigate(bookmark.path!!);
+                                    navigate(childBookmark.path!!);
                                 }}
                             >
-                                {Urls.containsPath(bookmark.path!!, BookmarkType.QUESTIONS) && (
-                                    <Icon icon="vaadin:question" slot="prefix"/>)}
-                                {Urls.containsPath(bookmark.path!!, BookmarkType.PARTICIPANTS) && (
-                                    <Icon icon="vaadin:user" slot="prefix"/>)}
-                                {Urls.containsPath(bookmark.path!!, BookmarkType.ADMINISTRATIONS) && (
-                                    <Icon icon="vaadin:cog" slot="prefix"/>)}
-                                {bookmark.label}
-
-                                {isBookmarked(bookmark.path) ? (
-                                    <Button
-                                        theme={ElementStylingTypes.TERTIARY_INLINE}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            deleteBookmark(bookmark);
+                                <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    width: '100%',
+                                    minWidth: 0,
+                                    gap: 'var(--lumo-space-s)'
+                                }}>
+                                    <div
+                                        className={styles.ellipsis_single}
+                                        title={childBookmark.label}
+                                        onClick={() => navigate(childBookmark.path!!)}
+                                        style={{
+                                            cursor: 'pointer',
+                                            flexGrow: 1,
+                                            fontSize: 'var(--lumo-font-size-s)'
                                         }}
                                     >
-                                        <Icon icon="vaadin:unlock" slot="suffix"/>
-                                    </Button>
-                                ) : (
+                                        {childBookmark.label}
+                                    </div>
                                     <Button
-                                        theme={ElementStylingTypes.TERTIARY_INLINE}
+                                        theme="tertiary icon"
+                                        style={{
+                                            padding: 0,
+                                            minWidth: 'var(--lumo-size-s)',
+                                            height: 'var(--lumo-size-s)',
+                                            color: bookmarked ? 'var(--lumo-primary-text-color)' : 'var(--lumo-disabled-text-color)'
+                                        }}
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            createBookmark(bookmark);
+                                            bookmarked ? deleteBookmark(childBookmark) : createBookmark(childBookmark);
                                         }}
                                     >
-                                        <Icon icon="vaadin:lock" slot="suffix"/>
+                                        <Icon icon={`vaadin:${bookmarked ? 'star' : 'star-o'}`}/>
                                     </Button>
-                                )}
+                                </div>
                             </SideNavItem>
                         );
                     })}

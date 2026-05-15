@@ -28,4 +28,15 @@ export class Strings {
     static isNotUndefined(id?: string) {
         return !this.isUndefined(id);
     }
+
+    static format(template: string, data: any[]): string {
+        let index = 0;
+        return template.replace(/{}/g, () => {
+            if (index < data.length) {
+                const item = data[index++];
+                return typeof item === 'object' ? JSON.stringify(item) : item;
+            }
+            return '{}';
+        });
+    }
 }

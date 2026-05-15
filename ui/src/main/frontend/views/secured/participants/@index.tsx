@@ -1,5 +1,5 @@
 import ParticipantDetail from "Frontend/generated/be/riddler/v1/participant/client/model/ParticipantDetail";
-import {Dialog, Grid, GridColumn, HorizontalLayout, Notification, TextField} from "@vaadin/react-components";
+import {Dialog, Grid, GridColumn, HorizontalLayout, TextField} from "@vaadin/react-components";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
 import {useEffect, useState} from "react";
@@ -15,9 +15,8 @@ import {
 } from "Frontend/components/ui/button";
 import CreateParticipant from "Frontend/generated/be/riddler/v1/participant/client/model/CreateParticipant";
 import {CheckIcon, CloseIcon} from "Frontend/components/ui/icons";
-import {ElementStylingTypes} from "Frontend/constant";
 import {useNavigate} from "react-router";
-import {Strings, Urls} from "Frontend/util";
+import {Notify, Strings, Urls} from "Frontend/util";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 
 function ParticipantTable() {
@@ -39,7 +38,7 @@ function ParticipantTable() {
             <>
                 <GenerateToken onClick={() => ParticipantAdminEndpoint.generateToken(item.id).then(_ => {
                     fetchParticipants();
-                    Notification.show('Token generated', {position: 'top-end', theme: ElementStylingTypes.SUCCESS});
+                    Notify.success('Token generated successfully for {} {}', [item.first_name, item.last_name]);
                 })}/>
                 <ViewDetailButton onClick={() => {
                     navigate(Urls.makePath(BookmarkType.PARTICIPANTS, item.id));

@@ -15,6 +15,10 @@ import org.jspecify.annotations.NonNull;
 public class Logger {
     private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger("Vaadin UI");
 
+    public boolean isDebug() {
+        return LOGGER.isDebugEnabled();
+    }
+
     public void debug(@NonNull String message, Object... args) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(message, args);

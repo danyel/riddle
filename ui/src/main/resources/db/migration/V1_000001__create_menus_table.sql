@@ -33,7 +33,8 @@ INSERT INTO menus (id, label, icon, path, bookmark_type, order_index, created_by
 VALUES ('095a7040-3fec-4675-924d-2515f777305c', 'Participants', 'vaadin:user-clock', '/#/participants', 'PARTICIPANTS',
         1, 'admin');
 INSERT INTO menus (id, label, icon, path, bookmark_type, order_index, created_by)
-VALUES ('bf0adea7-a6c7-45da-bfb7-5a5d1bcc69db', 'Administration', 'vaadin:cogs', '/#/administrations', 'PARTICIPANTS',
+VALUES ('bf0adea7-a6c7-45da-bfb7-5a5d1bcc69db', 'Administration', 'vaadin:cogs', '/#/administrations',
+        'ADMINISTRATIONS',
         1, 'admin');
 INSERT INTO menu_configurations(id, menu_id, role, created_by)
 VALUES ('4709ebc1-139a-4e9f-be70-8003f13a634f', 'bfc25c06-5a0a-42e3-9828-ae2ec16570b9', 'USER', 'admin');

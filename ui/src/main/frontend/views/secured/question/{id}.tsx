@@ -3,15 +3,7 @@ import {useEffect, useState} from "react";
 import {QuestionEndpoint, QuestionTypeEndpoint} from "Frontend/generated/endpoints";
 import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
 import AnswersTable from "Frontend/components/answers/answers-table.component";
-import {
-    Dialog,
-    HorizontalLayout,
-    Notification,
-    Select,
-    TextArea,
-    TextField,
-    VerticalLayout
-} from "@vaadin/react-components";
+import {Dialog, HorizontalLayout, Select, TextArea, TextField, VerticalLayout} from "@vaadin/react-components";
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css';
 import QuestionType from "Frontend/generated/be/riddler/v1/question/client/model/QuestionType";
@@ -20,7 +12,7 @@ import {BanButton, CheckButton, CloseButton, RefreshButton} from "Frontend/compo
 import {useSignal} from "@vaadin/hilla-react-signals";
 import {Button} from "@vaadin/react-components/Button.js";
 import {ElementStylingTypes} from "Frontend/constant";
-import {Objects, Urls} from "Frontend/util";
+import {Notify, Objects, Urls} from "Frontend/util";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 
 
@@ -51,7 +43,7 @@ export default function QuestionDetailPage() {
     function deleteQuestion() {
         QuestionEndpoint.delete(id!!)
             .then(() => {
-                Notification.show(`Question ${id} deleted`, {position: 'top-end', theme: ElementStylingTypes.SUCCESS});
+                Notify.success('Question {} deleted!', id);
                 navigate(Urls.makePath(BookmarkType.QUESTIONS));
             });
     }
@@ -80,10 +72,7 @@ export default function QuestionDetailPage() {
                         };
                         QuestionEndpoint.update(question?.id!!, updateQuestion)
                             .then(() => {
-                                Notification.show('Question saved', {
-                                    position: 'top-end',
-                                    theme: ElementStylingTypes.SUCCESS
-                                });
+                                Notify.success('Question updated: ', question.title)
                                 navigate(Urls.makePath(BookmarkType.QUESTIONS));
                             });
                     }} disabled={isSame()}/>

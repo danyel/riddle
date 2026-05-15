@@ -4,7 +4,6 @@ import {
     Grid,
     GridColumn,
     HorizontalLayout,
-    Notification,
     Upload,
     UploadBeforeEvent,
     VerticalLayout
@@ -20,6 +19,7 @@ import {PlusButton} from "Frontend/components/ui/button";
 import {Button} from "@vaadin/react-components/Button";
 import {ElementStylingTypes} from "Frontend/constant";
 import {useSignal} from "@vaadin/hilla-react-signals";
+import {Notify} from "Frontend/util";
 
 export function AdminParticipant() {
     const [cvOpen, setCvOpen] = useState(false);
@@ -65,8 +65,8 @@ export function AdminParticipant() {
     }, [params.id]);
 
     const uploadI18n = useSignal({
-        addFiles: { one: 'Upload Report...' },
-        dropFiles: { one: 'Drop report here' },
+        addFiles: {one: 'Upload Report...'},
+        dropFiles: {one: 'Drop report here'},
         error: {
             incorrectFileType: 'The provided file does not have the correct format (PDF document).',
         },
@@ -81,8 +81,8 @@ export function AdminParticipant() {
 
     function createInvitation(participantId: string) {
         InvitationEndpoint.create({participantId: participantId})
-            .then(() => {
-                Notification.show('Invitation created', {position: 'top-end', theme: ElementStylingTypes.SUCCESS});
+            .then((invitationDetail: InvitationDetail) => {
+                Notify.success('Invitation {} created', invitationDetail.id);
                 fetchInvitations();
                 setOpen(false);
             });
