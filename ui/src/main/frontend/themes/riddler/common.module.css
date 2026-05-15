@@ -89,6 +89,7 @@
     background-color: var(--lumo-base-color);
 }
 
+/*noinspection ALL*/
 .question_menu_bar vaadin-button {
     width: auto; /* Prevents stretching */
     flex-grow: 0; /* Prevents the button from expanding */
@@ -130,6 +131,7 @@
     overflow: hidden;
 }
 
+/*noinspection CssInvalidHtmlTagReference*/
 .menu_bar_layout vaadin-button {
     width: auto; /* Prevents stretching */
     flex-grow: 0; /* Prevents the button from expanding */
@@ -164,6 +166,7 @@
     max-height: 100vh !important;
 }
 
+/*noinspection CssInvalidHtmlTagReference*/
 vaadin-dialog-overlay::part(overlay) {
     max-width: 100vw !important;
     max-height: 100vh !important;
