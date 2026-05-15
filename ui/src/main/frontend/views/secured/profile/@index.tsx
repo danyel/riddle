@@ -9,6 +9,7 @@ import {Button} from "@vaadin/react-components/Button";
 import {ElementStylingTypes} from "Frontend/constant";
 import {useState} from "react";
 import {useSignal} from "@vaadin/hilla-react-signals";
+import {Collections} from "Frontend/util";
 
 export default function ProfilePage() {
     const {settings, setSettings} = useSettingsState();
@@ -31,7 +32,7 @@ export default function ProfilePage() {
                     dialogOpened.value = false;
                     setSettings({
                         ...settings,
-                        bookmarks: settings.bookmarks.filter((e: Bookmark) => e && e.id !== bookmark!.id)
+                        bookmarks: Collections.removeElement(settings.bookmarks, (e: Bookmark) => e && e.id !== bookmark!.id)
                     });
                 }
             );

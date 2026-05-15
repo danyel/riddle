@@ -20,6 +20,8 @@ import CreateQuestion from "Frontend/generated/be/riddler/v1/question/client/mod
 import {QuestionEndpoint} from "Frontend/generated/endpoints";
 import {CancelButton, CheckButton, CloseButton, PlusButton, ViewDetailButton} from "Frontend/components/ui/button";
 import QuestionType from "Frontend/generated/be/riddler/v1/question/client/model/QuestionType";
+import {Urls} from "Frontend/util";
+import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 
 
 function CreateQuestionDialogModal(props: {
@@ -135,7 +137,7 @@ function CreateQuestionDialogModal(props: {
 function QuestionTable(props: { questions: Question[] }) {
     const navigate = useNavigate();
     const showQuestion = ({item}: { item: Question }) => {
-        return <ViewDetailButton onClick={() => navigate(`/questions/${item.id}`)}/>;
+        return <ViewDetailButton onClick={() => navigate(Urls.makePath(BookmarkType.QUESTIONS, item.id))}/>;
     };
     return (
         <Grid key={"id"} items={props.questions} className={styles.riddler_table} allRowsVisible={true}>

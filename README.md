@@ -73,3 +73,10 @@ mvn clean install
 |:-----------|:----:|
 | postgres   | 5433 |
 | ui         | 8080 |
+
+# Credentials
+
+| username | password |
+|:---------|:--------:|
+| admin    |  admin   |
+| user     |   user   |

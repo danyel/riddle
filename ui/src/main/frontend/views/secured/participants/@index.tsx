@@ -17,6 +17,8 @@ import CreateParticipant from "Frontend/generated/be/riddler/v1/participant/clie
 import {CheckIcon, CloseIcon} from "Frontend/components/ui/icons";
 import {ElementStylingTypes} from "Frontend/constant";
 import {useNavigate} from "react-router";
+import {Strings, Urls} from "Frontend/util";
+import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 
 function ParticipantTable() {
     const [open, setOpen] = useState(false);
@@ -40,7 +42,7 @@ function ParticipantTable() {
                     Notification.show('Token generated', {position: 'top-end', theme: ElementStylingTypes.SUCCESS});
                 })}/>
                 <ViewDetailButton onClick={() => {
-                    navigate(`/participants/${item.id}`);
+                    navigate(Urls.makePath(BookmarkType.PARTICIPANTS, item.id));
                 }}/>
             </>
         );
@@ -49,8 +51,8 @@ function ParticipantTable() {
     const tokenIndicator = ({item}: { item: ParticipantDetail }) => {
         return (
             <>
-                {item.stored_token && (<CheckIcon/>)}
-                {!item.stored_token && (<CloseIcon/>)}
+                {Strings.isNotEmpty(item.stored_token) && (<CheckIcon/>)}
+                {Strings.isNotEmpty(item.stored_token) && (<CloseIcon/>)}
             </>
         );
     };

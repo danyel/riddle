@@ -28,20 +28,20 @@ CREATE TABLE menu_configurations
 --changeset dnoulet:V1_000001_create_menus_data context:lcl
 INSERT INTO menus (id, label, icon, path, bookmark_type, order_index, created_by)
 VALUES ('bfc25c06-5a0a-42e3-9828-ae2ec16570b9', 'Questions', 'vaadin:dashboard', '/#/questions', 'QUESTIONS', 0,
-        'dnoulet');
+        'admin');
 INSERT INTO menus (id, label, icon, path, bookmark_type, order_index, created_by)
 VALUES ('095a7040-3fec-4675-924d-2515f777305c', 'Participants', 'vaadin:user-clock', '/#/participants', 'PARTICIPANTS',
-        1, 'dnoulet');
+        1, 'admin');
 INSERT INTO menus (id, label, icon, path, bookmark_type, order_index, created_by)
 VALUES ('bf0adea7-a6c7-45da-bfb7-5a5d1bcc69db', 'Administration', 'vaadin:cogs', '/#/administrations', 'PARTICIPANTS',
-        1, 'dnoulet');
+        1, 'admin');
 INSERT INTO menu_configurations(id, menu_id, role, created_by)
-VALUES ('4709ebc1-139a-4e9f-be70-8003f13a634f', 'bfc25c06-5a0a-42e3-9828-ae2ec16570b9', 'USER', 'dnoulet');
+VALUES ('4709ebc1-139a-4e9f-be70-8003f13a634f', 'bfc25c06-5a0a-42e3-9828-ae2ec16570b9', 'USER', 'admin');
 INSERT INTO menu_configurations(id, menu_id, role, created_by)
-VALUES ('a501a559-7276-4eaf-a033-675b0bc499a5', 'bfc25c06-5a0a-42e3-9828-ae2ec16570b9', 'ADMIN', 'dnoulet');
+VALUES ('a501a559-7276-4eaf-a033-675b0bc499a5', 'bfc25c06-5a0a-42e3-9828-ae2ec16570b9', 'ADMIN', 'admin');
 INSERT INTO menu_configurations(id, menu_id, role, created_by)
-VALUES ('3a7a8cb6-7e68-448d-9a0f-8b833f39290f', '095a7040-3fec-4675-924d-2515f777305c', 'USER', 'dnoulet');
+VALUES ('3a7a8cb6-7e68-448d-9a0f-8b833f39290f', '095a7040-3fec-4675-924d-2515f777305c', 'USER', 'admin');
 INSERT INTO menu_configurations(id, menu_id, role, created_by)
-VALUES ('19c31479-d258-45f7-b970-85e5746d869a', '095a7040-3fec-4675-924d-2515f777305c', 'ADMIN', 'dnoulet');
+VALUES ('19c31479-d258-45f7-b970-85e5746d869a', '095a7040-3fec-4675-924d-2515f777305c', 'ADMIN', 'admin');
 INSERT INTO menu_configurations(id, menu_id, role, created_by)
-VALUES ('aa3e07e7-7b58-45f4-bd7a-8423a8a53440', 'bf0adea7-a6c7-45da-bfb7-5a5d1bcc69db', 'ADMIN', 'dnoulet');
+VALUES ('aa3e07e7-7b58-45f4-bd7a-8423a8a53440', 'bf0adea7-a6c7-45da-bfb7-5a5d1bcc69db', 'ADMIN', 'admin');

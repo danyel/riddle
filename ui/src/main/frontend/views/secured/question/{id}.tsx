@@ -20,6 +20,8 @@ import {BanButton, CheckButton, CloseButton, RefreshButton} from "Frontend/compo
 import {useSignal} from "@vaadin/hilla-react-signals";
 import {Button} from "@vaadin/react-components/Button.js";
 import {ElementStylingTypes} from "Frontend/constant";
+import {Objects, Urls} from "Frontend/util";
+import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 
 
 export default function QuestionDetailPage() {
@@ -43,14 +45,14 @@ export default function QuestionDetailPage() {
     }
 
     function isSame(): boolean {
-        return question?.question === updateQuestion?.question && question.type === updateQuestion.type;
+        return Objects.isEqual(question?.question, updateQuestion.question) && Objects.isEqual(question?.type, updateQuestion.type);
     }
 
     function deleteQuestion() {
         QuestionEndpoint.delete(id!!)
             .then(() => {
                 Notification.show(`Question ${id} deleted`, {position: 'top-end', theme: ElementStylingTypes.SUCCESS});
-                navigate('/questions');
+                navigate(Urls.makePath(BookmarkType.QUESTIONS));
             });
     }
 
@@ -82,7 +84,7 @@ export default function QuestionDetailPage() {
                                     position: 'top-end',
                                     theme: ElementStylingTypes.SUCCESS
                                 });
-                                navigate('/questions');
+                                navigate(Urls.makePath(BookmarkType.QUESTIONS));
                             });
                     }} disabled={isSame()}/>
                     <RefreshButton onClick={() => setUpdateQuestion({
@@ -95,7 +97,7 @@ export default function QuestionDetailPage() {
                         open();
                     }}/>
                     <CloseButton onClick={() => {
-                        navigate('/questions');
+                        navigate(Urls.makePath(BookmarkType.QUESTIONS));
                     }}/>
                 </div>
             </HorizontalLayout>

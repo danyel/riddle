@@ -42,6 +42,16 @@ import java.util.List;
 class SecurityConfiguration {
     @Value("${application.auth.secret}")
     private String authSecret;
+    private static final List<User> USERS = List.of(new User(
+                    "admin",
+                    "{noop}admin",
+                    List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"), new SimpleGrantedAuthority("ROLE_PARTICIPANT"))
+            ),
+            new User(
+                    "user",
+                    "{noop}user",
+                    List.of(new SimpleGrantedAuthority("ROLE_USER"))
+            ));
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) {
@@ -69,7 +79,7 @@ class SecurityConfiguration {
         // 4. Return clean 401 Unauthorized for REST paths instead of 302 Redirect
         http.exceptionHandling(exceptions -> exceptions
                 .defaultAuthenticationEntryPointFor(
-                        (request, response, authException) -> response.sendError(401, "Unauthorized"),
+                        (_, response, _) -> response.sendError(401, "Unauthorized"),
                         apiMatcher
                 )
         );
@@ -78,9 +88,7 @@ class SecurityConfiguration {
         http.addFilterBefore(new JwtAuthenticationFilter(authSecret), UsernamePasswordAuthenticationFilter.class);
 
         // 6. Apply Vaadin security
-        http.with(VaadinSecurityConfigurer.vaadin(), configurer -> {
-            configurer.loginView("/login");
-        });
+        http.with(VaadinSecurityConfigurer.vaadin(), configurer -> configurer.loginView("/login"));
 
         // 7. Apply stateless configurer
         http.with(new VaadinStatelessSecurityConfigurer<>(), cfg -> cfg.withSecretKey()
@@ -95,11 +103,7 @@ class SecurityConfiguration {
 
     @Bean
     UserDetailsService userDetailsService() {
-        return username -> new User(
-                username,
-                "{noop}password",
-                List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"), new SimpleGrantedAuthority("ROLE_PARTICIPANT"))
-        );
+        return username -> USERS.stream().filter(u -> u.getUsername().equals(username)).findFirst().orElseThrow();
     }
 }
 

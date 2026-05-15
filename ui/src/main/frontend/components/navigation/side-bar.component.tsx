@@ -16,11 +16,13 @@ import {ElementStylingTypes} from "Frontend/constant";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import {useSettingsState} from "Frontend/views/secured/settings-context-provider";
 import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
+import {Collections, Objects, Strings, Urls} from "Frontend/util";
 
 export function SideBar() {
     const [menus, setMenus] = useState<Menu[]>([]);
     const [participant, setParticipant] = useState<ParticipantDetail>();
     const [question, setQuestion] = useState<Question>();
+    const [administration, setAdministration] = useState<string>("");
     const [, setBookmarkTypes] = useState<String[]>([]);
     const {settings, setSettings} = useSettingsState();
     const navigate = useNavigate();
@@ -34,6 +36,11 @@ export function SideBar() {
     const isQuestionDetail = () => {
         return !!(params.id && location.pathname.startsWith(`/${BookmarkType.QUESTIONS.toLocaleLowerCase()}/`));
     };
+
+    const isAdministration = () => {
+        return !!(params.id && location.pathname.startsWith(`/${BookmarkType.ADMINISTRATIONS.toLocaleLowerCase()}/`));
+    };
+
     useEffect(() => {
         MenuService.menu().then(setMenus);
         BookmarkEndpoint.bookmarkTypes().then(setBookmarkTypes);
@@ -51,6 +58,12 @@ export function SideBar() {
         } else {
             setQuestion(undefined);
         }
+
+        if (isAdministration()) {
+            searchAdministration();
+        } else {
+            setAdministration(Strings.EMPTY);
+        }
     }, [params.id, location.pathname]);
 
     const searchQuestion = () => {
@@ -59,6 +72,10 @@ export function SideBar() {
     const searchParticipant = () => {
         ParticipantAdminEndpoint.findById(params.id!!).then(setParticipant);
     };
+
+    const searchAdministration = () => {
+        setAdministration('administration');
+    }
 
     const bookmarksJsonString = JSON.stringify(settings.bookmarks || []);
     const menusJsonString = JSON.stringify(menus);
@@ -78,16 +95,18 @@ export function SideBar() {
             const cleanMenuHash = menuPath.startsWith('/#') ? menuPath.substring(1) : menuPath;
             const routingPath = cleanMenuHash.replace(/^#/, '');
             const filtered = parsedBookmarks.filter((b): b is Bookmark => {
-                return b !== null && b !== undefined && b.bookmarkType === menu.bookmark_type;
+                return Objects.isNotNullAndNotUndefined(b) && b.bookmarkType === menu.bookmark_type;
             });
             let activeChildrenList: Bookmark[] = filtered;
-            const currentDetailPath = `/${menu.bookmark_type.toLocaleLowerCase()}/${params.id}`;
+            const currentDetailPath = Urls.makePath(menu.bookmark_type, params.id);
             let label = "Loading...";
 
             if (menu.bookmark_type === BookmarkType.PARTICIPANTS) {
                 label = `${participant?.first_name} ${participant?.last_name}`;
             } else if (menu.bookmark_type === BookmarkType.QUESTIONS) {
                 label = question?.title!!;
+            } else if (menu.bookmark_type === BookmarkType.ADMINISTRATIONS) {
+                label = administration;
             }
 
             if (!filtered.find(b => b.path === currentDetailPath)) {
@@ -97,7 +116,7 @@ export function SideBar() {
                         path: currentDetailPath,
                         label: label
                     };
-                    activeChildrenList = [ephemeralBookmark, ...filtered];
+                    activeChildrenList = Collections.putElementAtIndex(ephemeralBookmark, filtered, 0);
                 }
             }
 
@@ -132,7 +151,7 @@ export function SideBar() {
 
     const isBookmarked = (path: string | undefined, bookmarkType: BookmarkType): boolean => {
         const currentBookmarks: Bookmark[] = JSON.parse(bookmarksJsonString);
-        return currentBookmarks.some(b => b?.path?.startsWith(`/${bookmarkType.toLocaleLowerCase()}/`));
+        return currentBookmarks.some(b => Urls.isSamePath(b.path!!, bookmarkType));
     };
 
     return (
@@ -185,7 +204,12 @@ export function SideBar() {
                                     navigate(bookmark.path!!);
                                 }}
                             >
-                                <Icon icon="vaadin:user" slot="prefix"/>
+                                {Urls.containsPath(bookmark.path!!, BookmarkType.QUESTIONS) && (
+                                    <Icon icon="vaadin:question" slot="prefix"/>)}
+                                {Urls.containsPath(bookmark.path!!, BookmarkType.PARTICIPANTS) && (
+                                    <Icon icon="vaadin:user" slot="prefix"/>)}
+                                {Urls.containsPath(bookmark.path!!, BookmarkType.ADMINISTRATIONS) && (
+                                    <Icon icon="vaadin:cog" slot="prefix"/>)}
                                 {bookmark.label}
 
                                 {isBookmarked(params.id, menu.bookmark_type) ? (
