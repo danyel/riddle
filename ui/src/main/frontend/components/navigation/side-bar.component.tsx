@@ -16,7 +16,7 @@ import {ElementStylingTypes} from "Frontend/constant";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import {useSettingsState} from "Frontend/views/secured/settings-context-provider";
 import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
-import {Collections, Objects, Strings, Urls} from "Frontend/util";
+import {Collections, Logs, Objects, Strings, Urls} from "Frontend/util";
 
 export function SideBar() {
     const [menus, setMenus] = useState<Menu[]>([]);
@@ -47,6 +47,7 @@ export function SideBar() {
     }, []);
 
     useEffect(() => {
+        Logs.debug('Sidebar.useEffect', 'On init: {} {}', params.id, location.pathname);
         if (isParticipantDetail()) {
             searchParticipant();
         } else {
@@ -122,7 +123,7 @@ export function SideBar() {
 
             const isCurrent = (location.hash || '#/') === cleanMenuHash;
             const shouldBeExpanded = activeChildrenList.length > 0;
-            return {
+            let mappedDataReturn = {
                 menu,
                 menuPath,
                 routingPath,
@@ -130,6 +131,7 @@ export function SideBar() {
                 shouldBeExpanded,
                 activeChildrenList
             };
+            return mappedDataReturn;
         });
     }, [menusJsonString, bookmarksJsonString, params.id, location.pathname, location.hash, participantName, questionTitle]);
 
@@ -152,6 +154,7 @@ export function SideBar() {
     const isBookmarked = (path: string | undefined): boolean => {
         const currentBookmarks: Bookmark[] = JSON.parse(bookmarksJsonString);
         return currentBookmarks.some(b => {
+            Logs.debug('Sidebar.isBookmarked', 'isBookmarked', path, b.path)
             return Urls.isSamePath(b.path!!, path);
         });
     };

@@ -1,6 +1,5 @@
 package be.riddler.v1.security.bff;
 
-import be.riddler.v1.common.http.Unauthorized;
 import be.riddler.v1.security.client.SecurityClient;
 import be.riddler.v1.security.client.model.UserInfo;
 import be.riddler.v1.settings.constants.UserContext;
@@ -9,9 +8,7 @@ import com.vaadin.hilla.BrowserCallable;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.Assert;
 
@@ -45,14 +42,5 @@ public class UserEndpoint {
 
     public @NonNull List<@NonNull String> getAuthorities() {
         return UserContext.availableRoles();
-    }
-
-    public UserInfo authenticate(String username, String password) {
-        var authentication = securityClient.authenticate(username, password);
-        if (authentication instanceof UserInfo userInfo) {
-            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userInfo, password, userInfo.roles().stream().map(SimpleGrantedAuthority::new).toList()));
-            return authentication;
-        }
-        throw new Unauthorized("Incorrect username and/or password");
     }
 }
