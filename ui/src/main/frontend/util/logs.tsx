@@ -8,8 +8,8 @@ export class Logs {
 
     constructor(component: string) {
         this.component = component;
-        Logger.isDebug()
-            .then(e => Logs.DEBUG = e);
+        // Logger.isDebug()
+        //     .then(e => Logs.DEBUG = e);
     }
 
     public debug(message: string, ...data: any[]) {

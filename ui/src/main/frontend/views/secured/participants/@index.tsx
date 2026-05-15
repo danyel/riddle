@@ -1,5 +1,5 @@
 import ParticipantDetail from "Frontend/generated/be/riddler/v1/participant/client/model/ParticipantDetail";
-import {Dialog, Grid, GridColumn, HorizontalLayout, TextField} from "@vaadin/react-components";
+import {Dialog, Grid, GridColumn, HorizontalLayout, TextField, VerticalLayout} from "@vaadin/react-components";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
 import {useEffect, useState} from "react";
@@ -38,7 +38,7 @@ function ParticipantTable() {
             <>
                 <GenerateToken onClick={() => ParticipantAdminEndpoint.generateToken(item.id).then(_ => {
                     fetchParticipants();
-                    Notify.success('Token generated successfully for {} {}', [item.first_name, item.last_name]);
+                    Notify.success('Token generated successfully for {} {}', item.first_name, item.last_name);
                 })}/>
                 <ViewDetailButton onClick={() => {
                     navigate(Urls.makePath(BookmarkType.PARTICIPANTS, item.id));
@@ -117,43 +117,52 @@ function CreateParticipantDialogModal(props: {
         <Dialog
             width={"100vh"}
             height={"100vh"}
-            header-title="Create answer"
+            header-title="Add participant"
             opened={props.show}
             onOpenedChanged={closeIfNotValue}
             header={<CancelButton onClick={() => props.onClose()}/>}
             footerRenderer={() => (
                 <>
-                    <CloseButton onClick={props.onClose}/>
                     <CheckButton onClick={saveParticipant}/>
+                    <CloseButton onClick={props.onClose}/>
                 </>
             )}
         >
-            <div className={styles.div_full}>
-                <TextField
-                    label="First Name"
-                    value={createParticipant.value.email_address}
-                    onValueChanged={(e) => (createParticipant.value.first_name = e.detail.value)}
-                    className={styles.text_area_full}
-                />
-            </div>
-
-            <div className={styles.div_full}>
-                <TextField
-                    label="Last Name"
-                    value={createParticipant.value.email_address}
-                    onValueChanged={(e) => (createParticipant.value.last_name = e.detail.value)}
-                    className={styles.text_area_full}
-                />
-            </div>
-
-            <div className={styles.div_full}>
-                <TextField
-                    label="Email"
-                    value={createParticipant.value.email_address}
-                    onValueChanged={(e) => (createParticipant.value.email_address = e.detail.value)}
-                    className={styles.text_area_full}
-                />
-            </div>
+            <VerticalLayout theme="spacing" style={{alignItems: 'stretch'}}>
+                <HorizontalLayout style={{
+                    justifyContent: 'space-between',
+                    paddingTop: 'var(--lumo-space-s)'
+                }}>
+                    <TextField
+                        label="First Name"
+                        value={createParticipant.value.email_address}
+                        onValueChanged={(e) => (createParticipant.value.first_name = e.detail.value)}
+                        className={styles.text_area_full}
+                    />
+                </HorizontalLayout>
+                <HorizontalLayout style={{
+                    justifyContent: 'space-between',
+                    paddingTop: 'var(--lumo-space-s)'
+                }}>
+                    <TextField
+                        label="Last Name"
+                        value={createParticipant.value.email_address}
+                        onValueChanged={(e) => (createParticipant.value.last_name = e.detail.value)}
+                        className={styles.text_area_full}
+                    />
+                </HorizontalLayout>
+                <HorizontalLayout style={{
+                    justifyContent: 'space-between',
+                    paddingTop: 'var(--lumo-space-s)'
+                }}>
+                    <TextField
+                        label="Email"
+                        value={createParticipant.value.email_address}
+                        onValueChanged={(e) => (createParticipant.value.email_address = e.detail.value)}
+                        className={styles.text_area_full}
+                    />
+                </HorizontalLayout>
+            </VerticalLayout>
         </Dialog>
     );
 }

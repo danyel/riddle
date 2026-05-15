@@ -2,11 +2,11 @@ export class Strings {
     static EMPTY: string = '';
 
     static isEmpty(value?: string): boolean {
-        return !this.isNotEmpty(value);
+        return this.isNull(value) || this.isUndefined(value);
     }
 
     static isNotEmpty(value?: string): boolean {
-        return !this.isBlank(value);
+        return this.isNotNull(value) && this.isNotUndefined(value) && value?.trim() !== '';
     }
 
     static isBlank(value?: string): boolean {

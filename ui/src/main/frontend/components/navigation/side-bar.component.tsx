@@ -186,6 +186,11 @@ export function SideBar() {
                                 } else {
                                     el.removeAttribute('current');
                                 }
+                                if (shouldBeExpanded) {
+                                    el.setAttribute('expanded', '');
+                                } else {
+                                    el.removeAttribute('expanded');
+                                }
                             }
                         }
                     }}
