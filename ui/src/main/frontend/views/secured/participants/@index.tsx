@@ -52,7 +52,7 @@ function ParticipantTable() {
         return (
             <>
                 {Strings.isNotEmpty(item.stored_token) && (<CheckIcon/>)}
-                {Strings.isNotEmpty(item.stored_token) && (<CloseIcon/>)}
+                {Strings.isEmpty(item.stored_token) && (<CloseIcon/>)}
             </>
         );
     };

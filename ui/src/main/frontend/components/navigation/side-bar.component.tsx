@@ -149,9 +149,11 @@ export function SideBar() {
         });
     };
 
-    const isBookmarked = (path: string | undefined, bookmarkType: BookmarkType): boolean => {
+    const isBookmarked = (path: string | undefined): boolean => {
         const currentBookmarks: Bookmark[] = JSON.parse(bookmarksJsonString);
-        return currentBookmarks.some(b => Urls.isSamePath(b.path!!, bookmarkType));
+        return currentBookmarks.some(b => {
+            return Urls.isSamePath(b.path!!, path);
+        });
     };
 
     return (
@@ -212,7 +214,7 @@ export function SideBar() {
                                     <Icon icon="vaadin:cog" slot="prefix"/>)}
                                 {bookmark.label}
 
-                                {isBookmarked(params.id, menu.bookmark_type) ? (
+                                {isBookmarked(bookmark.path) ? (
                                     <Button
                                         theme={ElementStylingTypes.TERTIARY_INLINE}
                                         onClick={(e) => {
