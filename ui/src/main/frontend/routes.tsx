@@ -17,6 +17,7 @@ import ProfilePage from "./views/secured/profile/profile";
 import AdministrationPage from "./views/secured/administration/administration";
 import InvitationPage from "./views/secured/invitation/invitation";
 import PublicationsPage from "Frontend/views/secured/publication/publications";
+import PublicationPage from "Frontend/views/secured/publication/publication";
 
 
 function RootErrorBoundary() {
@@ -98,7 +99,7 @@ export const routes = protectRoutes([
             },
             {
                 path: '/publications/:id',
-                element: <PublicationsPage/>,
+                element: <PublicationPage/>,
                 handle: {rolesAllowed: ['ROLE_USER']} // Client-side check
             },
         ],

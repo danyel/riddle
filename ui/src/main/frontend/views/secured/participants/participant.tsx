@@ -15,6 +15,7 @@ import Publication from "Frontend/generated/be/riddler/v1/publication/client/mod
 import FormItem from "Frontend/components/ui/form/form-item.component";
 import RiddlerModal from "Frontend/components/ui/modal/modal";
 import ParticipantProfileDetail from "Frontend/components/participant/participant";
+import PublicationDetail from "Frontend/components/publication/publication";
 
 export type ModalType = 'PUBLICATION' | 'INVITATION' | 'CV' | 'PHOTO';
 
@@ -125,64 +126,7 @@ export function AdminParticipant() {
                     <CloseButton onClick={() => setOpen(false)}/>
                 }
                 content={
-                    <>
-                        <div style={{colspan: 2, marginTop: 'var(--lumo-space-m)'}}>
-                            <div style={{
-                                fontSize: 'var(--lumo-font-size-s)',
-                                fontWeight: 500,
-                                color: 'var(--lumo-secondary-text-color)',
-                                marginBottom: 'var(--lumo-space-xs)'
-                            }}>
-                                Title
-                            </div>
-
-                            <div className={styles.modal_text_ro}>
-                                {publication?.title || (
-                                    <span style={{color: 'var(--lumo-disabled-text-color)', fontStyle: 'italic'}}>
-                                        No title available for this publication.
-                                    </span>
-                                )}
-                            </div>
-                        </div>
-                        <div style={{colspan: 2, marginTop: 'var(--lumo-space-m)'}}>
-                            <div style={{
-                                fontSize: 'var(--lumo-font-size-s)',
-                                fontWeight: 500,
-                                color: 'var(--lumo-secondary-text-color)',
-                                marginBottom: 'var(--lumo-space-xs)'
-                            }}>
-                                Description
-                            </div>
-
-                            <div className={styles.modal_text_area_ro}>
-                                {publication?.description || (
-                                    <span style={{color: 'var(--lumo-disabled-text-color)', fontStyle: 'italic'}}>
-                                        No description available for this publication.
-                                    </span>
-                                )}
-                            </div>
-                        </div>
-                        <div style={{colspan: 2, marginTop: 'var(--lumo-space-m)'}}>
-                            <div style={{
-                                fontSize: 'var(--lumo-font-size-s)',
-                                fontWeight: 500,
-                                color: 'var(--lumo-secondary-text-color)',
-                                marginBottom: 'var(--lumo-space-xs)'
-                            }}>
-                                Description
-                            </div>
-
-                            <div className={styles.modal_text_area_ro}>
-                                {publication?.proposal ||
-                                    (
-                                        <span style={{color: 'var(--lumo-disabled-text-color)', fontStyle: 'italic'}}>
-                                            No proposal available for this publication.
-                                        </span>
-                                    )
-                                }
-                            </div>
-                        </div>
-                    </>
+                    <PublicationDetail publication={publication!!}/>
                 }/>
             <RiddlerModal
                 headerTitle={`Participant: ${participant?.first_name} ${participant?.last_name}`}
