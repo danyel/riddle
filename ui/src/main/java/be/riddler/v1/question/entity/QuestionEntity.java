@@ -1,25 +1,22 @@
 package be.riddler.v1.question.entity;
 
+import be.riddler.v1.common.entity.IdEntity;
 import be.riddler.v1.question.client.model.QuestionType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
  * QuestionEntity
@@ -29,17 +26,14 @@ import java.util.UUID;
  */
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@ToString
-@EqualsAndHashCode
+@SuperBuilder
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 @Entity
 @Table(name = "questions")
-public class QuestionEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+public class QuestionEntity extends IdEntity {
     private String title;
     private String question;
     @Enumerated(EnumType.STRING)

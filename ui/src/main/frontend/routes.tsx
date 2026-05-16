@@ -15,6 +15,8 @@ import AdminParticipantsPage from "Frontend/views/secured/participants/@index";
 import {AdminParticipant} from "./views/secured/participants/participant";
 import ProfilePage from "Frontend/views/secured/profile/@index";
 import AdministrationPage from "Frontend/views/secured/administration/@index";
+import InvitationPage from "Frontend/views/secured/invitation/@index";
+import PublicationsPage from "Frontend/views/secured/publication/publications";
 
 
 function RootErrorBoundary() {
@@ -52,22 +54,22 @@ export const routes = protectRoutes([
             {
                 path: '/participants',
                 element: <AdminParticipantsPage/>,
-                handle: {rolesAllowed: ['ROLE_ADMIN', 'ROLE_USER']} // Client-side check
+                handle: {rolesAllowed: ['ROLE_USER']} // Client-side check
             },
             {
                 path: '/participants/:id',
                 element: <AdminParticipant/>,
-                handle: {rolesAllowed: ['ROLE_ADMIN', 'ROLE_USER']} // Client-side check
+                handle: {rolesAllowed: ['ROLE_USER']} // Client-side check
             },
             {
                 path: '/questions',
                 element: <AdminQuestionsPage/>,
-                handle: {rolesAllowed: ['ROLE_ADMIN', 'ROLE_USER']} // Client-side check
+                handle: {rolesAllowed: ['ROLE_USER']} // Client-side check
             },
             {
                 path: '/questions/:id',
                 element: <AdminQuestionPage/>,
-                handle: {rolesAllowed: ['ROLE_ADMIN', 'ROLE_USER']} // Client-side check
+                handle: {rolesAllowed: ['ROLE_USER']} // Client-side check
             },
             {
                 path: '/icons',
@@ -83,6 +85,21 @@ export const routes = protectRoutes([
                 path: '/administrations',
                 element: <AdministrationPage/>,
                 handle: {rolesAllowed: ['ROLE_ADMIN']} // Client-side check
+            },
+            {
+                path: '/participants/:participant_id/invitations/:invitation_id',
+                element: <InvitationPage/>,
+                handle: {rolesAllowed: ['ROLE_USER', 'ROLE_ADMIN']} // Client-side check
+            },
+            {
+                path: '/publications',
+                element: <PublicationsPage/>,
+                handle: {rolesAllowed: ['ROLE_USER']} // Client-side check
+            },
+            {
+                path: '/publications/:id',
+                element: <PublicationsPage/>,
+                handle: {rolesAllowed: ['ROLE_USER']} // Client-side check
             },
         ],
     },

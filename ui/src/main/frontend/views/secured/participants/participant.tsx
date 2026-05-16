@@ -8,18 +8,18 @@ import {
     UploadBeforeEvent,
     VerticalLayout
 } from "@vaadin/react-components";
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import {useEffect, useState} from "react";
 import {InvitationEndpoint, ParticipantAdminEndpoint} from "Frontend/generated/endpoints";
 import ParticipantDetail from "Frontend/generated/be/riddler/v1/participant/client/model/ParticipantDetail";
 import InvitationDetail from "Frontend/generated/be/riddler/v1/invitation/client/model/InvitationDetail";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
-import {PlusButton} from "Frontend/components/ui/button";
+import {CloseButton, GenerateToken, PlusButton, ViewDetailButton} from "Frontend/components/ui/button";
 import {Button} from "@vaadin/react-components/Button";
 import {ElementStylingTypes} from "Frontend/constant";
 import {useSignal} from "@vaadin/hilla-react-signals";
-import {Notify} from "Frontend/util";
+import {Notify, Strings} from "Frontend/util";
 
 export function AdminParticipant() {
     const [cvOpen, setCvOpen] = useState(false);
@@ -91,14 +91,12 @@ export function AdminParticipant() {
     return (
         <>
             <Dialog
-                headerTitle="Curriculum Vitae Preview"
+                headerTitle={`Participant: ${participant?.first_name} ${participant?.last_name}`}
                 opened={cvOpen}
                 // 💡 Removed the old inline ref block completely
                 onClosed={() => setCvOpen(false)}
                 footer={
-                    <Button theme="tertiary" onClick={() => setCvOpen(false)} style={{margin: 'var(--lumo-space-m)'}}>
-                        Close
-                    </Button>
+                    <CloseButton onClick={() => setCvOpen(false)}/>
                 }
             >
                 {/* Flex configuration forces iframe to consume 100% of the newly expanded overlay space */}
@@ -133,14 +131,13 @@ export function AdminParticipant() {
                                          alt={"Photo"}/>
                                     <Upload
                                         accept="image/*"
-                                        target={"/v1/participants/" + params.id!! + "/photo"}
+                                        target={`/v1/participants/${params.id!!}/photo`}
                                         maxFileSize={20000000}
                                         i18n={uploadI18n.value}
                                         nodrop
                                         onUploadBefore={(e: UploadBeforeEvent) => {
                                             const csrfToken = getCookie('XSRF-TOKEN');
                                             if (csrfToken) {
-                                                // 💡 FIXED: Cleaned up the broken inline button comment text block
                                                 e.detail.xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);
                                             }
                                         }}
@@ -164,7 +161,7 @@ export function AdminParticipant() {
                         <HorizontalLayout className={styles.full_width_layout}>
                             <Upload
                                 accept="application/pdf"
-                                target={"/v1/participants/" + params.id!! + "/cv"}
+                                target={`/v1/participants/${params.id!!}/cv`}
                                 maxFileSize={20000000}
                                 nodrop
                                 onUploadBefore={(e: UploadBeforeEvent) => {
@@ -213,9 +210,23 @@ export function AdminParticipant() {
 }
 
 function InvitationTable(props: { invitations: InvitationDetail[] }) {
+    const navigate = useNavigate();
+
+    const actionButtons = ({item}: { item: InvitationDetail }) => {
+        return (
+            <>
+                <GenerateToken onClick={() => {
+                }}/>
+                <ViewDetailButton onClick={() => {
+                    navigate(Strings.format('/participants/{}/invitations/{}', [item.participantId, item.id]));
+                }}/>
+            </>
+        );
+    };
     return (
         <Grid items={props.invitations} className={styles.riddler_table} allRowsVisible={true}>
             <GridColumn path="id" header="Invitation Id"/>
+            <GridColumn header={'Actions'} renderer={actionButtons}/>
         </Grid>
     );
 }

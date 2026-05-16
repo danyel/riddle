@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
@@ -26,8 +27,8 @@ import java.util.UUID;
  */
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@ToString
+@SuperBuilder
+@ToString(callSuper = true)
 @Getter
 @Setter
 @Entity

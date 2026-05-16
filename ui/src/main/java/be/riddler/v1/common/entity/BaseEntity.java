@@ -2,8 +2,13 @@ package be.riddler.v1.common.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -20,9 +25,14 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @MappedSuperclass // 💡 Required so child entities inherit these columns
 @EntityListeners(AuditingEntityListener.class) // 💡 Intercepts save/update actions
-public abstract class BaseEntity {
+public abstract class BaseEntity extends IdEntity {
     @CreatedBy
     private String createdBy;
     @CreatedDate

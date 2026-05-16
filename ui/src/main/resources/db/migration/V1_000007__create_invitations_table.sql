@@ -6,8 +6,8 @@ CREATE TABLE invitations
     PARTICIPANT_ID UUID        NOT NULL,
     created_by     VARCHAR(50) NOT NULL,
     updated_by     VARCHAR(50),
-    CREATED_AT     TIMESTAMP default now(),
-    UPDATED_AT     TIMESTAMP
+    CREATED_AT TIMESTAMP WITHOUT TIME ZONE default now(),
+    UPDATED_AT TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE invitation_questions

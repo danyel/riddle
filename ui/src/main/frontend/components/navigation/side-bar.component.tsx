@@ -4,6 +4,7 @@ import {
     BookmarkEndpoint,
     MenuService,
     ParticipantAdminEndpoint,
+    PublicationsEndpoint,
     QuestionEndpoint,
     SettingsEndpoint
 } from "Frontend/generated/endpoints";
@@ -18,11 +19,13 @@ import Question from "Frontend/generated/be/riddler/v1/question/client/model/Que
 import {Logs, Notify, Objects, Strings, Urls} from "Frontend/util";
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css';
+import Publication from "Frontend/generated/be/riddler/v1/publication/client/model/Publication";
 
 export function SideBar() {
     const [menus, setMenus] = useState<Menu[]>([]);
     const [participant, setParticipant] = useState<ParticipantDetail>();
     const [question, setQuestion] = useState<Question>();
+    const [publication, setPublication] = useState<Publication>();
     const [administration, setAdministration] = useState<string>("");
     const [, setBookmarkTypes] = useState<String[]>([]);
     const {settings, setSettings} = useSettingsState();
@@ -30,18 +33,6 @@ export function SideBar() {
     const location = useLocation();
     const params = useParams();
     const logger = new Logs("SideBar");
-
-    const isParticipantDetail = () => {
-        return !!(params.id && location.pathname.startsWith(`/${BookmarkType.PARTICIPANTS.toLocaleLowerCase()}/`));
-    };
-
-    const isQuestionDetail = () => {
-        return !!(params.id && location.pathname.startsWith(`/${BookmarkType.QUESTIONS.toLocaleLowerCase()}/`));
-    };
-
-    const isAdministration = () => {
-        return !!(params.id && location.pathname.startsWith(`/${BookmarkType.ADMINISTRATIONS.toLocaleLowerCase()}/`));
-    };
 
     useEffect(() => {
         logger.debug('useEffect: {} {}', params.id, location.pathname);
@@ -68,11 +59,36 @@ export function SideBar() {
         } else {
             setAdministration(Strings.EMPTY);
         }
+
+        if (isPublication()) {
+            searchPublication();
+        } else {
+            setPublication(undefined);
+        }
     }, [params.id, location.pathname]);
+
+    const isParticipantDetail = () => {
+        return !!(params.id && location.pathname.startsWith(`/${BookmarkType.PARTICIPANTS.toLocaleLowerCase()}/`));
+    };
+
+    const isQuestionDetail = () => {
+        return !!(params.id && location.pathname.startsWith(`/${BookmarkType.QUESTIONS.toLocaleLowerCase()}/`));
+    };
+
+    const isAdministration = () => {
+        return !!(params.id && location.pathname.startsWith(`/${BookmarkType.ADMINISTRATIONS.toLocaleLowerCase()}/`));
+    };
+    const isPublication = () => {
+        return !!(params.id && location.pathname.startsWith(`/${BookmarkType.PUBLICATIONS.toLocaleLowerCase()}/`));
+    };
 
     const searchQuestion = () => {
         logger.debug('Fetching question {}', params.id);
         QuestionEndpoint.get(params.id!!).then(setQuestion);
+    };
+    const searchPublication = () => {
+        logger.debug('Fetching publication {}', params.id);
+        PublicationsEndpoint.findPublicationById(params.id!!).then(setPublication);
     };
     const searchParticipant = () => {
         logger.debug('Fetching participant {}', params.id);
@@ -80,15 +96,15 @@ export function SideBar() {
     };
 
     const addBookmark = (activeChildrenList: Bookmark[], bookmarkType: BookmarkType, label: string): Bookmark[] => {
-        logger.debug('AddBookmark: activeChildrenList: {} , bookmarkType: {} , label: {} , location.pathname: {} , Urls.makePath(bookmarkType, params.id): {}', activeChildrenList, bookmarkType, label, location.pathname, Urls.makePath(bookmarkType, params.id));
         if (params.id && Urls.isSamePath(location.pathname, Urls.makePath(bookmarkType, params.id))) {
-            const bookmark: Bookmark = {
+            let bookmark: Bookmark = {
                 bookmark_type: bookmarkType,
                 path: Urls.makePath(bookmarkType, params.id!!),
                 label: label
             };
-            if (!activeChildrenList.find(e => e.path === bookmark.path)) {
-                activeChildrenList.push(bookmark);
+            let foundBookmark = activeChildrenList.find(e => e.path === bookmark.path);
+            if (foundBookmark) {
+                bookmark = foundBookmark;
             }
             const tmp = activeChildrenList.filter(e => e.path !== bookmark.path);
             return [bookmark, ...tmp];
@@ -101,14 +117,17 @@ export function SideBar() {
 
     const bookmarksJsonString = JSON.stringify(settings.bookmarks || []);
     const menusJsonString = JSON.stringify(menus);
-    const participantName = participant
-        ? decodeURIComponent(`${participant.first_name} ${participant.last_name}`)
-        : "";
-    const questionTitle = question
-        ? decodeURIComponent(question.title || `Question #${params.id}`)
-        : "";
+    let label = "";
 
-    logger.debug('Participant: {} Question: {}', participantName, questionTitle);
+    if (Urls.isSamePath(location.pathname, Urls.makePath(BookmarkType.PARTICIPANTS, params.id))) {
+        label = `${participant?.first_name} ${participant?.last_name}`;
+    } else if (Urls.isSamePath(location.pathname, Urls.makePath(BookmarkType.QUESTIONS, params.id))) {
+        label = question?.title!!;
+    } else if (Urls.isSamePath(location.pathname, Urls.makePath(BookmarkType.ADMINISTRATIONS, params.id))) {
+        label = administration;
+    } else if (Urls.isSamePath(location.pathname, Urls.makePath(BookmarkType.PUBLICATIONS, params.id))) {
+        label = publication?.title!!;
+    }
 
     const mappedMenuData = useMemo(() => {
         const parsedMenus: Menu[] = JSON.parse(menusJsonString);
@@ -119,21 +138,10 @@ export function SideBar() {
             const cleanMenuHash = menuPath.startsWith('/#') ? menuPath.substring(1) : menuPath;
             const routingPath = cleanMenuHash.replace(/^#/, '');
             let activeChildrenList: Bookmark[] = parsedBookmarks.filter((b): b is Bookmark => {
-                logger.debug('parsedBookmarks.filter: isNotNullAndNotUndefined[{}] b.bookmark_type[{}] menu.bookmark_type[{}]', Objects.isNotNullAndNotUndefined(b), b.bookmark_type, menu.bookmark_type);
                 return Objects.isNotNullAndNotUndefined(b) && Objects.isEqual(b.bookmark_type, menu.bookmark_type);
             });
-            let label = "Loading...";
-
-            if (menu.bookmark_type === BookmarkType.PARTICIPANTS) {
-                label = `${participant?.first_name} ${participant?.last_name}`;
-            } else if (menu.bookmark_type === BookmarkType.QUESTIONS) {
-                label = question?.title!!;
-            } else if (menu.bookmark_type === BookmarkType.ADMINISTRATIONS) {
-                label = administration;
-            }
 
             activeChildrenList = addBookmark(activeChildrenList, menu.bookmark_type, label);
-            logger.debug('activeChildrenList  {} for type {}', activeChildrenList, menu.bookmark_type);
             const isCurrent = (location.hash || '#/') === cleanMenuHash;
             const shouldBeExpanded = activeChildrenList.length > 0;
             return {
@@ -145,7 +153,7 @@ export function SideBar() {
                 activeChildrenList
             };
         });
-    }, [menusJsonString, bookmarksJsonString, params.id, location.pathname, location.hash, participantName, questionTitle]);
+    }, [menusJsonString, bookmarksJsonString, params.id, location.pathname, location.hash, label]);
 
     const createBookmark = (bookmark: Bookmark) => {
         BookmarkEndpoint.bookmark({
@@ -153,12 +161,13 @@ export function SideBar() {
             label: bookmark.label,
             bookmark_type: bookmark.bookmark_type
         }).then(settings => {
-            Notify.success('Bookmark {} created', bookmark.path)
+            Notify.success('Bookmark {} created', bookmark.path);
             setSettings(settings);
         });
     };
 
     const deleteBookmark = (bookmark: Bookmark) => {
+        logger.debug('Bookmark {}', bookmark.id);
         BookmarkEndpoint.deleteBookmark(bookmark).then(() => {
             Notify.success('Bookmark {} deleted', bookmark.path)
             SettingsEndpoint.getSettings().then(setSettings);
@@ -168,7 +177,6 @@ export function SideBar() {
     const isBookmarked = (path: string | undefined): boolean => {
         const currentBookmarks: Bookmark[] = JSON.parse(bookmarksJsonString);
         return currentBookmarks.some(b => {
-            logger.debug('isBookmarked', path, b.path, Urls.isSamePath(b.path, path));
             return Urls.isSamePath(b.path, path);
         });
     };
@@ -214,7 +222,6 @@ export function SideBar() {
                     {activeChildrenList.map(childBookmark => {
                         const isChildCurrent = location.pathname === childBookmark.path;
                         const bookmarked = isBookmarked(childBookmark.path);
-                        logger.debug('Printing side navigation item: {}, {}, {}, {}', menu.bookmark_type, location.pathname, childBookmark.path, bookmarked);
                         return (
                             <SideNavItem
                                 key={childBookmark.path}

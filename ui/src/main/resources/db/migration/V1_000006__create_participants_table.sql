@@ -11,8 +11,8 @@ CREATE TABLE participants
     stored_token VARCHAR(255) NULL,
     created_by   VARCHAR(50)  NOT NULL,
     updated_by   VARCHAR(50),
-    CREATED_AT   TIMESTAMP default now(),
-    UPDATED_AT   TIMESTAMP
+    CREATED_AT TIMESTAMP WITHOUT TIME ZONE default now(),
+    UPDATED_AT TIMESTAMP WITHOUT TIME ZONE
 );
 
 --changeset dnoulet:V1_000006__create_participants_data context:lcl

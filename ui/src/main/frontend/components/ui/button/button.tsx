@@ -1,15 +1,6 @@
 import {Button, ButtonProps} from "@vaadin/react-components/Button.js";
 import {ReactNode} from "react";
-import {
-    BanIcon,
-    CheckIcon,
-    CloseIcon,
-    CrossIcon,
-    EyeIcon,
-    KeyIcon,
-    PlusIcon,
-    RotateLeftIcon
-} from "Frontend/components/ui/icons";
+import {BanIcon, CheckIcon, CloseIcon, EyeIcon, KeyIcon, PlusIcon, RotateLeftIcon} from "Frontend/components/ui/icons";
 import {ElementStylingTypes} from "Frontend/constant";
 
 export function CheckButton(props: ButtonDecorationProps) {
@@ -45,12 +36,12 @@ export function PlusButton(props: ButtonDecorationProps) {
     );
 }
 
-export function CancelButton(props: ButtonDecorationProps) {
+export function CancelButton(props: ButtonDecorationProps, theme: string = ElementStylingTypes.TERTIARY_INLINE) {
     return (
         <BaseButton
-            icon={CrossIcon()}
+            icon={CloseIcon()}
             onClick={props.onClick}
-            theme={ElementStylingTypes.TERTIARY_INLINE}
+            theme={props.theme}
             disabled={props.disabled}
         />
     );

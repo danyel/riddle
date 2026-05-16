@@ -47,8 +47,8 @@ CREATE TABLE participants
     last_name  VARCHAR(255) NOT NULL,
     email      VARCHAR(255) NOT NULL,
     token      VARCHAR(255) NOT NULL,
-    CREATED_AT TIMESTAMP default now(),
-    UPDATED_AT TIMESTAMP
+    CREATED_AT TIMESTAMP WITHOUT TIME ZONE default now(),
+    UPDATED_AT TIMESTAMP WITHOUT TIME ZONE
 );
 ```
 

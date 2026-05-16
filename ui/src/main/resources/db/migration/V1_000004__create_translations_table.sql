@@ -6,8 +6,8 @@ CREATE TABLE keys
     key        VARCHAR(255) NOT NULL,
     created_by VARCHAR(50)  NOT NULL,
     updated_by VARCHAR(50),
-    CREATED_AT TIMESTAMP default now(),
-    UPDATED_AT TIMESTAMP
+    CREATED_AT TIMESTAMP WITHOUT TIME ZONE default now(),
+    UPDATED_AT TIMESTAMP WITHOUT TIME ZONE
 );
 
 
@@ -19,8 +19,8 @@ CREATE TABLE translations
     language   varchar(2)   NOT NULL,
     created_by VARCHAR(50)  NOT NULL,
     updated_by VARCHAR(50),
-    CREATED_AT TIMESTAMP default now(),
-    UPDATED_AT TIMESTAMP
+    CREATED_AT TIMESTAMP WITHOUT TIME ZONE default now(),
+    UPDATED_AT TIMESTAMP WITHOUT TIME ZONE
 );
 
 --changeset dnoulet:V1_000004__create_translations_data context:lcl

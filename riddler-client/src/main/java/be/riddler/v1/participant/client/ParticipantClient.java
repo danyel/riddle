@@ -3,6 +3,7 @@ package be.riddler.v1.participant.client;
 import be.riddler.v1.participant.client.model.CreateParticipant;
 import be.riddler.v1.participant.client.model.ParticipantDetail;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Encoding;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.List;
 import java.util.UUID;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 /**
  * ParticipantApi
  *
@@ -33,14 +36,23 @@ public interface ParticipantClient {
             tags = "participants",
             summary = "Retrieve the participant corresponding to the id",
             operationId = "findById",
+            parameters = {
+                    @Parameter(name = "id", schema = @Schema(implementation = UUID.class))
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            content = @Content(schema = @Schema(implementation = ParticipantDetail.class))
+                            content = @Content(
+                                    mediaType = APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ParticipantDetail.class)
+                            )
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            content = @Content(schema = @Schema(implementation = ProblemDetail.class))
+                            content = @Content(
+                                    mediaType = APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ProblemDetail.class)
+                            )
                     )
             }
     )
@@ -56,11 +68,17 @@ public interface ParticipantClient {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            content = @Content(array = @ArraySchema(schema = @Schema(implementation = ParticipantDetail.class)))
+                            content = @Content(
+                                    mediaType = APPLICATION_JSON_VALUE,
+                                    array = @ArraySchema(schema = @Schema(implementation = ParticipantDetail.class))
+                            )
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            content = @Content(schema = @Schema(implementation = ProblemDetail.class))
+                            content = @Content(
+                                    mediaType = APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ProblemDetail.class)
+                            )
                     )
             }
     )
@@ -76,11 +94,17 @@ public interface ParticipantClient {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            content = @Content(array = @ArraySchema(schema = @Schema(implementation = ParticipantDetail.class)))
+                            content = @Content(
+                                    mediaType = APPLICATION_JSON_VALUE,
+                                    array = @ArraySchema(schema = @Schema(implementation = ParticipantDetail.class))
+                            )
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            content = @Content(schema = @Schema(implementation = ProblemDetail.class))
+                            content = @Content(
+                                    mediaType = APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ProblemDetail.class)
+                            )
                     )
             }
     )
@@ -100,15 +124,24 @@ public interface ParticipantClient {
             responses = {
                     @ApiResponse(
                             responseCode = "201",
-                            content = @Content(schema = @Schema(implementation = ParticipantDetail.class))
+                            content = @Content(
+                                    mediaType = APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ParticipantDetail.class)
+                            )
                     ),
                     @ApiResponse(
                             responseCode = "400",
-                            content = @Content(schema = @Schema(implementation = ProblemDetail.class))
+                            content = @Content(
+                                    mediaType = APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ProblemDetail.class)
+                            )
                     ),
                     @ApiResponse(
                             responseCode = "500",
-                            content = @Content(schema = @Schema(implementation = ProblemDetail.class))
+                            content = @Content(
+                                    mediaType = APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ProblemDetail.class)
+                            )
                     )
             }
     )

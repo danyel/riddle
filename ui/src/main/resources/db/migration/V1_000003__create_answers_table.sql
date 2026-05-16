@@ -5,8 +5,8 @@ CREATE TABLE answers
     ID          UUID PRIMARY KEY,
     VALUE       VARCHAR(255) NOT NULL,
     QUESTION_ID UUID         NOT NULL,
-    CREATED_AT  TIMESTAMP default now(),
-    UPDATED_AT  TIMESTAMP
+    CREATED_AT TIMESTAMP WITHOUT TIME ZONE default now(),
+    UPDATED_AT TIMESTAMP WITHOUT TIME ZONE
 );
 
 --changeset dnoulet:V1_000001_create_questions_data context:lcl

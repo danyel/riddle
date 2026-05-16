@@ -51,9 +51,9 @@ CREATE TABLE activities
     action_type     VARCHAR(255) NOT NULL,
     username        VARCHAR(255) NOT NULL,
     additional_data TEXT         NOT NULL,
-    action_time     TIMESTAMP,
-    CREATED_AT      TIMESTAMP default now(),
-    UPDATED_AT      TIMESTAMP
+    action_time     TIMESTAMP WITHOUT TIME ZONE,
+    CREATED_AT      TIMESTAMP WITHOUT TIME ZONE default now(),
+    UPDATED_AT      TIMESTAMP WITHOUT TIME ZONE
 );
 ```
 
@@ -124,9 +124,9 @@ CREATE TABLE activities
     action_type     VARCHAR(255) NOT NULL,
     username        VARCHAR(255) NOT NULL,
     additional_data TEXT         NOT NULL,
-    action_time     TIMESTAMP,
-    CREATED_AT      TIMESTAMP default now(),
-    UPDATED_AT      TIMESTAMP
+    action_time     TIMESTAMP WITHOUT TIME ZONE,
+    CREATED_AT      TIMESTAMP WITHOUT TIME ZONE default now(),
+    UPDATED_AT      TIMESTAMP WITHOUT TIME ZONE
 );
 ```
 

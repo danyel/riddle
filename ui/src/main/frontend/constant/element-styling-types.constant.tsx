@@ -20,7 +20,7 @@ export enum ElementStylingTypes {
     SMALL = 'small',
     LARGE = 'large',
     CONTRAST = 'contrast',
-    ERROR = 'error',
-    SUCCESS = 'success',
-    WARNING = 'warning'
+    ERROR = 'primary error',
+    SUCCESS = 'primary success',
+    WARNING = 'primary warning'
 }
