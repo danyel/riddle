@@ -1,5 +1,5 @@
 --liquibase formatted sql
---changeset dnoulet:V1_000008__create_settings_and_bookmarks_table
+--changeset dnoulet:V1_000009__create_settings_and_bookmarks_table
 CREATE TABLE settings
 (
     id       UUID         NOT NULL,

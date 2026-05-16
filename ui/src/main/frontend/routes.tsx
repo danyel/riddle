@@ -1,21 +1,21 @@
 // frontend/routes.tsx
 import {protectRoutes} from '@vaadin/hilla-react-auth';
 import MainLayout from "Frontend/views/secured/@layout";
-import AdminQuestionsPage from "Frontend/views/secured/questions/@index";
+import AdminQuestionsPage from "./views/secured/questions/questions";
 import HomeView from "Frontend/views/secured/@index";
 import LoginPage from "Frontend/views/login/@index";
 import LoginLayout from "Frontend/views/login/@layout";
-import AdminIconsPage from "Frontend/views/secured/icons/@index";
+import AdminIconsPage from "./views/secured/icons/icons";
 import {createHashRouter, isRouteErrorResponse, useRouteError} from "react-router-dom";
-import AdminQuestionPage from "Frontend/views/secured/question/{id}";
+import AdminQuestionPage from "Frontend/views/secured/questions/{id}";
 import ParticipantLayout from "Frontend/views/participant/@layout";
 import ParticipantQuestionsPage from "Frontend/views/participant/question/view-question-page";
 import ParticipantPage from "Frontend/views/participant/@index";
-import AdminParticipantsPage from "Frontend/views/secured/participants/@index";
+import AdminParticipantsPage from "./views/secured/participants/participants";
 import {AdminParticipant} from "./views/secured/participants/participant";
-import ProfilePage from "Frontend/views/secured/profile/@index";
-import AdministrationPage from "Frontend/views/secured/administration/@index";
-import InvitationPage from "Frontend/views/secured/invitation/@index";
+import ProfilePage from "./views/secured/profile/profile";
+import AdministrationPage from "./views/secured/administration/administration";
+import InvitationPage from "./views/secured/invitation/invitation";
 import PublicationsPage from "Frontend/views/secured/publication/publications";
 
 

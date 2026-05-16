@@ -2,7 +2,7 @@ package be.riddler.v1.invitation.api;
 
 import be.riddler.v1.invitation.client.InvitationClient;
 import be.riddler.v1.invitation.client.model.CreateInvitation;
-import be.riddler.v1.invitation.client.model.InvitationDetail;
+import be.riddler.v1.invitation.client.model.Invitation;
 import be.riddler.v1.invitation.feature.DeleteByIdFeature;
 import be.riddler.v1.invitation.feature.FindAllByParticipantIdFeature;
 import be.riddler.v1.invitation.feature.FindByIdFeature;
@@ -32,12 +32,12 @@ class InvitationResource implements InvitationClient {
     private final FindAllByParticipantIdFeature findAllByParticipantIdFeature;
 
     @Override
-    public @NonNull InvitationDetail create(@NonNull CreateInvitation createInvitation) {
+    public @NonNull Invitation create(@NonNull CreateInvitation createInvitation) {
         return saveInvitationFeature.save(createInvitation);
     }
 
     @Override
-    public @NonNull InvitationDetail findById(@NonNull UUID invitationId) {
+    public @NonNull Invitation findById(@NonNull UUID invitationId) {
         return findByIdFeature.findById(invitationId);
     }
 
@@ -47,7 +47,7 @@ class InvitationResource implements InvitationClient {
     }
 
     @Override
-    public @NonNull List<@NonNull InvitationDetail> findInvitationsByParticipantId(@NonNull UUID participantId) {
+    public @NonNull List<@NonNull Invitation> findInvitationsByParticipantId(@NonNull UUID participantId) {
         return findAllByParticipantIdFeature.findAllByParticipantId(participantId);
     }
 }

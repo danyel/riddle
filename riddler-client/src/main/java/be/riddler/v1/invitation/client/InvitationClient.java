@@ -1,7 +1,7 @@
 package be.riddler.v1.invitation.client;
 
 import be.riddler.v1.invitation.client.model.CreateInvitation;
-import be.riddler.v1.invitation.client.model.InvitationDetail;
+import be.riddler.v1.invitation.client.model.Invitation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -41,7 +41,7 @@ public interface InvitationClient {
             responses = {
                     @ApiResponse(
                             responseCode = "201",
-                            content = @Content(schema = @Schema(implementation = InvitationDetail.class))
+                            content = @Content(schema = @Schema(implementation = Invitation.class))
                     ),
                     @ApiResponse(
                             responseCode = "400",
@@ -55,7 +55,7 @@ public interface InvitationClient {
     )
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @NonNull InvitationDetail create(@RequestBody @NonNull CreateInvitation createInvitation);
+    @NonNull Invitation create(@RequestBody @NonNull CreateInvitation createInvitation);
 
     @Operation(
             method = "GET",
@@ -65,7 +65,7 @@ public interface InvitationClient {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            content = @Content(schema = @Schema(implementation = InvitationDetail.class))
+                            content = @Content(schema = @Schema(implementation = Invitation.class))
                     ),
                     @ApiResponse(
                             responseCode = "404",
@@ -75,7 +75,7 @@ public interface InvitationClient {
     )
     @GetMapping(path = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @NonNull InvitationDetail findById(@PathVariable(name = "id") @NonNull UUID invitationId);
+    @NonNull Invitation findById(@PathVariable(name = "id") @NonNull UUID invitationId);
 
     @Operation(
             method = "GET",
@@ -85,7 +85,7 @@ public interface InvitationClient {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            content = @Content(array = @ArraySchema(schema = @Schema(implementation = InvitationDetail.class)))
+                            content = @Content(array = @ArraySchema(schema = @Schema(implementation = Invitation.class)))
                     ),
                     @ApiResponse(
                             responseCode = "404",
@@ -95,7 +95,7 @@ public interface InvitationClient {
     )
     @GetMapping(path = "/participants/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @NonNull List<@NonNull InvitationDetail> findInvitationsByParticipantId(@PathVariable(name = "id") @NonNull UUID participantId);
+    @NonNull List<@NonNull Invitation> findInvitationsByParticipantId(@PathVariable(name = "id") @NonNull UUID participantId);
 
     @Operation(
             method = "DELETE",

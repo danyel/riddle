@@ -1,12 +1,14 @@
 package be.riddler.v1.invitation.entity;
 
 import be.riddler.v1.common.entity.BaseEntity;
+import be.riddler.v1.publication.entity.PublicationEntity;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -43,4 +45,7 @@ public class InvitationEntity extends BaseEntity {
     )
     @Column(name = "question_id")
     private List<UUID> questions;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "publication_id", nullable = false)
+    private PublicationEntity publication;
 }

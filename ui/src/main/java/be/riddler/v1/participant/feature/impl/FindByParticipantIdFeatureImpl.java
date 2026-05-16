@@ -1,6 +1,6 @@
 package be.riddler.v1.participant.feature.impl;
 
-import be.riddler.v1.participant.client.model.ParticipantDetail;
+import be.riddler.v1.participant.client.model.Participant;
 import be.riddler.v1.participant.client.model.ParticipantId;
 import be.riddler.v1.participant.feature.FindByParticipantIdFeature;
 import be.riddler.v1.participant.mapper.ParticipantMapper;
@@ -23,7 +23,7 @@ class FindByParticipantIdFeatureImpl implements FindByParticipantIdFeature {
     private final ParticipantRepository participantRepository;
 
     @Override
-    public @NonNull ParticipantDetail findByParticipantId(@NonNull ParticipantId participantId) {
+    public @NonNull Participant findByParticipantId(@NonNull ParticipantId participantId) {
         var participant = participantRepository.findById(participantId.id());
 
         if (participant.isPresent()) {

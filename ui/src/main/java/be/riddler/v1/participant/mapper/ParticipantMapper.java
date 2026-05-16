@@ -1,7 +1,7 @@
 package be.riddler.v1.participant.mapper;
 
 import be.riddler.v1.participant.client.model.CreateParticipant;
-import be.riddler.v1.participant.client.model.ParticipantDetail;
+import be.riddler.v1.participant.client.model.Participant;
 import be.riddler.v1.participant.entity.ParticipantEntity;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -24,7 +24,7 @@ public class ParticipantMapper {
                 .build();
     }
 
-    public static @NonNull ParticipantDetail fromParticipantEntity(@NonNull ParticipantEntity participant) {
+    public static @NonNull Participant fromParticipantEntity(@NonNull ParticipantEntity participant) {
         String photo = null;
         String cv = null;
         if (participant.getPhoto() != null) {
@@ -34,6 +34,6 @@ public class ParticipantMapper {
             cv = Base64.getEncoder().encodeToString(participant.getCv());
         }
 
-        return new ParticipantDetail(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getEmail(), participant.getStoredToken(), photo, cv);
+        return new Participant(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getEmail(), participant.getStoredToken(), photo, cv);
     }
 }

@@ -1,6 +1,6 @@
 package be.riddler.v1.participant.feature;
 
-import be.riddler.v1.participant.client.model.ParticipantDetail;
+import be.riddler.v1.participant.client.model.Participant;
 import org.jspecify.annotations.NonNull;
 
 import java.util.List;
@@ -12,5 +12,5 @@ import java.util.List;
  * @version 1.0.0 10/05/2026
  */
 public interface FindAllParticipantsFeature {
-    @NonNull List<@NonNull ParticipantDetail> findAll();
+    @NonNull List<@NonNull Participant> findAll();
 }

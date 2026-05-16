@@ -1,7 +1,7 @@
 package be.riddler.v1.participant.bff;
 
 import be.riddler.v1.participant.client.ParticipantClient;
-import be.riddler.v1.participant.client.model.ParticipantDetail;
+import be.riddler.v1.participant.client.model.Participant;
 import be.riddler.v1.question.client.QuestionClient;
 import be.riddler.v1.question.client.model.Question;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
@@ -35,7 +35,7 @@ public class ParticipantEndpoint {
         return questionApi.findById(uuid);
     }
 
-    public @NonNull ParticipantDetail findById(@NonNull UUID uuid) {
+    public @NonNull Participant findById(@NonNull UUID uuid) {
         return participantClient.findById(uuid);
     }
 }

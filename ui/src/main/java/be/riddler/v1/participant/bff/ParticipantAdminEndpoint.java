@@ -2,7 +2,7 @@ package be.riddler.v1.participant.bff;
 
 import be.riddler.v1.participant.client.ParticipantClient;
 import be.riddler.v1.participant.client.model.CreateParticipant;
-import be.riddler.v1.participant.client.model.ParticipantDetail;
+import be.riddler.v1.participant.client.model.Participant;
 import com.vaadin.hilla.BrowserCallable;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AccessLevel;
@@ -24,11 +24,11 @@ import java.util.UUID;
 public class ParticipantAdminEndpoint {
     private final ParticipantClient participantClient;
 
-    public @NonNull List<@NonNull ParticipantDetail> findAll() {
+    public @NonNull List<@NonNull Participant> findAll() {
         return participantClient.findAll();
     }
 
-    public @NonNull ParticipantDetail findById(@NonNull UUID id) {
+    public @NonNull Participant findById(@NonNull UUID id) {
         return participantClient.findById(id);
     }
 
@@ -36,7 +36,7 @@ public class ParticipantAdminEndpoint {
         participantClient.generateToken(participantId);
     }
 
-    public @NonNull ParticipantDetail create(CreateParticipant createParticipant) {
+    public @NonNull Participant create(CreateParticipant createParticipant) {
         return participantClient.create(createParticipant);
     }
 }

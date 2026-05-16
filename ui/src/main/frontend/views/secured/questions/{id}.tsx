@@ -3,7 +3,15 @@ import {useEffect, useState} from "react";
 import {QuestionEndpoint, QuestionTypeEndpoint} from "Frontend/generated/endpoints";
 import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
 import AnswersTable from "Frontend/components/answers/answers-table.component";
-import {Dialog, HorizontalLayout, Select, TextArea, TextField, VerticalLayout} from "@vaadin/react-components";
+import {
+    Dialog,
+    FormLayout,
+    HorizontalLayout,
+    Select,
+    TextArea,
+    TextField,
+    VerticalLayout
+} from "@vaadin/react-components";
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css';
 import QuestionType from "Frontend/generated/be/riddler/v1/question/client/model/QuestionType";
@@ -14,6 +22,7 @@ import {Button} from "@vaadin/react-components/Button.js";
 import {ElementStylingTypes} from "Frontend/constant";
 import {Notify, Objects, Urls} from "Frontend/util";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
+import FormItem from "Frontend/components/ui/form/form-item.component";
 
 
 export default function QuestionDetailPage() {
@@ -110,25 +119,31 @@ export default function QuestionDetailPage() {
             >
                 Are you sure you want to delete this user permanently?
             </Dialog>
-            <HorizontalLayout className={styles.full_width_layout}>
-                <VerticalLayout style={{width: '100%'}}>
-                    <HorizontalLayout className={styles.full_width_layout}>
+            <VerticalLayout className={styles.full_width_layout}>
+                <FormLayout
+                    style={{width: '100%'}}
+                    autoResponsive
+                    columnWidth="8em"
+                    expandColumns
+                    expandFields
+                >
+                    <FormItem children={
                         <TextField value={question.title}
-                                   className={styles.text_area_full}
+                                   className={styles.text_full}
                                    onValueChanged={(e) => {
                                        setQuestion(prev => prev ? {...prev, title: e.detail.value} : undefined);
                                    }}
                         />
-                    </HorizontalLayout>
-                    <HorizontalLayout className={styles.full_width_layout}>
+                    }/>
+                    <FormItem children={
                         <TextArea value={question.question}
                                   className={styles.text_area_full}
                                   onValueChanged={(e) => {
                                       setQuestion(prev => prev ? {...prev, question: e.detail.value} : undefined);
                                   }}
                         />
-                    </HorizontalLayout>
-                    <HorizontalLayout className={styles.full_width_layout}>
+                    }/>
+                    <FormItem children={
                         <Select
                             label="Question Type"
                             items={items}
@@ -139,11 +154,14 @@ export default function QuestionDetailPage() {
                                 // Mutate state correctly using the updater function
                                 setQuestion(prev => prev ? {...prev, type: newType} : undefined);
                             }}
-                        />
-                    </HorizontalLayout>
+                        />}
+                    />
+                </FormLayout>
+                <HorizontalLayout className={styles.full_width_layout}>
                     {question.type !== "REVIEW" && (<AnswersTable questionId={question.id!!}/>)}
-                </VerticalLayout>
-            </HorizontalLayout>
+                </HorizontalLayout>
+            </VerticalLayout>
         </>
-    );
+    )
+        ;
 }

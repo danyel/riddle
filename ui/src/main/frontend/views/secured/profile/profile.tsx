@@ -11,7 +11,7 @@ import {ReactNode, useState} from "react";
 import {useSignal} from "@vaadin/hilla-react-signals";
 import {Collections, Logs} from "Frontend/util";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
-import ParticipantDetail from "Frontend/generated/be/riddler/v1/participant/client/model/ParticipantDetail";
+import Participant from "Frontend/generated/be/riddler/v1/participant/client/model/Participant";
 import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
 
 
@@ -59,7 +59,7 @@ export default function ProfilePage() {
                     logger.debug('Detail button clicked: [{}], {}', model.item, id);
                     if (model.item.bookmark_type === BookmarkType.PARTICIPANTS) {
                         ParticipantAdminEndpoint.findById(id)
-                            .then((participant: ParticipantDetail) => {
+                            .then((participant: Participant) => {
                                 child.value = (
                                     <VerticalLayout theme="spacing" style={{alignItems: 'stretch'}}>
                                         <HorizontalLayout style={{

@@ -1,6 +1,6 @@
 package be.riddler.v1.invitation.feature.impl;
 
-import be.riddler.v1.invitation.client.model.InvitationDetail;
+import be.riddler.v1.invitation.client.model.Invitation;
 import be.riddler.v1.invitation.feature.FindByIdFeature;
 import be.riddler.v1.invitation.mapper.InvitationMapper;
 import be.riddler.v1.invitation.repository.InvitationRepository;
@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -22,8 +23,9 @@ import java.util.UUID;
 class FindByIdFeatureImpl implements FindByIdFeature {
     private final InvitationRepository invitationRepository;
 
+    @Transactional(readOnly = true)
     @Override
-    public @NonNull InvitationDetail findById(@NonNull UUID invitationId) {
+    public @NonNull Invitation findById(@NonNull UUID invitationId) {
         var invitation = invitationRepository.findById(invitationId);
 
         if (invitation.isPresent()) {

@@ -1,7 +1,7 @@
 package be.riddler.v1.participant.feature.impl;
 
 import be.riddler.v1.participant.client.model.CreateParticipant;
-import be.riddler.v1.participant.client.model.ParticipantDetail;
+import be.riddler.v1.participant.client.model.Participant;
 import be.riddler.v1.participant.feature.CreateParticipantFeature;
 import be.riddler.v1.participant.mapper.ParticipantMapper;
 import be.riddler.v1.participant.repository.ParticipantRepository;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 class CreateParticipantFeatureImpl implements CreateParticipantFeature {
     private final ParticipantRepository participantRepository;
 
-    public @NonNull ParticipantDetail create(@NonNull CreateParticipant createParticipant) {
+    public @NonNull Participant create(@NonNull CreateParticipant createParticipant) {
         var participantEntity = ParticipantMapper.fromCreateParticipant(createParticipant);
         participantRepository.save(participantEntity);
         return ParticipantMapper.fromParticipantEntity(participantEntity);

@@ -18,4 +18,7 @@ public record Publication(
         @NonNull Position position,
         @NonNull Level level
 ) {
+    public Publication() {
+        this(UUID.randomUUID(), "", "", "", new Position(UUID.randomUUID(), ""), new Level(UUID.randomUUID(), ""));
+    }
 }

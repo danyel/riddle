@@ -1,7 +1,7 @@
 package be.riddler.v1.participant.client;
 
 import be.riddler.v1.participant.client.model.CreateParticipant;
-import be.riddler.v1.participant.client.model.ParticipantDetail;
+import be.riddler.v1.participant.client.model.Participant;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -44,7 +44,7 @@ public interface ParticipantClient {
                             responseCode = "200",
                             content = @Content(
                                     mediaType = APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ParticipantDetail.class)
+                                    schema = @Schema(implementation = Participant.class)
                             )
                     ),
                     @ApiResponse(
@@ -58,7 +58,7 @@ public interface ParticipantClient {
     )
     @GetMapping(path = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @NonNull ParticipantDetail findById(@PathVariable(name = "id") @NonNull UUID participantId);
+    @NonNull Participant findById(@PathVariable(name = "id") @NonNull UUID participantId);
 
     @Operation(
             method = "GET",
@@ -70,7 +70,7 @@ public interface ParticipantClient {
                             responseCode = "200",
                             content = @Content(
                                     mediaType = APPLICATION_JSON_VALUE,
-                                    array = @ArraySchema(schema = @Schema(implementation = ParticipantDetail.class))
+                                    array = @ArraySchema(schema = @Schema(implementation = Participant.class))
                             )
                     ),
                     @ApiResponse(
@@ -84,7 +84,7 @@ public interface ParticipantClient {
     )
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @NonNull List<@NonNull ParticipantDetail> findAll();
+    @NonNull List<@NonNull Participant> findAll();
 
     @Operation(
             method = "GET",
@@ -96,7 +96,7 @@ public interface ParticipantClient {
                             responseCode = "200",
                             content = @Content(
                                     mediaType = APPLICATION_JSON_VALUE,
-                                    array = @ArraySchema(schema = @Schema(implementation = ParticipantDetail.class))
+                                    array = @ArraySchema(schema = @Schema(implementation = Participant.class))
                             )
                     ),
                     @ApiResponse(
@@ -126,7 +126,7 @@ public interface ParticipantClient {
                             responseCode = "201",
                             content = @Content(
                                     mediaType = APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ParticipantDetail.class)
+                                    schema = @Schema(implementation = Participant.class)
                             )
                     ),
                     @ApiResponse(
@@ -147,5 +147,5 @@ public interface ParticipantClient {
     )
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @NonNull ParticipantDetail create(@RequestBody @NonNull CreateParticipant participantDetail);
+    @NonNull Participant create(@RequestBody @NonNull CreateParticipant participantDetail);
 }

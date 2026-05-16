@@ -1,6 +1,6 @@
 package be.riddler.v1.participant.feature.impl;
 
-import be.riddler.v1.participant.client.model.ParticipantDetail;
+import be.riddler.v1.participant.client.model.Participant;
 import be.riddler.v1.participant.feature.FindAllParticipantsFeature;
 import be.riddler.v1.participant.mapper.ParticipantMapper;
 import be.riddler.v1.participant.repository.ParticipantRepository;
@@ -23,7 +23,7 @@ class FindAllParticipantsFeatureImpl implements FindAllParticipantsFeature {
     private final ParticipantRepository participantRepository;
 
     @Override
-    public @NonNull List<@NonNull ParticipantDetail> findAll() {
+    public @NonNull List<@NonNull Participant> findAll() {
         return participantRepository.findAll()
                 .stream()
                 .map(ParticipantMapper::fromParticipantEntity)

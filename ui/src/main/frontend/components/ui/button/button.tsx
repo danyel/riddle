@@ -1,6 +1,15 @@
 import {Button, ButtonProps} from "@vaadin/react-components/Button.js";
 import {ReactNode} from "react";
-import {BanIcon, CheckIcon, CloseIcon, EyeIcon, KeyIcon, PlusIcon, RotateLeftIcon} from "Frontend/components/ui/icons";
+import {
+    BanIcon,
+    CheckIcon,
+    CloseIcon,
+    EyeIcon,
+    KeyIcon,
+    NewsPaperIcon,
+    PlusIcon,
+    RotateLeftIcon
+} from "Frontend/components/ui/icons";
 import {ElementStylingTypes} from "Frontend/constant";
 
 export function CheckButton(props: ButtonDecorationProps) {
@@ -51,6 +60,17 @@ export function ViewDetailButton(props: ButtonDecorationProps) {
     return (
         <BaseButton
             icon={EyeIcon()}
+            onClick={props.onClick}
+            theme={ElementStylingTypes.TERTIARY_INLINE}
+            disabled={props.disabled}
+        />
+    );
+}
+
+export function NewsPaperButton(props: ButtonDecorationProps) {
+    return (
+        <BaseButton
+            icon={NewsPaperIcon()}
             onClick={props.onClick}
             theme={ElementStylingTypes.TERTIARY_INLINE}
             disabled={props.disabled}

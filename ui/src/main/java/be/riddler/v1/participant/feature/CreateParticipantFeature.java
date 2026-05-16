@@ -1,7 +1,7 @@
 package be.riddler.v1.participant.feature;
 
 import be.riddler.v1.participant.client.model.CreateParticipant;
-import be.riddler.v1.participant.client.model.ParticipantDetail;
+import be.riddler.v1.participant.client.model.Participant;
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -11,5 +11,5 @@ import org.jspecify.annotations.NonNull;
  * @version 1.0.0 10/05/2026
  */
 public interface CreateParticipantFeature {
-    @NonNull ParticipantDetail create(@NonNull CreateParticipant createParticipant);
+    @NonNull Participant create(@NonNull CreateParticipant createParticipant);
 }

@@ -1,4 +1,4 @@
-import ParticipantDetail from "Frontend/generated/be/riddler/v1/participant/client/model/ParticipantDetail";
+import Participant from "Frontend/generated/be/riddler/v1/participant/client/model/Participant";
 import {Dialog, Grid, GridColumn, HorizontalLayout, TextField, VerticalLayout} from "@vaadin/react-components";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
@@ -21,7 +21,7 @@ import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/Bookma
 
 function ParticipantTable() {
     const [open, setOpen] = useState(false);
-    const [participants, setParticipants] = useState<ParticipantDetail[]>([]);
+    const [participants, setParticipants] = useState<Participant[]>([]);
     const navigate = useNavigate();
 
     function fetchParticipants() {
@@ -33,7 +33,7 @@ function ParticipantTable() {
         fetchParticipants();
     }, []);
 
-    const actionButtons = ({item}: { item: ParticipantDetail }) => {
+    const actionButtons = ({item}: { item: Participant }) => {
         return (
             <>
                 <GenerateToken onClick={() => ParticipantAdminEndpoint.generateToken(item.id).then(_ => {
@@ -47,7 +47,7 @@ function ParticipantTable() {
         );
     };
 
-    const tokenIndicator = ({item}: { item: ParticipantDetail }) => {
+    const tokenIndicator = ({item}: { item: Participant }) => {
         return (
             <>
                 {Strings.isNotEmpty(item.stored_token) && (<CheckIcon/>)}

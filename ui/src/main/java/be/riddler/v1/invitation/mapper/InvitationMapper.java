@@ -1,8 +1,9 @@
 package be.riddler.v1.invitation.mapper;
 
 import be.riddler.v1.invitation.client.model.CreateInvitation;
-import be.riddler.v1.invitation.client.model.InvitationDetail;
+import be.riddler.v1.invitation.client.model.Invitation;
 import be.riddler.v1.invitation.entity.InvitationEntity;
+import be.riddler.v1.publication.mapper.PublicationMapper;
 import lombok.experimental.UtilityClass;
 
 import java.util.List;
@@ -20,9 +21,12 @@ public class InvitationMapper {
         return InvitationEntity.builder().participantId(createInvitation.participantId()).build();
     }
 
-    public static InvitationDetail fromInvitationEntity(InvitationEntity invitationEntity) {
+    public static Invitation fromInvitationEntity(InvitationEntity invitationEntity) {
         List<java.util.UUID> safeQuestions = Optional.ofNullable(invitationEntity.getQuestions())
                 .orElseGet(List::of);
-        return safeQuestions.isEmpty() ? new InvitationDetail(invitationEntity.getId(), invitationEntity.getParticipantId()) : new InvitationDetail(invitationEntity.getId(), invitationEntity.getParticipantId(), safeQuestions);
+        var publication = PublicationMapper.fromEntity(invitationEntity.getPublication());
+        return safeQuestions.isEmpty()
+                ? new Invitation(invitationEntity.getId(), invitationEntity.getParticipantId(), publication)
+                : new Invitation(invitationEntity.getId(), publication, invitationEntity.getParticipantId(), safeQuestions);
     }
 }

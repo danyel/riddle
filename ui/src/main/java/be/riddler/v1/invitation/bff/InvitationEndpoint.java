@@ -2,7 +2,7 @@ package be.riddler.v1.invitation.bff;
 
 import be.riddler.v1.invitation.client.InvitationClient;
 import be.riddler.v1.invitation.client.model.CreateInvitation;
-import be.riddler.v1.invitation.client.model.InvitationDetail;
+import be.riddler.v1.invitation.client.model.Invitation;
 import be.riddler.v1.question.client.QuestionClient;
 import be.riddler.v1.question.client.model.Question;
 import com.vaadin.hilla.BrowserCallable;
@@ -27,11 +27,11 @@ public class InvitationEndpoint {
     private final InvitationClient invitationClient;
     private final QuestionClient questionClient;
 
-    public @NonNull InvitationDetail create(@NonNull CreateInvitation createInvitation) {
+    public @NonNull Invitation create(@NonNull CreateInvitation createInvitation) {
         return invitationClient.create(createInvitation);
     }
 
-    public @NonNull InvitationDetail findById(@NonNull UUID invitationId) {
+    public @NonNull Invitation findById(@NonNull UUID invitationId) {
         return invitationClient.findById(invitationId);
     }
 
@@ -39,7 +39,7 @@ public class InvitationEndpoint {
         invitationClient.deleteById(invitationId);
     }
 
-    public @NonNull List<@NonNull InvitationDetail> findInvitationsByParticipantId(@NonNull UUID participantId) {
+    public @NonNull List<@NonNull Invitation> findInvitationsByParticipantId(@NonNull UUID participantId) {
         return invitationClient.findInvitationsByParticipantId(participantId);
     }
 

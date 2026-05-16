@@ -11,7 +11,7 @@ import java.util.UUID;
  * @author dnoulet
  * @version 1.0.0 09/05/2026
  */
-public record ParticipantDetail(
+public record Participant(
         @NonNull UUID id,
         @JsonProperty("first_name")
         @NonNull String firstName,

@@ -1,14 +1,5 @@
 import {useEffect, useState} from 'react';
-import {
-    Dialog,
-    FormLayout,
-    FormRow,
-    Grid,
-    GridColumn,
-    HorizontalLayout,
-    Select,
-    TextArea
-} from "@vaadin/react-components";
+import {Dialog, FormLayout, Grid, GridColumn, HorizontalLayout, Select, TextArea} from "@vaadin/react-components";
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css';
 
@@ -22,6 +13,7 @@ import {CancelButton, CheckButton, CloseButton, PlusButton, ViewDetailButton} fr
 import QuestionType from "Frontend/generated/be/riddler/v1/question/client/model/QuestionType";
 import {Urls} from "Frontend/util";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
+import FormItem from "Frontend/components/ui/form/form-item.component";
 
 
 function CreateQuestionDialogModal(props: {
@@ -103,19 +95,17 @@ function CreateQuestionDialogModal(props: {
                 expandFields
             >
 
-                <FormRow>
-                    <Select label="Type" items={dropDown}
-                            onValueChanged={(e) => {
+                <FormItem children={<Select label="Type" items={dropDown}
+                                            onValueChanged={(e) => {
 
-                                setCreateQuestion(prevState => {
-                                    return {
-                                        ...prevState,
-                                        type: e.detail.value as QuestionType
-                                    }
-                                });
-                            }}/>
-                </FormRow>
-                <FormRow>
+                                                setCreateQuestion(prevState => {
+                                                    return {
+                                                        ...prevState,
+                                                        type: e.detail.value as QuestionType
+                                                    }
+                                                });
+                                            }}/>}/>
+                <FormItem key={"question"} children={
                     <TextArea value={createQuestion.question}
                               className={styles.text_area_full}
                               onValueChanged={(e) => {
@@ -126,9 +116,8 @@ function CreateQuestionDialogModal(props: {
                                       }
                                   });
                               }}
-                    />
+                    />}/>
 
-                </FormRow>
             </FormLayout>
         </Dialog>
     );

@@ -2,7 +2,7 @@ package be.riddler.v1.participant.api;
 
 import be.riddler.v1.participant.client.ParticipantClient;
 import be.riddler.v1.participant.client.model.CreateParticipant;
-import be.riddler.v1.participant.client.model.ParticipantDetail;
+import be.riddler.v1.participant.client.model.Participant;
 import be.riddler.v1.participant.client.model.ParticipantId;
 import be.riddler.v1.participant.feature.CreateParticipantFeature;
 import be.riddler.v1.participant.feature.FindAllParticipantsFeature;
@@ -43,7 +43,7 @@ class ParticipantResource implements ParticipantClient {
     private final UploadCvFeature uploadCvFeature;
 
     @Override
-    public @NonNull List<@NonNull ParticipantDetail> findAll() {
+    public @NonNull List<@NonNull Participant> findAll() {
         return findAllParticipantsFeature.findAll();
     }
 
@@ -53,12 +53,12 @@ class ParticipantResource implements ParticipantClient {
     }
 
     @Override
-    public @NonNull ParticipantDetail findById(@NonNull UUID participantId) {
+    public @NonNull Participant findById(@NonNull UUID participantId) {
         return findByParticipantIdFeature.findByParticipantId(ParticipantId.from(participantId));
     }
 
     @Override
-    public @NonNull ParticipantDetail create(@NonNull CreateParticipant participantDetail) {
+    public @NonNull Participant create(@NonNull CreateParticipant participantDetail) {
         return createParticipantFeature.create(participantDetail);
     }
 

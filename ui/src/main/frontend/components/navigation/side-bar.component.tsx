@@ -10,7 +10,7 @@ import {
 } from "Frontend/generated/endpoints";
 import Menu from "Frontend/generated/be/riddler/v1/menu/client/model/Menu";
 import {useLocation, useNavigate, useParams} from "react-router";
-import ParticipantDetail from "Frontend/generated/be/riddler/v1/participant/client/model/ParticipantDetail";
+import Participant from "Frontend/generated/be/riddler/v1/participant/client/model/Participant";
 import Bookmark from "Frontend/generated/be/riddler/v1/settings/model/Bookmark";
 import {Button} from "@vaadin/react-components/Button.js";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
@@ -23,7 +23,7 @@ import Publication from "Frontend/generated/be/riddler/v1/publication/client/mod
 
 export function SideBar() {
     const [menus, setMenus] = useState<Menu[]>([]);
-    const [participant, setParticipant] = useState<ParticipantDetail>();
+    const [participant, setParticipant] = useState<Participant>();
     const [question, setQuestion] = useState<Question>();
     const [publication, setPublication] = useState<Publication>();
     const [administration, setAdministration] = useState<string>("");
@@ -42,7 +42,7 @@ export function SideBar() {
 
     useEffect(() => {
         logger.debug('useEffect [params.id, location.pathname]: {} {}', params.id, location.pathname);
-        if (isParticipantDetail()) {
+        if (isParticipant()) {
             searchParticipant();
         } else {
             setParticipant(undefined);
@@ -67,7 +67,7 @@ export function SideBar() {
         }
     }, [params.id, location.pathname]);
 
-    const isParticipantDetail = () => {
+    const isParticipant = () => {
         return !!(params.id && location.pathname.startsWith(`/${BookmarkType.PARTICIPANTS.toLocaleLowerCase()}/`));
     };
 

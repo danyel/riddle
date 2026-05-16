@@ -17,6 +17,10 @@ export function GlobeIcon() {
     return (<Icon icon='vaadin:globe' slot={"prefix"}/>);
 }
 
+export function NewsPaperIcon() {
+    return (<Icon icon='vaadin:newspaper' slot={"prefix"}/>);
+}
+
 export function KeyIcon() {
     return (<Icon icon='vaadin:key' slot={"prefix"}/>);
 }

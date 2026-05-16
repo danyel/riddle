@@ -30,7 +30,10 @@ spring:
     defer-datasource-initialization: false
 hibernate:
   generate_statistics: false
-
+vaadin:
+  devmode:
+    devTools:
+      enabled: false
 management:
   health:
     status:

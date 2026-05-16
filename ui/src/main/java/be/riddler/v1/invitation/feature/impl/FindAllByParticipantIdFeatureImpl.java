@@ -1,6 +1,6 @@
 package be.riddler.v1.invitation.feature.impl;
 
-import be.riddler.v1.invitation.client.model.InvitationDetail;
+import be.riddler.v1.invitation.client.model.Invitation;
 import be.riddler.v1.invitation.entity.InvitationEntity;
 import be.riddler.v1.invitation.feature.FindAllByParticipantIdFeature;
 import be.riddler.v1.invitation.mapper.InvitationMapper;
@@ -29,7 +29,7 @@ class FindAllByParticipantIdFeatureImpl implements FindAllByParticipantIdFeature
 
     @Transactional
     @Override
-    public @NonNull List<@NonNull InvitationDetail> findAllByParticipantId(@NonNull UUID participantId) {
+    public @NonNull List<@NonNull Invitation> findAllByParticipantId(@NonNull UUID participantId) {
         var invitations = invitationRepository.findAllByParticipantId(participantId);
 
         return Objects.requireNonNullElse(invitations, new ArrayList<InvitationEntity>())
