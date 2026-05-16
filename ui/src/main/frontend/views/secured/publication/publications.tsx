@@ -21,6 +21,7 @@ import {ElementStylingTypes} from "Frontend/constant";
 import {PublicationsEndpoint} from "Frontend/generated/endpoints";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import {useNavigate} from "react-router";
+import FormItem from "Frontend/components/ui/form/form-item.component";
 
 export default function PublicationsPage() {
     const [publications, setPublications] = useState<Publication[]>([]);
@@ -86,55 +87,55 @@ export default function PublicationsPage() {
                             </>
                         }>
                     <VerticalLayout theme="spacing" style={{alignItems: 'stretch'}}>
-                        <HorizontalLayout style={{
-                            justifyContent: 'space-between',
-                            borderBottom: '1px solid var(--lumo-contrast-10pct)',
-                            paddingBottom: 'var(--lumo-space-s)'
-                        }}>
-                            <TextField
-                                label="Title"
-                                value={createPublication.value.title}
-                                onValueChanged={(e) => (createPublication.value.title = e.detail.value)}
-                                className={styles.text_area_full}
-                            />
-                        </HorizontalLayout>
-                        <HorizontalLayout style={{
-                            justifyContent: 'space-between',
-                            borderBottom: '1px solid var(--lumo-contrast-10pct)',
-                            paddingBottom: 'var(--lumo-space-s)'
-                        }}>
-                            <TextArea
-                                label="Description"
-                                value={createPublication.value.description}
-                                onValueChanged={(e) => (createPublication.value.description = e.detail.value)}
-                                className={styles.text_area_full}
-                            />
-                        </HorizontalLayout>
-                        <HorizontalLayout style={{
-                            justifyContent: 'space-between',
-                            paddingTop: 'var(--lumo-space-xs)'
-                        }}>
-                            <TextArea
-                                label="Proposal"
-                                value={createPublication.value.proposal}
-                                onValueChanged={(e) => (createPublication.value.proposal = e.detail.value)}
-                                className={styles.text_area_full}
-                            />
-                        </HorizontalLayout>
-                        <HorizontalLayout style={{
-                            justifyContent: 'space-between',
-                            paddingTop: 'var(--lumo-space-xs)'
-                        }}>
-                            <LevelSelector selectedLevelId={createPublication.value.level_id}
-                                           onLevelChange={(id) => createPublication.value.level_id = id!!}/>
-                        </HorizontalLayout>
-                        <HorizontalLayout style={{
-                            justifyContent: 'space-between',
-                            paddingTop: 'var(--lumo-space-xs)'
-                        }}>
-                            <PositionSelector selectedPositionId={createPublication.value.position_id}
-                                              onPositionChange={(id) => createPublication.value.position_id = id!!}/>
-                        </HorizontalLayout>
+                        <FormItem
+                            children={
+                                <TextField
+                                    label="Title"
+                                    value={createPublication.value.title}
+                                    onValueChanged={(e) => (createPublication.value.title = e.detail.value)}
+                                    className={styles.text_area_full}
+                                />
+                            }
+                        />
+                        <FormItem
+                            children={
+                                <TextArea
+                                    label="Description"
+                                    value={createPublication.value.description}
+                                    onValueChanged={(e) => (createPublication.value.description = e.detail.value)}
+                                    className={styles.text_area_full}
+                                />
+                            }
+                        />
+
+                        <FormItem
+                            children={
+                                <TextArea
+                                    label="Proposal"
+                                    value={createPublication.value.proposal}
+                                    onValueChanged={(e) => (createPublication.value.proposal = e.detail.value)}
+                                    className={styles.text_area_full}
+                                />
+                            }
+                        />
+
+                        <FormItem
+                            children={
+                                <LevelSelector
+                                    selectedLevelId={createPublication.value.level_id}
+                                    onLevelChange={(id) => createPublication.value.level_id = id!!}
+                                />
+                            }
+                        />
+
+                        <FormItem
+                            children={
+                                <PositionSelector
+                                    selectedPositionId={createPublication.value.position_id}
+                                    onPositionChange={(id) => createPublication.value.position_id = id!!}
+                                />
+                            }
+                        />
                     </VerticalLayout>
                 </Dialog>
                 <Grid key={"id"} items={publications} className={styles.riddler_table} allRowsVisible={true}>
