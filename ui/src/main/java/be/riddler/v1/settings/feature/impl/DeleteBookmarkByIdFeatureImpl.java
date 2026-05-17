@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ import java.util.UUID;
 public class DeleteBookmarkByIdFeatureImpl implements DeleteBookmarkByIdFeature {
     private final BookmarkRepository bookmarkRepository;
 
+    @Transactional
     @Override
     public void deleteBookmark(@NonNull UUID bookmarkId) {
         bookmarkRepository.deleteById(bookmarkId);

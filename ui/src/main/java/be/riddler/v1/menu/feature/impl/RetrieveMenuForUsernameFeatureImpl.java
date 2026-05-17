@@ -9,7 +9,8 @@ import be.riddler.v1.settings.constants.UserContext;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -20,12 +21,13 @@ import java.util.List;
  * @author dnoulet
  * @version 1.0.0 09/05/2026
  */
-@Component
+@Service
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 class RetrieveMenuForUsernameFeatureImpl implements RetrieveMenuForUsernameFeature {
     private final MenuRepository menuRepository;
     private final MenuConfigurationRepository menuConfigurationRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public @NonNull List<@NonNull Menu> retrieveMenu() {
         var menuConfigurations = menuConfigurationRepository.findAllByRoleIn(UserContext.roles().stream().map(d -> d.replace("ROLE_", "")).toList());

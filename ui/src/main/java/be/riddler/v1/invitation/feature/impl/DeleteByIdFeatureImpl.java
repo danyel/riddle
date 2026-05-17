@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ import java.util.UUID;
 class DeleteByIdFeatureImpl implements DeleteByIdFeature {
     private final InvitationRepository invitationRepository;
 
+    @Transactional
     @Override
     public void deleteById(@NonNull UUID invitationId) {
         invitationRepository.deleteById(invitationId);

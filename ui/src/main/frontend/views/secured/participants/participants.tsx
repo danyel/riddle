@@ -1,23 +1,18 @@
 import Participant from "Frontend/generated/be/riddler/v1/participant/client/model/Participant";
-import {Dialog, Grid, GridColumn, HorizontalLayout, TextField, VerticalLayout} from "@vaadin/react-components";
+import {FormLayout, Grid, GridColumn, HorizontalLayout, TextField} from "@vaadin/react-components";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
 import {useEffect, useState} from "react";
 import {ParticipantAdminEndpoint} from "Frontend/generated/endpoints";
 import {useSignal} from "@vaadin/hilla-react-signals";
-import {
-    CancelButton,
-    CheckButton,
-    CloseButton,
-    GenerateToken,
-    PlusButton,
-    ViewDetailButton
-} from "Frontend/components/ui/button";
+import {CheckButton, CloseButton, GenerateToken, PlusButton, ViewDetailButton} from "Frontend/components/ui/button";
 import CreateParticipant from "Frontend/generated/be/riddler/v1/participant/client/model/CreateParticipant";
 import {CheckIcon, CloseIcon} from "Frontend/components/ui/icons";
 import {useNavigate} from "react-router";
 import {Notify, Strings, Urls} from "Frontend/util";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
+import RiddlerModal from "Frontend/components/ui/modal/modal";
+import FormItem from "Frontend/components/ui/form/form-item.component";
 
 function ParticipantTable() {
     const [open, setOpen] = useState(false);
@@ -108,62 +103,58 @@ function CreateParticipantDialogModal(props: {
             });
     }
 
-    function closeIfNotValue(e: CustomEvent<{ value: boolean }>) {
-        // Syncs background clicks / ESC keys directly back to parent
-        if (!e.detail.value) props.onClose();
-    }
-
     return (
-        <Dialog
-            width={"100vh"}
-            height={"100vh"}
-            header-title="Add participant"
+        <RiddlerModal
+            headerTitle="Add participant"
             opened={props.show}
-            onOpenedChanged={closeIfNotValue}
-            header={<CancelButton onClick={() => props.onClose()}/>}
-            footerRenderer={() => (
+            onClosed={() => {
+                props.onClose()
+            }}
+            footer={
                 <>
                     <CheckButton onClick={saveParticipant}/>
                     <CloseButton onClick={props.onClose}/>
                 </>
-            )}
-        >
-            <VerticalLayout theme="spacing" style={{alignItems: 'stretch'}}>
-                <HorizontalLayout style={{
-                    justifyContent: 'space-between',
-                    paddingTop: 'var(--lumo-space-s)'
-                }}>
-                    <TextField
-                        label="First Name"
-                        value={createParticipant.value.email_address}
-                        onValueChanged={(e) => (createParticipant.value.first_name = e.detail.value)}
-                        className={styles.text_area_full}
-                    />
-                </HorizontalLayout>
-                <HorizontalLayout style={{
-                    justifyContent: 'space-between',
-                    paddingTop: 'var(--lumo-space-s)'
-                }}>
-                    <TextField
-                        label="Last Name"
-                        value={createParticipant.value.email_address}
-                        onValueChanged={(e) => (createParticipant.value.last_name = e.detail.value)}
-                        className={styles.text_area_full}
-                    />
-                </HorizontalLayout>
-                <HorizontalLayout style={{
-                    justifyContent: 'space-between',
-                    paddingTop: 'var(--lumo-space-s)'
-                }}>
-                    <TextField
-                        label="Email"
-                        value={createParticipant.value.email_address}
-                        onValueChanged={(e) => (createParticipant.value.email_address = e.detail.value)}
-                        className={styles.text_area_full}
-                    />
-                </HorizontalLayout>
-            </VerticalLayout>
-        </Dialog>
+            }
+            content={
+                <>
+                    <FormLayout style={{width: '100%'}}
+                                autoResponsive
+                                columnWidth="8em"
+                                expandColumns
+                                expandFields>
+                        <FormItem key={"firstName"}
+                                  children={
+                                      <TextField
+                                          label="First Name"
+                                          value={createParticipant.value.first_name}
+                                          onValueChanged={(e) => (createParticipant.value.first_name = e.detail.value)}
+                                          className={styles.text_full}
+                                      />
+                                  }/>
+                        <FormItem key={"lastName"}
+                                  children={
+                                      <TextField
+                                          label="Last Name"
+                                          value={createParticipant.value.last_name}
+                                          onValueChanged={(e) => (createParticipant.value.last_name = e.detail.value)}
+                                          className={styles.text_full}
+                                      />
+                                  }/>
+                        <FormItem key={"emailAddress"}
+                                  children={
+                                      <TextField
+                                          label="Email"
+                                          value={createParticipant.value.email_address}
+                                          onValueChanged={(e) => (createParticipant.value.email_address = e.detail.value)}
+                                          className={styles.text_full}
+                                      />
+                                  }/>
+                    </FormLayout>
+
+                </>
+            }
+        />
     );
 }
 

@@ -3,6 +3,7 @@ package be.riddler.v1.participant.client.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jspecify.annotations.NonNull;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -22,6 +23,7 @@ public record Participant(
         @JsonProperty("stored_token")
         String storedToken,
         String photo,
-        String cv
+        String cv,
+        @NonNull List<@NonNull Category> categories
 ) {
 }

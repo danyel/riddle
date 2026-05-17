@@ -1,12 +1,16 @@
 package be.riddler.v1.participant.mapper;
 
+import be.riddler.v1.participant.client.model.Category;
 import be.riddler.v1.participant.client.model.CreateParticipant;
 import be.riddler.v1.participant.client.model.Participant;
+import be.riddler.v1.participant.entity.CategoryEntity;
 import be.riddler.v1.participant.entity.ParticipantEntity;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 import java.util.Base64;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * ParticipantMapper
@@ -34,6 +38,9 @@ public class ParticipantMapper {
             cv = Base64.getEncoder().encodeToString(participant.getCv());
         }
 
-        return new Participant(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getEmail(), participant.getStoredToken(), photo, cv);
+        return new Participant(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getEmail(), participant.getStoredToken(), photo, cv, Objects.requireNonNullElse(participant.getCategories(), List.<CategoryEntity>of())
+                .stream()
+                .map(category -> new Category(participant.getId(), category.getName()))
+                .toList());
     }
 }

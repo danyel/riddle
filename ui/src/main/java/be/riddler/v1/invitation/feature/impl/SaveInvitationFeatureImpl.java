@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 class SaveInvitationFeatureImpl implements SaveInvitationFeature {
     private final InvitationRepository invitationRepository;
     private final PublicationRepository publicationRepository;
-    ;
 
     @Transactional
     @Override

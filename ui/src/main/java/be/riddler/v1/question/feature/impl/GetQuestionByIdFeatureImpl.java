@@ -9,7 +9,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * CreateQuestionFeature
@@ -17,11 +18,12 @@ import org.springframework.stereotype.Component;
  * @author dnoulet
  * @version 1.0.0 09/05/2026
  */
-@Component
+@Service
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 class GetQuestionByIdFeatureImpl implements GetQuestionByIdFeature {
     private final QuestionRepository questionRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public @NonNull Question byQuestionId(@NonNull QuestionId questionId) {
         return questionRepository.findById(questionId.id()).map(QuestionMapper::fromQuestionEntity).orElseThrow(EntityNotFoundException::new);

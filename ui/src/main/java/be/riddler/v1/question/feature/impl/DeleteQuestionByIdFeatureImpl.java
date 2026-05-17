@@ -7,7 +7,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * CreateQuestionFeature
@@ -15,11 +16,12 @@ import org.springframework.stereotype.Component;
  * @author dnoulet
  * @version 1.0.0 09/05/2026
  */
-@Component
+@Service
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 class DeleteQuestionByIdFeatureImpl implements DeleteQuestionByIdFeature {
     private final QuestionRepository questionRepository;
 
+    @Transactional
     @Override
     public void execute(@NonNull QuestionId questionId) {
         if (!questionRepository.existsById(questionId.id())) {

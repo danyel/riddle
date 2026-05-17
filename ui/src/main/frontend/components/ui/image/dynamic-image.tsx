@@ -1,5 +1,4 @@
 import {CSSProperties, useEffect, useState} from "react";
-import {Logs} from "Frontend/util";
 
 interface DynamicBase64ImageProps {
     rawBase64: string | undefined;
@@ -17,7 +16,7 @@ export function DynamicBase64Image({
                                        style
                                    }: DynamicBase64ImageProps) {
     const [imageSrc, setImageSrc] = useState<string>("");
-    const logger = new Logs('DynamicBase64Image');
+
     useEffect(() => {
         if (!rawBase64) {
             setImageSrc("");
@@ -45,8 +44,6 @@ export function DynamicBase64Image({
                 break;
             }
         }
-        logger.debug('Dynamic image {}', `data:${detectedMimeType};base64,${cleanBase64}`)
-        // 4. Construct the completely valid, single-line data URL
         setImageSrc(`data:${detectedMimeType};base64,${cleanBase64}`);
     }, [rawBase64]);
 

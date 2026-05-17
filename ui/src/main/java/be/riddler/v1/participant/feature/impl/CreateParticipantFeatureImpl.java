@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * CreateParticipantFeature
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 class CreateParticipantFeatureImpl implements CreateParticipantFeature {
     private final ParticipantRepository participantRepository;
 
+    @Transactional
     public @NonNull Participant create(@NonNull CreateParticipant createParticipant) {
         var participantEntity = ParticipantMapper.fromCreateParticipant(createParticipant);
         participantRepository.save(participantEntity);

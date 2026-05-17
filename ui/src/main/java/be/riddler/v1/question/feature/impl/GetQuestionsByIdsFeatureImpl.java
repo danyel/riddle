@@ -7,7 +7,8 @@ import be.riddler.v1.question.repository.QuestionRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,11 +19,12 @@ import java.util.UUID;
  * @author dnoulet
  * @version 1.0.0 09/05/2026
  */
-@Component
+@Service
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 class GetQuestionsByIdsFeatureImpl implements GetQuestionsByIdsFeature {
     private final QuestionRepository questionRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public @NonNull List<@NonNull Question> findAll(List<UUID> questionIds) {
         return questionRepository.findAllById(questionIds)

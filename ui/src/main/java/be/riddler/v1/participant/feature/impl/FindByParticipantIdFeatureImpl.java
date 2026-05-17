@@ -9,7 +9,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * FindParticipantByIdFeature
@@ -17,11 +18,12 @@ import org.springframework.stereotype.Component;
  * @author dnoulet
  * @version 1.0.0 09/05/2026
  */
-@Component
+@Service
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 class FindByParticipantIdFeatureImpl implements FindByParticipantIdFeature {
     private final ParticipantRepository participantRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public @NonNull Participant findByParticipantId(@NonNull ParticipantId participantId) {
         var participant = participantRepository.findById(participantId.id());

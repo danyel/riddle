@@ -7,7 +7,8 @@ import be.riddler.v1.question.repository.QuestionRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,11 +18,12 @@ import java.util.List;
  * @author dnoulet
  * @version 1.0.0 09/05/2026
  */
-@Component
+@Service
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 class GetQuestionsFeatureImpl implements GetQuestionsFeature {
     private final QuestionRepository questionRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public @NonNull List<@NonNull Question> findAll() {
         return questionRepository.findAll()

@@ -6,6 +6,7 @@ import {DynamicBase64Image} from "Frontend/components/ui/image/dynamic-image";
 import Participant from "Frontend/generated/be/riddler/v1/participant/client/model/Participant";
 import {useParams} from "react-router";
 import {ModalType} from "Frontend/views/secured/participants/participant";
+import Category from "Frontend/generated/be/riddler/v1/participant/client/model/Category";
 
 export default function ParticipantProfileDetail(
     {
@@ -41,12 +42,10 @@ export default function ParticipantProfileDetail(
     }
 
     return (
-        <VerticalLayout className={styles.full_width_layout} theme="padding" style={{alignItems: 'stretch'}}>
+        <VerticalLayout className={styles.full_width_layout} style={{alignItems: 'stretch'}}>
             <Card style={{width: '100%', padding: 'var(--lumo-space-l)', boxShadow: 'var(--lumo-box-shadow-s)'}}>
                 <HorizontalLayout theme="spacing-xl"
                                   style={{alignItems: 'flex-start', width: '100%', flexWrap: 'wrap'}}>
-
-                    {/* 1. Left Side Column: Avatar Frame & Upload Trigger */}
                     <VerticalLayout theme="spacing-m" style={{width: 'auto', alignItems: 'center', minWidth: '160px'}}>
                         <div style={{position: 'relative'}}>
                             <DynamicBase64Image
@@ -55,19 +54,18 @@ export default function ParticipantProfileDetail(
                                 width="130"
                                 height="130"
                                 style={{
-                                    borderRadius: '50%', // Round avatar design
+                                    borderRadius: '50%',
                                     border: '3px solid var(--lumo-primary-color-10pct)',
                                     boxShadow: 'var(--lumo-box-shadow-xs)'
                                 }}
                             />
                         </div>
-
                         <Upload
                             accept="image/*"
                             target={`/v1/participants/${params.id!!}/photo`}
                             maxFileSize={20000000}
                             nodrop
-                            i18n={photoUploadI18n} // 💡 Applied customized label mapping here
+                            i18n={photoUploadI18n}
                             onUploadBefore={(e: any) => {
                                 const csrfToken = getCookie('XSRF-TOKEN');
                                 if (csrfToken) {
@@ -80,10 +78,7 @@ export default function ParticipantProfileDetail(
                             style={{scale: '0.9'}}
                         />
                     </VerticalLayout>
-
-                    {/* 2. Right Side Column: Core Details & Documents Section */}
                     <VerticalLayout theme="spacing-m" style={{flexGrow: 1, minWidth: '280px'}}>
-                        {/* Title Row Headers */}
                         <VerticalLayout theme="spacing-xs" style={{
                             borderBottom: '1px solid var(--lumo-contrast-10pct)',
                             paddingBottom: 'var(--lumo-space-m)',
@@ -104,9 +99,34 @@ export default function ParticipantProfileDetail(
                             }}>
                                 {participant?.email_address}
                             </div>
+                            {participant?.categories && participant.categories.length > 0 && (
+                                <HorizontalLayout
+                                    theme="spacing-s"
+                                    style={{
+                                        flexWrap: 'wrap',
+                                        marginTop: 'var(--lumo-space-s)',
+                                        marginBottom: 'var(--lumo-space-xs)'
+                                    }}
+                                >
+                                    {participant.categories.map((category: Category) => (
+                                        <span
+                                            key={`category_${category.id}`}
+                                            style={{
+                                                background: 'var(--lumo-primary-color-10pct)',
+                                                color: 'var(--lumo-primary-text-color)',
+                                                fontSize: 'var(--lumo-font-size-xs)',
+                                                fontWeight: 'bold',
+                                                padding: 'var(--lumo-space-xs) var(--lumo-space-s)',
+                                                borderRadius: '20px',
+                                                whiteSpace: 'nowrap'
+                                            }}
+                                        >
+                                            {category.name}
+                                        </span>
+                                    ))}
+                                </HorizontalLayout>
+                            )}
                         </VerticalLayout>
-
-                        {/* Document Asset Dashboard Area */}
                         <VerticalLayout theme="spacing-s" style={{
                             width: '100%',
                             background: 'var(--lumo-contrast-5pct)',
@@ -130,9 +150,9 @@ export default function ParticipantProfileDetail(
                                 flexWrap: 'wrap',
                                 gap: 'var(--lumo-space-s)'
                             }}>
-                                {/* Left Action: View Trigger Button */}
                                 <HorizontalLayout theme="spacing-s" style={{alignItems: 'center'}}>
                                     <Button
+                                        key={`view_cv_button_${params.id}`}
                                         theme="primary"
                                         disabled={!participant?.cv}
                                         onClick={() => {
@@ -142,8 +162,6 @@ export default function ParticipantProfileDetail(
                                     >
                                         View CV Document
                                     </Button>
-
-                                    {/* Small visual validation indicator badge */}
                                     <span style={{
                                         fontSize: 'var(--lumo-font-size-xs)',
                                         fontWeight: 'bold',
@@ -155,14 +173,13 @@ export default function ParticipantProfileDetail(
                                         {participant?.cv ? "AVAILABLE" : "MISSING"}
                                     </span>
                                 </HorizontalLayout>
-
-                                {/* Right Action: Document Upload Filter Input */}
                                 <Upload
                                     accept="application/pdf"
                                     target={`/v1/participants/${params.id!!}/cv`}
                                     maxFileSize={20000000}
                                     nodrop
-                                    i18n={cvUploadI18n} // 💡 Applied customized label mapping here
+                                    key={`cv_upload_${params.id}`}
+                                    i18n={cvUploadI18n}
                                     onUploadBefore={(e: any) => {
                                         const csrfToken = getCookie('XSRF-TOKEN');
                                         if (csrfToken) {
@@ -176,7 +193,6 @@ export default function ParticipantProfileDetail(
                                 />
                             </HorizontalLayout>
                         </VerticalLayout>
-
                     </VerticalLayout>
                 </HorizontalLayout>
             </Card>
