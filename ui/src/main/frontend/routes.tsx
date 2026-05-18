@@ -18,6 +18,7 @@ import AdministrationPage from "./views/secured/administration/administration";
 import InvitationPage from "./views/secured/invitation/invitation";
 import PublicationsPage from "Frontend/views/secured/publication/publications";
 import PublicationPage from "Frontend/views/secured/publication/publication";
+import CategoryManagementPage from "Frontend/views/secured/category/categories";
 
 
 function RootErrorBoundary() {
@@ -102,6 +103,11 @@ export const routes = protectRoutes([
                 element: <PublicationPage/>,
                 handle: {rolesAllowed: ['ROLE_USER']} // Client-side check
             },
+            {
+                path: `/administrations/categories`,
+                element: <CategoryManagementPage/>,
+                handle: {rolesAllowed: ['ROLE_USER', 'ROLE_ADMIN']}
+            }
         ],
     },
     {

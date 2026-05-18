@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * UiApi
@@ -31,6 +32,9 @@ public interface UiClient {
             tags = "ui",
             summary = "Retrieves all possible icon names",
             operationId = "icons",
+            parameters = {
+                    @Parameter(name = "X-Correlation-Id", in = ParameterIn.HEADER, schema = @Schema(implementation = UUID.class))
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -51,6 +55,9 @@ public interface UiClient {
             tags = "ui",
             summary = "Retrieves all supported languages",
             operationId = "supportedLanguages",
+            parameters = {
+                    @Parameter(name = "X-Correlation-Id", in = ParameterIn.HEADER, schema = @Schema(implementation = UUID.class))
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -71,6 +78,9 @@ public interface UiClient {
             tags = "ui",
             summary = "Retrieves all question types",
             operationId = "questionTypes",
+            parameters = {
+                    @Parameter(name = "X-Correlation-Id", in = ParameterIn.HEADER, schema = @Schema(implementation = UUID.class))
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -92,6 +102,7 @@ public interface UiClient {
             summary = "Retrieves translations for a specific language",
             operationId = "translations",
             parameters = {
+                    @Parameter(name = "X-Correlation-Id", in = ParameterIn.HEADER, schema = @Schema(implementation = UUID.class)),
                     @Parameter(in = ParameterIn.QUERY, name = "language", schema = @Schema(implementation = String.class))
             },
             responses = {
@@ -115,6 +126,7 @@ public interface UiClient {
             summary = "Retrieves translations for a specific language",
             operationId = "translate",
             parameters = {
+                    @Parameter(name = "X-Correlation-Id", in = ParameterIn.HEADER, schema = @Schema(implementation = UUID.class)),
                     @Parameter(in = ParameterIn.QUERY, name = "language", schema = @Schema(implementation = String.class)),
                     @Parameter(in = ParameterIn.QUERY, name = "key", schema = @Schema(implementation = String.class))
             },

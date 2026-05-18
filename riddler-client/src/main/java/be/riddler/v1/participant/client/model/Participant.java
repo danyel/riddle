@@ -1,5 +1,6 @@
 package be.riddler.v1.participant.client.model;
 
+import be.riddler.v1.category.client.model.Category;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jspecify.annotations.NonNull;
 

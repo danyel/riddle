@@ -4,6 +4,7 @@ import be.riddler.v1.participant.client.model.CreateParticipant;
 import be.riddler.v1.participant.client.model.Participant;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Encoding;
@@ -37,7 +38,8 @@ public interface ParticipantClient {
             summary = "Retrieve the participant corresponding to the id",
             operationId = "findById",
             parameters = {
-                    @Parameter(name = "id", schema = @Schema(implementation = UUID.class))
+                    @Parameter(name = "id", schema = @Schema(implementation = UUID.class)),
+                    @Parameter(name = "X-Correlation-Id", in = ParameterIn.HEADER, schema = @Schema(implementation = UUID.class))
             },
             responses = {
                     @ApiResponse(
@@ -65,6 +67,9 @@ public interface ParticipantClient {
             tags = "participants",
             summary = "Retrieve all participants",
             operationId = "findAll",
+            parameters = {
+                    @Parameter(name = "X-Correlation-Id", in = ParameterIn.HEADER, schema = @Schema(implementation = UUID.class))
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -91,6 +96,9 @@ public interface ParticipantClient {
             tags = "participants",
             summary = "Generates a token for the participant",
             operationId = "generateToken",
+            parameters = {
+                    @Parameter(name = "X-Correlation-Id", in = ParameterIn.HEADER, schema = @Schema(implementation = UUID.class))
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -117,6 +125,9 @@ public interface ParticipantClient {
             tags = "participants",
             operationId = "create",
             summary = "Creates a participant",
+            parameters = {
+                    @Parameter(name = "X-Correlation-Id", in = ParameterIn.HEADER, schema = @Schema(implementation = UUID.class))
+            },
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = CreateParticipant.class), mediaType = MediaType.APPLICATION_JSON_VALUE, encoding = @Encoding(contentType = MediaType.APPLICATION_JSON_VALUE))
 

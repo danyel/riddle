@@ -6,7 +6,7 @@ import {DynamicBase64Image} from "Frontend/components/ui/image/dynamic-image";
 import Participant from "Frontend/generated/be/riddler/v1/participant/client/model/Participant";
 import {useParams} from "react-router";
 import {ModalType} from "Frontend/views/secured/participants/participant";
-import Category from "Frontend/generated/be/riddler/v1/participant/client/model/Category";
+import Category from "Frontend/generated/be/riddler/v1/category/client/model/Category";
 
 export default function ParticipantProfileDetail(
     {

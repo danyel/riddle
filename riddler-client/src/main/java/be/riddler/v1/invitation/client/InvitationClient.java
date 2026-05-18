@@ -3,6 +3,8 @@ package be.riddler.v1.invitation.client;
 import be.riddler.v1.invitation.client.model.CreateInvitation;
 import be.riddler.v1.invitation.client.model.Invitation;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Encoding;
@@ -34,6 +36,9 @@ public interface InvitationClient {
             tags = "invitations",
             operationId = "create",
             summary = "Creates an invitation",
+            parameters = {
+                    @Parameter(name = "X-Correlation-Id", in = ParameterIn.HEADER, schema = @Schema(implementation = UUID.class))
+            },
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(schema = @Schema(implementation = CreateInvitation.class), mediaType = MediaType.APPLICATION_JSON_VALUE, encoding = @Encoding(contentType = MediaType.APPLICATION_JSON_VALUE))
 
@@ -62,6 +67,9 @@ public interface InvitationClient {
             tags = "invitations",
             summary = "Retrieve the invitation corresponding to the id",
             operationId = "findById",
+            parameters = {
+                    @Parameter(name = "X-Correlation-Id", in = ParameterIn.HEADER, schema = @Schema(implementation = UUID.class))
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -82,6 +90,9 @@ public interface InvitationClient {
             tags = "invitations",
             summary = "Retrieves the invitations corresponding to the participant id",
             operationId = "findInvitationsByParticipantId",
+            parameters = {
+                    @Parameter(name = "X-Correlation-Id", in = ParameterIn.HEADER, schema = @Schema(implementation = UUID.class))
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -102,6 +113,9 @@ public interface InvitationClient {
             tags = "invitations",
             summary = "Deletes the invitation corresponding to the id",
             operationId = "deleteById",
+            parameters = {
+                    @Parameter(name = "X-Correlation-Id", in = ParameterIn.HEADER, schema = @Schema(implementation = UUID.class))
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "204"

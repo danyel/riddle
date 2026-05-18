@@ -11,10 +11,11 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.FactorGrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jose.jws.JwsAlgorithms;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
-import java.util.List;
 
 
 /**
@@ -42,16 +42,6 @@ import java.util.List;
 class SecurityConfiguration {
     @Value("${application.auth.secret}")
     private String authSecret;
-    private static final List<User> USERS = List.of(new User(
-                    "admin",
-                    "{noop}admin",
-                    List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"), new SimpleGrantedAuthority("ROLE_PARTICIPANT"))
-            ),
-            new User(
-                    "user",
-                    "{noop}user",
-                    List.of(new SimpleGrantedAuthority("ROLE_USER"))
-            ));
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) {
@@ -103,12 +93,23 @@ class SecurityConfiguration {
 
     @Bean
     UserDetailsService userDetailsService() {
-        return username -> USERS.stream().filter(u -> u.getUsername().equals(username)).findFirst().orElseThrow();
+        UserDetails admin = User.withUsername("admin")
+                .password("{noop}admin")
+                .authorities("ROLE_ADMIN", "ROLE_USER", "ROLE_PARTICIPANT")
+                .build();
+
+        UserDetails user = User.withUsername("user")
+                .password("{noop}user")
+                .authorities("ROLE_USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(admin, user);
     }
 }
 
 @Controller
 class SpaForwardingController {
+    @SuppressWarnings("MVCPathVariableInspection")
     @RequestMapping(value = "{path:[^.]*}")
     String forward() {
         return "forward:/";

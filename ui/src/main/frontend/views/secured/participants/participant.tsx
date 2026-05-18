@@ -5,10 +5,9 @@ import {InvitationEndpoint, ParticipantAdminEndpoint, PublicationsEndpoint} from
 import Participant from "Frontend/generated/be/riddler/v1/participant/client/model/Participant";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
-import {CloseButton, NewsPaperButton, PlusButton} from "Frontend/components/ui/button";
+import {CloseButton, PlusButton} from "Frontend/components/ui/button";
 import {Button} from "@vaadin/react-components/Button";
 import {ElementStylingTypes} from "Frontend/constant";
-import {useSignal} from "@vaadin/hilla-react-signals";
 import {Notify} from "Frontend/util";
 import Invitation from "Frontend/generated/be/riddler/v1/invitation/client/model/Invitation";
 import Publication from "Frontend/generated/be/riddler/v1/publication/client/model/Publication";
@@ -90,21 +89,6 @@ export function AdminParticipant() {
                 .then(setPublication);
         }
     }, [publicationId]);
-
-    const uploadI18n = useSignal({
-        addFiles: {one: 'Upload Report...'},
-        dropFiles: {one: 'Drop report here'},
-        error: {
-            incorrectFileType: 'The provided file does not have the correct format (PDF document).',
-        },
-    });
-
-    function getCookie(name: string): string | null {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
-        return null;
-    }
 
     function createInvitation(participantId: string) {
         const createInvitation = {participant_id: participantId, publication_id: publicationId!!};
@@ -259,17 +243,96 @@ function InvitationTable(
     const actionButtons = ({item}: { item: Invitation }) => {
         return (
             <>
-                <NewsPaperButton onClick={() => {
-                    openModal(item.publication.id);
-                }}/>
+                <Button theme="small secondary" onClick={() => openModal(item.publication.id)}>Publication</Button>
             </>
         );
     };
+    if (!invitations || invitations.length === 0) {
+        return (
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '200px',
+                width: '100%',
+                background: 'var(--lumo-contrast-5pct)',
+                borderRadius: 'var(--lumo-base-border-radius)',
+                border: '1px dashed var(--lumo-contrast-20pct)',
+                gap: 'var(--lumo-space-xs)'
+            }}>
+                <span style={{
+                    color: 'var(--lumo-secondary-text-color)',
+                    fontWeight: 500,
+                    fontSize: 'var(--lumo-font-size-m)'
+                }}>
+                    No active invitations found
+                </span>
+                <span style={{color: 'var(--lumo-disabled-text-color)', fontSize: 'var(--lumo-font-size-s)'}}>
+                    Sent or pending invitations will appear here in this list view.
+                </span>
+            </div>
+        );
+    }
+
     return (
-        <Grid items={invitations} className={styles.riddler_table} allRowsVisible={true}>
-            <GridColumn path="id" header="Invitation Id"/>
-            <GridColumn path="publication.title" header="Publication"/>
-            <GridColumn header={'Actions'} renderer={actionButtons}/>
+        <Grid
+            items={invitations}
+            allRowsVisible={true}
+            style={{
+                borderRadius: 'var(--lumo-base-border-radius)',
+                border: '1px solid var(--lumo-contrast-10pct)',
+                boxShadow: 'var(--lumo-box-shadow-xs)'
+            }}
+        >
+            <GridColumn
+                header="Invitation ID"
+                width="140px"
+                flexGrow={0}
+                renderer={({item}) => (
+                    <code
+                        title={item.id}
+                        style={{
+                            background: 'var(--lumo-contrast-5pct)',
+                            color: 'var(--lumo-primary-text-color)',
+                            padding: '2px 6px',
+                            borderRadius: '4px',
+                            fontSize: 'var(--lumo-font-size-xs)',
+                            fontFamily: 'var(--lumo-font-family-monospace)',
+                            fontWeight: 'bold',
+                            textTransform: 'uppercase'
+                        }}
+                    >
+                        {item.id ? `${item.id.substring(0, 8)}...` : 'N/A'}
+                    </code>
+                )}
+            />
+            <GridColumn
+                header="Publication Title"
+                flexGrow={1}
+                renderer={({item}) => (
+                    <div style={{
+                        fontWeight: 500,
+                        color: 'var(--lumo-heading-text-color)',
+                        fontSize: 'var(--lumo-font-size-m)',
+                        whiteSpace: 'normal', // Forces text to wrap beautifully instead of overflowing columns
+                        wordBreak: 'break-word',
+                        lineHeight: 'var(--lumo-line-height-m)'
+                    }}>
+                        {item.publication?.title || (
+                            <span style={{color: 'var(--lumo-disabled-text-color)', fontStyle: 'italic'}}>
+                                Untitled Publication
+                            </span>
+                        )}
+                    </div>
+                )}
+            />
+            <GridColumn
+                header="Actions"
+                renderer={actionButtons}
+                width="240px"
+                flexGrow={0}
+            />
         </Grid>
     );
 }

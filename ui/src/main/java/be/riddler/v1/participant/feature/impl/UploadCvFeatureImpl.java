@@ -1,9 +1,9 @@
 package be.riddler.v1.participant.feature.impl;
 
-import be.riddler.v1.participant.entity.CategoryEntity;
+import be.riddler.v1.category.entity.CategoryEntity;
+import be.riddler.v1.category.repository.CategoryRepository;
 import be.riddler.v1.participant.entity.ParticipantEntity;
 import be.riddler.v1.participant.feature.UploadCvFeature;
-import be.riddler.v1.participant.repository.CategoryRepository;
 import be.riddler.v1.participant.repository.ParticipantRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
@@ -20,7 +20,6 @@ import org.springframework.util.Assert;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -68,29 +67,18 @@ class UploadCvFeatureImpl implements UploadCvFeature {
     private Set<CategoryEntity> determineCategoriesFromText(String text) {
         Set<CategoryEntity> matchedCategories = new HashSet<>();
         String lowerCaseText = text.toLowerCase();
-        // todo should be a matrix that is configurable per publication
-        Map<String, List<String>> classificationRules = Map.of(
-                "Java Developer", List.of("java", "spring boot", "jpa", "hibernate", "maven", "slf4j"),
-                "Spring", List.of("spring", "spring boot"),
-                "Database", List.of("oracle", "mysql", "postgres", "h2"),
-                "Frontend Engineer", List.of("react", "typescript", "vaadin", "hilla", "javascript", "css"),
-                "DevOps Cloud Specialist", List.of("docker", "kubernetes", "aws", "azure", "ci/cd", "jenkins"),
-                "Data Analyst", List.of("python", "sql", "pandas", "tableau", "excel", "power bi")
-        );
+        List<CategoryEntity> dbRules = categoryRepository.findAllWithKeywords();
 
-        classificationRules.forEach((categoryName, keywordTokens) -> {
-            long tokenMatchCount = keywordTokens.stream()
+        for (CategoryEntity category : dbRules) {
+            long tokenMatchCount = category.getKeywords().stream()
+                    .map(keyword -> keyword.getWord().toLowerCase())
                     .filter(lowerCaseText::contains)
                     .count();
 
             if (tokenMatchCount >= 2) {
-                CategoryEntity targetCategory = categoryRepository.findByNameIgnoreCase(categoryName)
-                        .orElseGet(() -> categoryRepository.save(
-                                CategoryEntity.builder().name(categoryName).build()
-                        ));
-                matchedCategories.add(targetCategory);
+                matchedCategories.add(category);
             }
-        });
+        }
 
         if (matchedCategories.isEmpty()) {
             CategoryEntity defaultCategory = categoryRepository.findByNameIgnoreCase("Unclassified/General")

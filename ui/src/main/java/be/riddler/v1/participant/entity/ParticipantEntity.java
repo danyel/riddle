@@ -1,5 +1,6 @@
 package be.riddler.v1.participant.entity;
 
+import be.riddler.v1.category.entity.CategoryEntity;
 import be.riddler.v1.common.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
