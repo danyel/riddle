@@ -15,6 +15,7 @@ import FormItem from "Frontend/components/ui/form/form-item.component";
 import RiddlerModal from "Frontend/components/ui/modal/modal";
 import ParticipantProfileDetail from "Frontend/components/participant/participant";
 import PublicationDetail from "Frontend/components/publication/publication";
+import Empty from "Frontend/components/ui/empty/empty";
 
 export type ModalType = 'PUBLICATION' | 'INVITATION' | 'CV' | 'PHOTO';
 
@@ -248,31 +249,8 @@ function InvitationTable(
         );
     };
     if (!invitations || invitations.length === 0) {
-        return (
-            <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '200px',
-                width: '100%',
-                background: 'var(--lumo-contrast-5pct)',
-                borderRadius: 'var(--lumo-base-border-radius)',
-                border: '1px dashed var(--lumo-contrast-20pct)',
-                gap: 'var(--lumo-space-xs)'
-            }}>
-                <span style={{
-                    color: 'var(--lumo-secondary-text-color)',
-                    fontWeight: 500,
-                    fontSize: 'var(--lumo-font-size-m)'
-                }}>
-                    No active invitations found
-                </span>
-                <span style={{color: 'var(--lumo-disabled-text-color)', fontSize: 'var(--lumo-font-size-s)'}}>
-                    Sent or pending invitations will appear here in this list view.
-                </span>
-            </div>
-        );
+        return (<Empty emptyMessage={"No active invitations found"}
+                       helperMessage={"Sent or pending invitations will appear here in this list view."}/>);
     }
 
     return (

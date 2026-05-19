@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import Publication from "Frontend/generated/be/riddler/v1/publication/client/model/Publication";
 import {
+    Button,
     Dialog,
     Grid,
     GridColumn,
@@ -12,7 +13,7 @@ import {
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css'
 import {useSignal} from "@vaadin/hilla-react-signals";
-import {CancelButton, CheckButton, PlusButton, ViewDetailButton} from "Frontend/components";
+import {CancelButton, CheckButton, ViewDetailButton} from "Frontend/components";
 import CreatePublication from "Frontend/generated/be/riddler/v1/publication/client/model/CreatePublication";
 import {LevelSelector} from "Frontend/components/publication/level-selector-component";
 import {PositionSelector} from "Frontend/components/publication/position-selector-component";
@@ -22,6 +23,7 @@ import {PublicationsEndpoint} from "Frontend/generated/endpoints";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import {useNavigate} from "react-router";
 import FormItem from "Frontend/components/ui/form/form-item.component";
+import Empty from "Frontend/components/ui/empty/empty";
 
 export default function PublicationsPage() {
     const [publications, setPublications] = useState<Publication[]>([]);
@@ -60,7 +62,8 @@ export default function PublicationsPage() {
         <VerticalLayout className={styles.full_width_layout}>
             <HorizontalLayout className={styles.full_width_layout}>
                 <div className={styles.menu_bar_layout}>
-                    <PlusButton onClick={() => createPublicationOpened.value = true}/>
+                    <Button theme="primary" onClick={() => createPublicationOpened.props = true}>Add New
+                        Publication</Button>
                 </div>
             </HorizontalLayout>
             <HorizontalLayout className={styles.full_width_layout}>
@@ -138,13 +141,20 @@ export default function PublicationsPage() {
                         />
                     </VerticalLayout>
                 </Dialog>
-                <Grid key={"id"} items={publications} className={styles.riddler_table} allRowsVisible={true}>
-                    <GridColumn key={"title"} path={"title"}/>
-                    <GridColumn key={"description"} path={"description"}/>
-                    <GridColumn key={"position"} path={"position.position"}/>
-                    <GridColumn key={"level"} path={"level.level"}/>
-                    <GridColumn header={'Actions'} renderer={actionButtons}/>
-                </Grid>
+                {publications.length > 0 ?
+                    (
+                        <Grid key={"id"} items={publications} className={styles.riddler_table} allRowsVisible={true}>
+                            <GridColumn key={"title"} path={"title"}/>
+                            <GridColumn key={"description"} path={"description"}/>
+                            <GridColumn key={"position"} path={"position.position"}/>
+                            <GridColumn key={"level"} path={"level.level"}/>
+                            <GridColumn header={'Actions'} renderer={actionButtons}/>
+                        </Grid>) :
+                    (
+                        <Empty emptyMessage={"No publication found"}
+                               helperMessage={"Click \"Add New Publication\" to add a new publication."}/>
+                    )}
+
             </HorizontalLayout>
         </VerticalLayout>
     );

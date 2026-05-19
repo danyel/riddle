@@ -1,5 +1,14 @@
 import {useEffect, useState} from 'react';
-import {Dialog, FormLayout, Grid, GridColumn, HorizontalLayout, Select, TextArea} from "@vaadin/react-components";
+import {
+    Button,
+    Dialog,
+    FormLayout,
+    Grid,
+    GridColumn,
+    HorizontalLayout,
+    Select,
+    TextArea
+} from "@vaadin/react-components";
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css';
 
@@ -9,18 +18,25 @@ import {useNavigate} from "react-router";
 import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
 import CreateQuestion from "Frontend/generated/be/riddler/v1/question/client/model/CreateQuestion";
 import {QuestionEndpoint} from "Frontend/generated/endpoints";
-import {CancelButton, CheckButton, CloseButton, PlusButton, ViewDetailButton} from "Frontend/components/ui/button";
+import {CancelButton, CheckButton, CloseButton, ViewDetailButton} from "Frontend/components/ui/button";
 import QuestionType from "Frontend/generated/be/riddler/v1/question/client/model/QuestionType";
 import {Urls} from "Frontend/util";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import FormItem from "Frontend/components/ui/form/form-item.component";
+import Empty from "Frontend/components/ui/empty/empty";
 
 
-function CreateQuestionDialogModal(props: {
-    show: boolean;
-    onParticipantCreated: () => void;
-    onClose: () => void;
-}) {
+function CreateQuestionDialogModal(
+    {
+        show,
+        onParticipantCreated,
+        onClose
+    }: {
+        show: boolean;
+        onParticipantCreated: () => void;
+        onClose: () => void;
+    }
+) {
     const [createQuestion, setCreateQuestion] = useState<CreateQuestion>({
         type: QuestionType.OPEN,
         question: '',
@@ -46,13 +62,13 @@ function CreateQuestionDialogModal(props: {
     ];
 
     useEffect(() => {
-        if (props.show) {
+        if (show) {
             // Clear input value when the modal opens
             createQuestion.type = QuestionType.OPEN;
             createQuestion.question = '';
             createQuestion.title = '';
         }
-    }, [props.show]);
+    }, [show]);
 
     function saveQuestion() {
         const payload: CreateQuestion = {
@@ -62,14 +78,14 @@ function CreateQuestionDialogModal(props: {
         };
         QuestionEndpoint.create(payload)
             .then(() => {
-                props.onParticipantCreated();
-                props.onClose();
+                onParticipantCreated();
+                onClose();
             });
     }
 
     function closeIfNotValue(e: CustomEvent<{ value: boolean }>) {
         // Syncs background clicks / ESC keys directly back to parent
-        if (!e.detail.value) props.onClose();
+        if (!e.detail.value) onClose();
     }
 
     return (
@@ -77,13 +93,13 @@ function CreateQuestionDialogModal(props: {
             width={"100vh"}
             height={"100vh"}
             header-title="Create question"
-            opened={props.show}
+            opened={show}
             onOpenedChanged={closeIfNotValue}
-            header={<CancelButton onClick={() => props.onClose()}/>}
+            header={<CancelButton onClick={() => onClose()}/>}
             footerRenderer={() => (
                 <>
-                    <CloseButton onClick={props.onClose}/>
                     <CheckButton onClick={saveQuestion}/>
+                    <CloseButton onClick={onClose}/>
                 </>
             )}
         >
@@ -123,19 +139,20 @@ function CreateQuestionDialogModal(props: {
     );
 }
 
-function QuestionTable(props: { questions: Question[] }) {
+function QuestionTable({questions}: { questions: Question[] }) {
     const navigate = useNavigate();
     const showQuestion = ({item}: { item: Question }) => {
         return <ViewDetailButton onClick={() => navigate(Urls.makePath(BookmarkType.QUESTIONS, item.id))}/>;
     };
-    return (
-        <Grid key={"id"} items={props.questions} className={styles.riddler_table} allRowsVisible={true}>
+    return questions.length > 0 ? (
+        <Grid key={"id"} items={questions} className={styles.riddler_table} allRowsVisible={true}>
             <GridColumn key={"title"} path={"title"}/>
             <GridColumn key={"question"} path={"question"}/>
             <GridColumn key={"type"} path={"type"}/>
             <GridColumn header={'Action'} renderer={showQuestion}/>
         </Grid>
-    );
+    ) : (<Empty emptyMessage={"No question found"}
+                helperMessage={"Click \"Add New Question\" to add a new question."}/>);
 }
 
 export default function QuestionsView() {
@@ -154,7 +171,7 @@ export default function QuestionsView() {
         <>
             <HorizontalLayout className={styles.full_width_layout}>
                 <div className={styles.menu_bar_layout}>
-                    <PlusButton onClick={() => setOpen(true)}/>
+                    <Button theme="primary" onClick={() => setOpen(true)}>Add New Question</Button>
                 </div>
             </HorizontalLayout>
             <CreateQuestionDialogModal show={open}

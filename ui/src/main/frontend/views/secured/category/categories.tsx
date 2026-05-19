@@ -6,6 +6,7 @@ import Category from "Frontend/generated/be/riddler/v1/category/client/model/Cat
 import CreateCategory from "Frontend/generated/be/riddler/v1/category/client/model/CreateCategory";
 import {useAuth} from "Frontend/auth";
 import UpdateCategory from "Frontend/generated/be/riddler/v1/category/client/model/UpdateCategory";
+import Empty from "Frontend/components/ui/empty/empty";
 
 export default function CategoryManagementPage() {
     const {state} = useAuth();
@@ -141,31 +142,8 @@ export default function CategoryManagementPage() {
                     <GridColumn header="Actions" renderer={actionRenderer} width="160px" flexGrow={0}/>
                 </Grid>
             ) : (
-                <VerticalLayout
-                    theme="padding spacing"
-                    style={{
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        height: '250px',
-                        background: 'var(--lumo-contrast-5pct)',
-                        borderRadius: 'var(--lumo-base-border-radius)',
-                        border: '1px dashed var(--lumo-contrast-20pct)'
-                    }}
-                >
-                    <span style={{
-                        color: 'var(--lumo-secondary-text-color)',
-                        fontSize: 'var(--lumo-font-size-m)',
-                        fontWeight: 500
-                    }}>
-                        No category rules found
-                    </span>
-                    <span style={{
-                        color: 'var(--lumo-disabled-text-color)',
-                        fontSize: 'var(--lumo-font-size-s)'
-                    }}>
-                        Click "Add New Rule" to configure your first parsing track.
-                    </span>
-                </VerticalLayout>
+                <Empty emptyMessage={"No category rules found"}
+                       helperMessage={"Click \"Add New Rule\" to configure your first parsing track."}/>
             )}
 
             <Dialog

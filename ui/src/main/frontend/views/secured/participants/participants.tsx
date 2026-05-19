@@ -1,11 +1,11 @@
 import Participant from "Frontend/generated/be/riddler/v1/participant/client/model/Participant";
-import {FormLayout, Grid, GridColumn, HorizontalLayout, TextField} from "@vaadin/react-components";
+import {Button, FormLayout, Grid, GridColumn, HorizontalLayout, TextField} from "@vaadin/react-components";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
 import {useEffect, useState} from "react";
 import {ParticipantAdminEndpoint} from "Frontend/generated/endpoints";
 import {useSignal} from "@vaadin/hilla-react-signals";
-import {CheckButton, CloseButton, GenerateToken, PlusButton, ViewDetailButton} from "Frontend/components/ui/button";
+import {CheckButton, CloseButton, GenerateToken, ViewDetailButton} from "Frontend/components/ui/button";
 import CreateParticipant from "Frontend/generated/be/riddler/v1/participant/client/model/CreateParticipant";
 import {CheckIcon, CloseIcon} from "Frontend/components/ui/icons";
 import {useNavigate} from "react-router";
@@ -13,6 +13,7 @@ import {Notify, Strings, Urls} from "Frontend/util";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import RiddlerModal from "Frontend/components/ui/modal/modal";
 import FormItem from "Frontend/components/ui/form/form-item.component";
+import Empty from "Frontend/components/ui/empty/empty";
 
 function ParticipantTable() {
     const [open, setOpen] = useState(false);
@@ -55,21 +56,26 @@ function ParticipantTable() {
         <>
             <HorizontalLayout className={styles.full_width_layout}>
                 <div className={styles.menu_bar_layout}>
-                    <PlusButton onClick={() => setOpen(true)}/>
+                    <Button theme="primary" onClick={() => setOpen(true)}>Add New Participant</Button>
                 </div>
             </HorizontalLayout>
             <CreateParticipantDialogModal show={open}
                                           onParticipantCreated={fetchParticipants}
                                           onClose={() => setOpen(false)}/>
-            <HorizontalLayout className={styles.full_width_layout}>
-                <Grid key={"id"} items={participants} className={styles.riddler_table} allRowsVisible={true}>
-                    <GridColumn key={"first_name"} header={'First Name'} path={"first_name"}/>
-                    <GridColumn key={"last_name"} header={'Last Name'} path={"last_name"}/>
-                    <GridColumn key={"email_address"} header={'Email'} path={"email_address"}/>
-                    <GridColumn key={"stored_token"} header={'Token'} renderer={tokenIndicator}/>
-                    <GridColumn header={'Actions'} renderer={actionButtons}/>
-                </Grid>
-            </HorizontalLayout>
+            {participants.length > 0 ? (
+                <HorizontalLayout className={styles.full_width_layout}>
+                    <Grid key={"id"} items={participants} className={styles.riddler_table} allRowsVisible={true}>
+                        <GridColumn key={"first_name"} header={'First Name'} path={"first_name"}/>
+                        <GridColumn key={"last_name"} header={'Last Name'} path={"last_name"}/>
+                        <GridColumn key={"email_address"} header={'Email'} path={"email_address"}/>
+                        <GridColumn key={"stored_token"} header={'Token'} renderer={tokenIndicator}/>
+                        <GridColumn header={'Actions'} renderer={actionButtons}/>
+                    </Grid>
+                </HorizontalLayout>
+            ) : (
+                <Empty emptyMessage={"No participant found"}
+                       helperMessage={"Click \"Add New Participant\" to add a new participant."}/>
+            )}
         </>
     );
 }
