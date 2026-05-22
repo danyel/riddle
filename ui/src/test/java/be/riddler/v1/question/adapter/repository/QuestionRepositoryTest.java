@@ -23,7 +23,7 @@ class QuestionRepositoryTest extends AbstractRepositoryTest {
     @Test
     void findAll() {
         var questions = questionRepository.findAll();
-        assertEquals(3, questions.size());
+        assertEquals(5, questions.size());
     }
 
     @Test
