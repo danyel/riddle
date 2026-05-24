@@ -1,6 +1,6 @@
-# Participant Api (PART)
+# Participant Api (PAPI)
 
-## Endpoint /v1/participant
+## Endpoint /v1/participants
 
 | Url            |                         Action                         | Status |
 |:---------------|:------------------------------------------------------:|:------:|
@@ -11,7 +11,7 @@
 
 ## User Stories
 
-### US PART 1: [API] Create Participant 🟢
+### US PAPI 1: [API] Create Participant 🟢
 
 #### Context
 
@@ -56,7 +56,9 @@ CREATE TABLE participants
 
 This operation is used to create a participant which is filled in from a modal.
 
-### US PART 2: [UI] Create Participant Endpoint 🟢
+### US PAPI 2: [UI] Create Participant Endpoint 🟢
+
+![img.png](add_participant.png)
 
 #### Context
 
@@ -77,7 +79,7 @@ ParticipantDetail create(CreateParticipant createParticipant);
 
 This operation is used in the UI to create a participant.
 
-### US PART 3: [API] List Participants 🟢
+### US PAPI 3: [API] List Participants 🟢
 
 #### Context
 
@@ -92,7 +94,7 @@ As a system, there needs to be an Endpoint that will retrieve all participants.
 
 This operation is used in the UI to retrieve all participants.
 
-### US PART 4: [UI] List Participants Endpoint 🟢
+### US PAPI 4: [UI] List Participants Endpoint 🟢
 
 #### Context
 
@@ -113,7 +115,7 @@ List<ParticipantDetail> findAll();
 
 This operation is used in the UI to retrieve all participants.
 
-### US PART 5: [API] Generate Token 🟢
+### US PAPI 5: [API] Generate Token 🟢
 
 #### Context
 
@@ -128,7 +130,7 @@ As a system, there needs to be an Endpoint that generates a token for a particip
 
 This operation is used in the UI to generate a token for a participant.
 
-### US PART 6: [UI] List Participants Endpoint 🟢
+### US PAPI 6: [UI] List Participants Endpoint 🟢
 
 #### Context
 
@@ -149,22 +151,7 @@ List<ParticipantDetail> findAll();
 
 This operation is used in the UI to retrieve all participants.
 
-### US PART 7: [API] Generate Token 🟢
-
-#### Context
-
-As a system, there needs to be an Endpoint that generates a token for a participant.
-
-#### Vaadin Endpoint: ParticipantAdminEndpoint
-
-- AllowedRoles: ADMIN
-- ParticipantApi.generateToken(participantId)
-
-#### Usage
-
-This operation is used in the UI to generate a token for a participant.
-
-### US PART 8: [UI] Generate Token For Participant Endpoint 🟢
+### US PAPI 8: [UI] Generate Token For Participant Endpoint 🟢
 
 #### Context
 
@@ -185,7 +172,7 @@ void generateToken(UUID participantId);
 
 This operation is used in the UI to retrieve all participants.
 
-### US PART 9: [UI] Participants Page 🔴
+### US PAPI 9: [UI] Participants Page 🔴
 
 #### Context
 
@@ -205,7 +192,7 @@ There a buttons as well:
 
 ADMIN
 
-### US PART 10: [UI] Participant Page 🔴
+### US PAPI 10: [UI] Participant Page 🔴
 
 #### Context
 
@@ -223,7 +210,7 @@ There a buttons as well:
 ### Actions
 
 1. when delete participant button has been clicked, then the participant will be removed from the system and the page
-   will be redirected to the Participants Page (US PART 9).
+   will be redirected to the Participants Page (US PAPI 9).
 2. when the edit participant button has been clicked, then the page will transform in edit modus.
 3. when generate token button has been clicked, than the token will be generated in the backend.
 

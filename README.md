@@ -69,10 +69,10 @@ mvn clean install
 
 ## Data
 
-| Technology | Port |
-|:-----------|:----:|
-| postgres   | 5433 |
-| ui         | 8080 |
+| Technology | Port  |
+|:-----------|:-----:|
+| postgres   | 5433  |
+| ui (https) | 18080 |
 
 # Credentials
 
