@@ -93,7 +93,7 @@ public interface InvitationClient {
             }
     )
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @NonNull Invitation update(@PathVariable(name = "id") UUID invitationId, @RequestBody @NonNull UpdateInvitation updateInvitation);
 
     @Operation(
@@ -184,6 +184,6 @@ public interface InvitationClient {
             }
     )
     @GetMapping(path = "{id}/generate", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.CREATED)
     @NonNull Invitation generateToken(@PathVariable(name = "id") @NonNull UUID invitationId);
 }

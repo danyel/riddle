@@ -24,7 +24,7 @@ import java.util.UUID;
  * @version 1.0.0 10/05/2026
  */
 @BrowserCallable
-@RolesAllowed("ADMIN")
+@RolesAllowed({"USER", "ADMIN"})
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class InvitationEndpoint {
     private final InvitationClient invitationClient;
