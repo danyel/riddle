@@ -1,4 +1,4 @@
-import {Icon, SideNav, SideNavItem} from "@vaadin/react-components";
+import {SideNav, SideNavItem} from "@vaadin/react-components";
 import {useEffect, useMemo, useState} from "react";
 import {
     BookmarkEndpoint,
@@ -16,11 +16,17 @@ import {Button} from "@vaadin/react-components/Button.js";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import {useSettingsState} from "Frontend/views/secured/settings-context-provider";
 import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
-import {Logs, Notify, Objects, Strings, Urls} from "Frontend/util";
+import {LOGGER, Notify, Objects, Strings, Urls} from "Frontend/util";
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css';
 import Publication from "Frontend/generated/be/riddler/v1/publication/client/model/Publication";
 import {Navigate} from "Frontend/util/navigate";
+import {BookmarkCheck, BookmarkOff} from "lucide-react";
+import {Authorisation} from "Frontend/util/authorisation";
+
+export interface Bookmarkable extends Bookmark {
+    bookmarkable: boolean;
+}
 
 export function SideBar() {
     const [menus, setMenus] = useState<Menu[]>([]);
@@ -32,16 +38,15 @@ export function SideBar() {
     const {settings, setSettings} = useSettingsState();
     const location = useLocation();
     const params = useParams();
-    const logger = new Logs("SideBar");
 
     useEffect(() => {
-        logger.debug('useEffect: {} {}', params.id, location.pathname);
+        LOGGER.debug('useEffect: {} {}', params.id, location.pathname);
         MenuService.menu().then(setMenus);
         BookmarkEndpoint.bookmarkTypes().then(setBookmarkTypes);
     }, []);
 
     useEffect(() => {
-        logger.debug('useEffect [params.id, location.pathname]: {} {}', params.id, location.pathname);
+        LOGGER.debug('useEffect [params.id, location.pathname]: {} {}', params.id, location.pathname);
         if (isParticipant()) {
             searchParticipant();
         } else {
@@ -83,24 +88,25 @@ export function SideBar() {
     };
 
     const searchQuestion = () => {
-        logger.debug('Fetching question {}', params.id);
+        LOGGER.debug('Fetching question {}', params.id);
         QuestionEndpoint.get(params.id!!).then(setQuestion);
     };
     const searchPublication = () => {
-        logger.debug('Fetching publication {}', params.id);
+        LOGGER.debug('Fetching publication {}', params.id);
         PublicationsEndpoint.findPublicationById(params.id!!).then(setPublication);
     };
     const searchParticipant = () => {
-        logger.debug('Fetching participant {}', params.id);
+        LOGGER.debug('Fetching participant {}', params.id);
         ParticipantAdminEndpoint.findById(params.id!!).then(setParticipant);
     };
 
-    const addBookmark = (activeChildrenList: Bookmark[], bookmarkType: BookmarkType, label: string): Bookmark[] => {
+    const addBookmark = (activeChildrenList: Bookmarkable[], bookmarkType: BookmarkType, label: string): Bookmarkable[] => {
         if (params.id && Urls.isSamePath(location.pathname, Urls.makePath(bookmarkType, params.id))) {
-            let bookmark: Bookmark = {
+            let bookmark: Bookmarkable = {
                 bookmark_type: bookmarkType,
                 path: Urls.makePath(bookmarkType, params.id!!),
-                label: label
+                label: label,
+                bookmarkable: true
             };
             let foundBookmark = activeChildrenList.find(e => e.path === bookmark.path);
             if (foundBookmark) {
@@ -115,7 +121,15 @@ export function SideBar() {
         setAdministration('administration');
     }
 
-    const bookmarksJsonString = JSON.stringify(settings.bookmarks || []);
+    const bookmarksJsonString = JSON.stringify((settings.bookmarks || []).map(b => {
+        return {
+            id: b.id,
+            bookmark_type: b.bookmark_type,
+            path: b.path,
+            label: b.label,
+            bookmarkable: true
+        } as Bookmarkable;
+    }));
     const menusJsonString = JSON.stringify(menus);
     let label = "";
 
@@ -131,17 +145,24 @@ export function SideBar() {
 
     const mappedMenuData = useMemo(() => {
         const parsedMenus: Menu[] = JSON.parse(menusJsonString);
-        const parsedBookmarks: Bookmark[] = JSON.parse(bookmarksJsonString);
+        const parsedBookmarks: Bookmarkable[] = JSON.parse(bookmarksJsonString);
 
         return parsedMenus.map((menu) => {
             const menuPath = menu.path!!;
             const cleanMenuHash = menuPath.startsWith('/#') ? menuPath.substring(1) : menuPath;
             const routingPath = cleanMenuHash.replace(/^#/, '');
-            let activeChildrenList: Bookmark[] = parsedBookmarks.filter((b): b is Bookmark => {
+            let activeChildrenList: Bookmarkable[] = parsedBookmarks.filter((b): b is Bookmarkable => {
                 return Objects.isNotNullAndNotUndefined(b) && Objects.isEqual(b.bookmark_type, menu.bookmark_type);
             });
-
             activeChildrenList = addBookmark(activeChildrenList, menu.bookmark_type, label);
+            if (menu.bookmark_type === BookmarkType.ADMINISTRATIONS && Authorisation.hasRole([Authorisation.ADMIN])) {
+                activeChildrenList.push({
+                    path: "/administrations/categories",
+                    label: 'Categories',
+                    bookmark_type: BookmarkType.ADMINISTRATIONS,
+                    bookmarkable: false
+                })
+            }
             const isCurrent = (location.hash || '#/') === cleanMenuHash;
             const shouldBeExpanded = activeChildrenList.length > 0;
             return {
@@ -155,7 +176,7 @@ export function SideBar() {
         });
     }, [menusJsonString, bookmarksJsonString, params.id, location.pathname, location.hash, label]);
 
-    const createBookmark = (bookmark: Bookmark) => {
+    const createBookmark = (bookmark: Bookmarkable) => {
         BookmarkEndpoint.bookmark({
             path: bookmark.path,
             label: bookmark.label,
@@ -166,8 +187,8 @@ export function SideBar() {
         });
     };
 
-    const deleteBookmark = (bookmark: Bookmark) => {
-        logger.debug('Bookmark {}', bookmark.id);
+    const deleteBookmark = (bookmark: Bookmarkable) => {
+        LOGGER.debug('Bookmark {}', bookmark.id);
         BookmarkEndpoint.deleteBookmark(bookmark).then(() => {
             Notify.warn('Bookmark {} removed', bookmark.label)
             SettingsEndpoint.getSettings().then(setSettings);
@@ -175,7 +196,7 @@ export function SideBar() {
     };
 
     const isBookmarked = (path: string | undefined): boolean => {
-        const currentBookmarks: Bookmark[] = JSON.parse(bookmarksJsonString);
+        const currentBookmarks: Bookmarkable[] = JSON.parse(bookmarksJsonString);
         return currentBookmarks.some(b => {
             return Urls.isSamePath(b.path, path);
         });
@@ -261,21 +282,28 @@ export function SideBar() {
                                     >
                                         {childBookmark.label}
                                     </div>
-                                    <Button
-                                        theme="tertiary icon"
-                                        style={{
-                                            padding: 0,
-                                            minWidth: 'var(--lumo-size-s)',
-                                            height: 'var(--lumo-size-s)',
-                                            color: bookmarked ? 'var(--lumo-primary-text-color)' : 'var(--lumo-disabled-text-color)'
-                                        }}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            bookmarked ? deleteBookmark(childBookmark) : createBookmark(childBookmark);
-                                        }}
-                                    >
-                                        <Icon icon={`vaadin:${bookmarked ? 'star' : 'star-o'}`}/>
-                                    </Button>
+                                    {childBookmark.bookmarkable && (
+                                        <Button
+                                            theme="tertiary icon"
+                                            style={{
+                                                padding: 0,
+                                                minWidth: 'var(--lumo-size-s)',
+                                                height: 'var(--lumo-size-s)',
+                                                color: bookmarked ? 'var(--lumo-primary-text-color)' : 'var(--lumo-disabled-text-color)'
+                                            }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                bookmarked ? deleteBookmark(childBookmark) : createBookmark(childBookmark);
+                                            }}
+                                        >
+                                            {bookmarked ? (
+                                                    <BookmarkCheck size={16}/>
+                                                ) :
+                                                (
+                                                    <BookmarkOff size={16}/>
+                                                )}
+                                        </Button>
+                                    )}
                                 </div>
                             </SideNavItem>
                         );

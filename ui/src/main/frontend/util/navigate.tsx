@@ -1,7 +1,7 @@
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import {Urls} from "Frontend/util/urls";
 import {NavigateFunction} from "react-router";
-import {LOGGER} from "Frontend/util/logs";
+import {LOGGER} from "./defaultLog";
 
 export class Navigate {
     private static instance: NavigateFunction | null = null;

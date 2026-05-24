@@ -11,11 +11,14 @@ import {SettingsStateProvider, useSettingsState} from "Frontend/views/secured/se
 import {SettingsEndpoint} from "Frontend/generated/endpoints";
 import {SideBar} from "Frontend/components";
 import {Navigate} from "Frontend/util/navigate";
+import {Authorisation} from "Frontend/util/authorisation";
+import {useAuth} from "Frontend/auth";
 
 function MainLayoutContent() {
     const [isOpened, setIsOpened] = useState(true);
     const {setSettings} = useSettingsState();
     const navigate = useNavigate();
+    const auth = useAuth();
 
     useEffect(() => {
         SettingsEndpoint.getSettings()
@@ -25,6 +28,10 @@ function MainLayoutContent() {
     useEffect(() => {
         Navigate.initialize(navigate);
     }, [navigate]);
+
+    useEffect(() => {
+        Authorisation.initialize(auth);
+    }, [auth]);
 
     return (
         <AppLayout primarySection="navbar"
