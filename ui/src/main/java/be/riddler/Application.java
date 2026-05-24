@@ -6,6 +6,7 @@ import com.vaadin.flow.component.page.BodySize;
 import com.vaadin.flow.component.page.Meta;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.page.Viewport;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.shared.communication.PushMode;
 import com.vaadin.flow.shared.ui.Transport;
@@ -20,12 +21,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @version 1.0.0 11/04/2026
  */
 @StyleSheet(Lumo.STYLESHEET)
-@Meta(name = "Author", content = "Donald Duck")
-@PWA(name = "My Fun Application", shortName = "fun-app")
+@Meta(name = "Author", content = "Daniel Noulet")
+@PWA(name = "Riddler Application", shortName = "what?")
 //@Inline("my-custom-javascript.js")
 @Viewport("width=device-width, initial-scale=1")
 @BodySize(height = "100vh", width = "100vw")
-//@PageTitle("my-title")
+@PageTitle("Riddler")
 @Push(value = PushMode.AUTOMATIC, transport = Transport.WEBSOCKET_XHR)
 @SpringBootApplication
 public class Application implements AppShellConfigurator {

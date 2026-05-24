@@ -89,7 +89,7 @@ export const routes = protectRoutes([
                 handle: {rolesAllowed: ['ROLE_ADMIN']} // Client-side check
             },
             {
-                path: '/participants/:participant_id/invitations/:invitation_id',
+                path: '/invitations/:invitation_id',
                 element: <InvitationPage/>,
                 handle: {rolesAllowed: ['ROLE_USER', 'ROLE_ADMIN']} // Client-side check
             },

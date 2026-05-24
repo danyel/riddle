@@ -15,8 +15,10 @@ import FormItem from "Frontend/components/ui/form/form-item.component";
 import RiddlerModal from "Frontend/components/ui/modal/modal";
 import ParticipantProfileDetail from "Frontend/components/participant/participant";
 import PublicationDetail from "Frontend/components/publication/publication";
-import {Ban, Newspaper, Save, Trash2} from "lucide-react";
+import {Ban, Glasses, Newspaper, Save, Trash2} from "lucide-react";
 import RiddlerTable from "Frontend/components/table/table";
+import {Navigate} from "Frontend/util/navigate";
+import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 
 export type ModalType = 'PUBLICATION' | 'INVITATION' | 'CV' | 'PHOTO' | 'TODO' | 'NONE';
 
@@ -314,9 +316,14 @@ export function AdminParticipant() {
                                   return (
                                       <>
                                           <Button theme={ElementStylingTypes.TERTIARY_ICON}
-                                                  onClick={() => openModal(item.publication.id, 'PUBLICATION')}><Newspaper/></Button>
+                                                  onClick={() => openModal(item.publication.id, 'PUBLICATION')}><Newspaper
+                                              size={24}/></Button>
+                                          <Button theme={ElementStylingTypes.TERTIARY_ICON}
+                                                  onClick={() => Navigate.to(BookmarkType.INVITATIONS, item.id)}><Glasses
+                                              size={24}/></Button>
                                           <Button theme={ElementStylingTypes.TERTIARY_ICON_RED}
-                                                  onClick={() => openModal(item.publication.id, 'TODO')}><Trash2/></Button>
+                                                  onClick={() => openModal(item.publication.id, 'TODO')}><Trash2
+                                              size={24}/></Button>
                                       </>
                                   );
                               }}

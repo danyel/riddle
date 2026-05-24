@@ -1,5 +1,5 @@
 import {type ComponentType, ReactElement, useEffect, useMemo, useState} from "react";
-import {Button, Grid, GridColumn, HorizontalLayout, VerticalLayout} from "@vaadin/react-components";
+import {Button, Grid, GridColumn, HorizontalLayout} from "@vaadin/react-components";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
 import type {GridBodyReactRendererProps} from "@vaadin/react-components/renderers/grid.d.ts";
@@ -46,7 +46,7 @@ export default function RiddlerTable(
     }, [elements.length, totalPages, currentPage]);
 
     return (
-        <VerticalLayout style={{width: '100%', gap: '1em'}}>
+        <>
             <HorizontalLayout className={styles.full_width_layout}>
                 {elements.length > 0 ? (
                     <Grid items={paginatedElements} allRowsVisible={true}>
@@ -57,7 +57,7 @@ export default function RiddlerTable(
                                             renderer={columnName.renderer}/>
                             ))
                         }
-                        {actionButtons && (<GridColumn header={'Actions'} width="150px"
+                        {actionButtons && (<GridColumn header={'Actions'} width="200px"
                                                        flexGrow={0} renderer={actionButtons}/>)}
                     </Grid>
                 ) : (
@@ -67,7 +67,7 @@ export default function RiddlerTable(
 
             {
                 totalPages > 1 && (
-                    <HorizontalLayout style={{justifyContent: 'center', alignItems: 'center', width: '100%', gap: '1em'}}>
+                    <HorizontalLayout className={styles.full_width_layout}>
                         <Button
                             disabled={currentPage === 0}
                             onClick={() => setCurrentPage(p => p - 1)}
@@ -86,7 +86,6 @@ export default function RiddlerTable(
                     </HorizontalLayout>
                 )
             }
-        </VerticalLayout>
-    )
-        ;
+        </>
+    );
 }

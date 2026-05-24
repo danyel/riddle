@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * UpdateCategoryFeatureImpl
@@ -38,6 +40,14 @@ class UpdateCategoryFeatureImpl implements UpdateCategoryFeature {
             if (!Objects.equals(category.getName(), updateCategory.name())) {
                 category.setName(updateCategory.name());
             }
+
+            var collect = updateCategory.keywords().stream().filter(e -> Objects.nonNull(e.id())).collect(Collectors.toMap(UpdateKeyword::id, new Function<UpdateKeyword, UpdateKeyword>() {
+                @Override
+                public @NonNull UpdateKeyword apply(@NonNull UpdateKeyword updateCategoryFeature) {
+                    return updateCategoryFeature;
+                }
+            }));
+            category.getKeywords().removeAll(category.getKeywords().stream().filter(s -> !collect.containsKey(s.getId())).toList());
             updateCategory.keywords()
                     .forEach(updateKeyword -> {
                         if (updateKeyword.id() != null) {
@@ -51,6 +61,7 @@ class UpdateCategoryFeatureImpl implements UpdateCategoryFeature {
                             category.getKeywords().add(toSave);
                         }
                     });
+            categoryRepository.save(category);
             return CategoryMapper.fromCategoryEntity(category);
         }
 

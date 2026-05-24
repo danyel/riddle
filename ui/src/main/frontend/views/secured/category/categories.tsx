@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react";
-import {Button, HorizontalLayout, TextField, VerticalLayout} from "@vaadin/react-components";
-import {Notify} from "Frontend/util";
+import React, {useEffect, useState} from "react";
+import {Button, Dialog, HorizontalLayout, TextField} from "@vaadin/react-components";
+import {LOGGER, Notify} from "Frontend/util";
 import {CategoryEndpoint} from "Frontend/generated/endpoints";
 import Category from "Frontend/generated/be/riddler/v1/category/client/model/Category";
 import CreateCategory from "Frontend/generated/be/riddler/v1/category/client/model/CreateCategory";
@@ -8,17 +8,23 @@ import {useAuth} from "Frontend/auth";
 import UpdateCategory from "Frontend/generated/be/riddler/v1/category/client/model/UpdateCategory";
 import RiddlerTable from "Frontend/components/table/table";
 import {CancelButton, PlusButton} from "Frontend/components";
-import {Pen, Save, Trash2} from "lucide-react";
+import {Ban, Pen, Save, Trash2} from "lucide-react";
 import {ElementStylingTypes} from "Frontend/constant";
 import RiddlerModal from "Frontend/components/ui/modal/modal";
+// @ts-ignore
+import styles from 'Frontend/themes/riddler/common.module.css';
 
 export default function CategoryManagementPage() {
     const {state} = useAuth();
     const [categories, setCategories] = useState<Category[]>([]);
+    const [modalType, setModalType] = useState<ModalType>('NONE');
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
     const [categoryName, setCategoryName] = useState("");
     const [rawKeywords, setRawKeywords] = useState("");
+    const [itemId, setItemId] = useState<string>('');
+
+    type ModalType = 'DELETE' | 'EDIT' | 'NONE';
     const loadData = () => {
         if (state.user) {
             CategoryEndpoint.findAll().then(setCategories);
@@ -27,6 +33,7 @@ export default function CategoryManagementPage() {
 
     useEffect(() => {
         loadData();
+        setModalType("NONE");
     }, []);
 
     const openEditor = (category: Category | null) => {
@@ -39,10 +46,10 @@ export default function CategoryManagementPage() {
             setCategoryName("");
             setRawKeywords("");
         }
-        setDialogOpen(true);
+        openModal('EDIT');
     };
 
-    const handleSave = async () => {
+    const handleSave = () => {
         if (!categoryName.trim()) {
             Notify.error("Category name cannot be left blank.");
             return;
@@ -61,42 +68,34 @@ export default function CategoryManagementPage() {
                 name: categoryName,
                 keywords: keywordList
             };
-
-            try {
-                await CategoryEndpoint.update(selectedCategory.id, updateCategory);
-                Notify.success("Scanning rule configuration stored successfully!");
-                setDialogOpen(false);
-                loadData();
-            } catch (error) {
-                Notify.error("Failed to write rules data changes to backend endpoints.");
-            }
+            LOGGER.debug("Updating Category");
+            CategoryEndpoint.update(selectedCategory.id, updateCategory)
+                .then(() => {
+                    Notify.success("Scanning rule configuration stored successfully!");
+                    closeModal();
+                    loadData();
+                })
+                .catch(() => Notify.error("Failed to write rules data changes to backend endpoints."));
         } else {
+            LOGGER.debug("Creating Category");
             const categoryPayload: CreateCategory = {
                 name: categoryName,
                 keywords: keywordList
             };
 
-            try {
-                await CategoryEndpoint.create(categoryPayload);
-                Notify.success("Scanning rule configuration stored successfully!");
-                setDialogOpen(false);
-                loadData();
-            } catch (error) {
-                Notify.error("Failed to write rules data changes to backend endpoints.");
-            }
+            CategoryEndpoint.create(categoryPayload)
+                .then(() => {
+                    Notify.success("Scanning rule configuration stored successfully!");
+                    closeModal();
+                    loadData();
+                })
+                .catch(() => Notify.error("Failed to write rules data changes to backend endpoints."));
         }
     };
 
-    const handleDelete = async (id: string) => {
-        if (confirm("Are you sure you want to permanently delete this classification rule package? This removes it from all existing participants.")) {
-            try {
-                await CategoryEndpoint.delete(id);
-                Notify.success("Classification rules scrubbed successfully.");
-                loadData();
-            } catch (error) {
-                Notify.error("Failed to delete category rule dependency.");
-            }
-        }
+    const handleDelete = (id: string) => {
+        setItemId(id);
+        openModal("DELETE");
     };
 
     const actionRenderer = ({item}: { item: Category }) => (
@@ -126,9 +125,23 @@ export default function CategoryManagementPage() {
         </HorizontalLayout>
     );
 
+    const closeModal = () => {
+        setModalType('NONE');
+        setDialogOpen(false);
+    }
+
+    const openModal = (modalType: ModalType) => {
+        setModalType(modalType);
+        setDialogOpen(true);
+    }
+
+    function isOpen(mt: ModalType): boolean {
+        return dialogOpen && modalType === mt;
+    }
+
     return (
-        <VerticalLayout theme="padding spacing" style={{width: '100%', alignItems: 'stretch'}}>
-            <HorizontalLayout style={{justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
+        <>
+            <HorizontalLayout className={styles.full_width_layout}>
                 <div>
                     <h1 style={{margin: 0, fontSize: 'var(--lumo-font-size-xxl)'}}>CV Category Rules Management</h1>
                     <div style={{color: 'var(--lumo-secondary-text-color)', fontSize: 'var(--lumo-font-size-s)'}}>
@@ -139,6 +152,36 @@ export default function CategoryManagementPage() {
                 <PlusButton onClick={() => openEditor(null)}/>
             </HorizontalLayout>
 
+            <Dialog
+                headerTitle={`Remove category?`}
+                opened={isOpen('DELETE')}
+                onClosed={close}
+                footer={
+                    <>
+                        <Button
+                            theme={ElementStylingTypes.TERTIARY_ICON_RED}
+                            style={{marginRight: 'auto'}}
+                            onClick={() => {
+                                CategoryEndpoint.delete(itemId)
+                                    .then(() => {
+                                        Notify.success("Classification rules scrubbed successfully.");
+                                        loadData();
+                                        closeModal();
+                                    })
+                                    .catch(() => Notify.error("Failed to delete category rule dependency."));
+                            }}
+                        >
+                            <Trash2 size={24}/>
+                        </Button>
+                        <Button theme={ElementStylingTypes.TERTIARY_ICON} onClick={closeModal}>
+                            <Ban size={24}/>
+                        </Button>
+                    </>
+                }
+            >
+                Are you sure you want to permanently delete this classification rule package? This removes it from all
+                existing participants.
+            </Dialog>
             <RiddlerTable
                 elements={categories}
                 columnNames={
@@ -163,7 +206,7 @@ export default function CategoryManagementPage() {
                 helperMessage={"Click \"+\" to configure your first parsing track."}/>
             <RiddlerModal
                 headerTitle={selectedCategory ? "Edit Skill Classification Rules" : "Create New Skill Classification Rule"}
-                opened={dialogOpen}
+                opened={isOpen('EDIT')}
                 onClosed={() => setDialogOpen(false)}
                 footer={
                     <HorizontalLayout theme="spacing" style={{width: '100%', justifyContent: 'flex-end'}}>
@@ -174,7 +217,7 @@ export default function CategoryManagementPage() {
                     </HorizontalLayout>
                 }
                 content={
-                    <VerticalLayout theme="spacing" style={{width: '420px', alignItems: 'stretch'}}>
+                    <>
                         <TextField
                             label="Profile Category Name"
                             placeholder="e.g., Python AI Developer"
@@ -198,9 +241,9 @@ export default function CategoryManagementPage() {
                             parses
                             matching words case-insensitively against the list above.
                         </div>
-                    </VerticalLayout>
+                    </>
                 }
             />
-        </VerticalLayout>
+        </>
     );
 }
