@@ -2,7 +2,7 @@ import {Button, ButtonProps} from "@vaadin/react-components/Button.js";
 import {ReactNode} from "react";
 import {CloseIcon, KeyIcon, NewsPaperIcon} from "Frontend/components/ui/icons";
 import {ElementStylingTypes} from "Frontend/constant";
-import {ArrowLeft, Ban, Glasses, Plus, RefreshCw, Save} from "lucide-react";
+import {ArrowLeft, Ban, Glasses, Plus, RefreshCw, Save, Trash2} from "lucide-react";
 
 export function CheckButton(props: ButtonDecorationProps) {
     return (
@@ -60,10 +60,10 @@ export function PlusButton(props: ButtonDecorationProps) {
     );
 }
 
-export function CancelButton(props: ButtonDecorationProps, theme: string = ElementStylingTypes.TERTIARY_INLINE) {
+export function CancelButton(props: ButtonDecorationProps, theme: string = ElementStylingTypes.TERTIARY_ICON) {
     return (
         <BaseButton
-            icon={CloseIcon()}
+            icon={<Ban size={24}/>}
             onClick={props.onClick}
             theme={props.theme}
             disabled={props.disabled}
@@ -129,9 +129,9 @@ export function RefreshButton(props: ButtonDecorationProps) {
 export function DeleteButton(props: ButtonDecorationProps) {
     return (
         <BaseButton
-            icon={CloseIcon()}
+            icon={<Trash2 size={24}/>}
             onClick={props.onClick}
-            theme={ElementStylingTypes.TERTIARY_INLINE}
+            theme={ElementStylingTypes.TERTIARY_ICON_RED}
             disabled={props.disabled}
         />
     );

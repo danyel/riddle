@@ -8,7 +8,7 @@ import '@vaadin/icons';
 import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
 import CreateQuestion from "Frontend/generated/be/riddler/v1/question/client/model/CreateQuestion";
 import {QuestionEndpoint} from "Frontend/generated/endpoints";
-import {CheckButton, CloseButton, PlusButton, ViewDetailButton} from "Frontend/components/ui/button";
+import {CloseButton, PlusButton, SaveButton, ViewDetailButton} from "Frontend/components/ui/button";
 import QuestionType from "Frontend/generated/be/riddler/v1/question/client/model/QuestionType";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import FormItem from "Frontend/components/ui/form/form-item.component";
@@ -92,7 +92,7 @@ export default function QuestionsView() {
                 onClosed={closeIfNotValue}
                 footer={
                     <>
-                        <CheckButton onClick={saveQuestion}/>
+                        <SaveButton onClick={saveQuestion}/>
                         <CloseButton onClick={() => setOpen(false)}/>
                     </>
                 }

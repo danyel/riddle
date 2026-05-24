@@ -285,6 +285,7 @@ export function AdminParticipant() {
                                       {
                                           path: 'publication.title',
                                           flexGrow: 1,
+                                          width: '200px',
                                           renderer: ({item}) => (
                                               <div style={{
                                                   fontWeight: 500,

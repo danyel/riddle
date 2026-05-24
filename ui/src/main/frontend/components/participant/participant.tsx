@@ -7,6 +7,8 @@ import Participant from "Frontend/generated/be/riddler/v1/participant/client/mod
 import {useParams} from "react-router";
 import {ModalType} from "Frontend/views/secured/participants/participant";
 import Category from "Frontend/generated/be/riddler/v1/category/client/model/Category";
+import {ElementStylingTypes} from "Frontend/constant";
+import {File} from "lucide-react";
 
 export default function ParticipantProfileDetail(
     {
@@ -151,13 +153,13 @@ export default function ParticipantProfileDetail(
                                 <HorizontalLayout theme="spacing-s" style={{alignItems: 'center'}}>
                                     <Button
                                         key={`view_cv_button_${params.id}`}
-                                        theme="primary"
+                                        theme={ElementStylingTypes.TERTIARY_ICON}
                                         disabled={!participant?.cv}
                                         onClick={() => {
                                             openModal(participant.id, 'CV');
                                         }}
                                     >
-                                        View CV Document
+                                        <File size={24}/>
                                     </Button>
                                     <span style={{
                                         fontSize: 'var(--lumo-font-size-xs)',

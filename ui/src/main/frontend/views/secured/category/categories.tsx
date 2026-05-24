@@ -1,12 +1,16 @@
 import {useEffect, useState} from "react";
-import {Button, Dialog, Grid, GridColumn, HorizontalLayout, TextField, VerticalLayout} from "@vaadin/react-components";
+import {Button, HorizontalLayout, TextField, VerticalLayout} from "@vaadin/react-components";
 import {Notify} from "Frontend/util";
 import {CategoryEndpoint} from "Frontend/generated/endpoints";
 import Category from "Frontend/generated/be/riddler/v1/category/client/model/Category";
 import CreateCategory from "Frontend/generated/be/riddler/v1/category/client/model/CreateCategory";
 import {useAuth} from "Frontend/auth";
 import UpdateCategory from "Frontend/generated/be/riddler/v1/category/client/model/UpdateCategory";
-import Empty from "Frontend/components/ui/empty/empty";
+import RiddlerTable from "Frontend/components/table/table";
+import {CancelButton, PlusButton} from "Frontend/components";
+import {Pen, Save, Trash2} from "lucide-react";
+import {ElementStylingTypes} from "Frontend/constant";
+import RiddlerModal from "Frontend/components/ui/modal/modal";
 
 export default function CategoryManagementPage() {
     const {state} = useAuth();
@@ -97,8 +101,9 @@ export default function CategoryManagementPage() {
 
     const actionRenderer = ({item}: { item: Category }) => (
         <HorizontalLayout theme="spacing-s">
-            <Button theme="small secondary" onClick={() => openEditor(item)}>Edit</Button>
-            <Button theme="small error primary" onClick={() => handleDelete(item.id!!)}>Delete</Button>
+            <Button theme={ElementStylingTypes.TERTIARY_ICON} onClick={() => openEditor(item)}><Pen size={24}/></Button>
+            <Button theme={ElementStylingTypes.TERTIARY_ICON_RED} onClick={() => handleDelete(item.id!!)}><Trash2
+                size={24}/></Button>
         </HorizontalLayout>
     );
 
@@ -131,57 +136,71 @@ export default function CategoryManagementPage() {
                         dynamically.
                     </div>
                 </div>
-                <Button theme="primary" onClick={() => openEditor(null)}>Add New Rule</Button>
+                <PlusButton onClick={() => openEditor(null)}/>
             </HorizontalLayout>
 
-            {categories.length > 0 ? (
-                <Grid items={categories} allRowsVisible={true}>
-                    <GridColumn path="name" header="Category Skill Track Name" width="220px" flexGrow={0}/>
-                    <GridColumn header="Target Scanning Keywords (Matches 2 or more to activate)"
-                                renderer={keywordsBadgeRenderer}/>
-                    <GridColumn header="Actions" renderer={actionRenderer} width="160px" flexGrow={0}/>
-                </Grid>
-            ) : (
-                <Empty emptyMessage={"No category rules found"}
-                       helperMessage={"Click \"Add New Rule\" to configure your first parsing track."}/>
-            )}
-
-            <Dialog
+            <RiddlerTable
+                elements={categories}
+                columnNames={
+                    [
+                        {
+                            path: 'name',
+                            header: 'Category Skill Track Name',
+                            width: "20%",
+                            flexGrow: 0
+                        },
+                        {
+                            path: 'keywords',
+                            width: '60%',
+                            flexGrow: 1,
+                            header: 'Target Scanning Keywords (Matches 2 or more to activate)',
+                            renderer: keywordsBadgeRenderer
+                        }
+                    ]
+                }
+                actionButtons={actionRenderer}
+                emptyMessage={"No category rules found"}
+                helperMessage={"Click \"+\" to configure your first parsing track."}/>
+            <RiddlerModal
                 headerTitle={selectedCategory ? "Edit Skill Classification Rules" : "Create New Skill Classification Rule"}
                 opened={dialogOpen}
                 onClosed={() => setDialogOpen(false)}
                 footer={
                     <HorizontalLayout theme="spacing" style={{width: '100%', justifyContent: 'flex-end'}}>
-                        <Button theme="primary" onClick={handleSave}>Save Rule Configuration</Button>
-                        <Button theme="tertiary" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                        <Button theme={ElementStylingTypes.TERTIARY_ICON} onClick={handleSave}><Save
+                            size={24}/></Button>
+                        <CancelButton theme={ElementStylingTypes.TERTIARY_ICON}
+                                      onClick={() => setDialogOpen(false)}></CancelButton>
                     </HorizontalLayout>
                 }
-            >
-                <VerticalLayout theme="spacing" style={{width: '420px', alignItems: 'stretch'}}>
-                    <TextField
-                        label="Profile Category Name"
-                        placeholder="e.g., Python AI Developer"
-                        value={categoryName}
-                        onChange={(e) => setCategoryName(e.target.value)}
-                        style={{width: '100%'}}
-                    />
-                    <TextField
-                        label="Associated Tracking Keywords"
-                        placeholder="Separate tags with commas (e.g., python, pytorch, pandas)"
-                        value={rawKeywords}
-                        onChange={(e) => setRawKeywords(e.target.value)}
-                        style={{width: '100%'}}
-                    />
-                    <div style={{
-                        fontSize: 'var(--lumo-font-size-xs)',
-                        color: 'var(--lumo-secondary-text-color)',
-                        lineHeight: 'var(--lumo-line-height-s)'
-                    }}>
-                        * Note: When any participant uploads their CV document, the internal indexing framework parses
-                        matching words case-insensitively against the list above.
-                    </div>
-                </VerticalLayout>
-            </Dialog>
+                content={
+                    <VerticalLayout theme="spacing" style={{width: '420px', alignItems: 'stretch'}}>
+                        <TextField
+                            label="Profile Category Name"
+                            placeholder="e.g., Python AI Developer"
+                            value={categoryName}
+                            onChange={(e) => setCategoryName(e.target.value)}
+                            style={{width: '100%'}}
+                        />
+                        <TextField
+                            label="Associated Tracking Keywords"
+                            placeholder="Separate tags with commas (e.g., python, pytorch, pandas)"
+                            value={rawKeywords}
+                            onChange={(e) => setRawKeywords(e.target.value)}
+                            style={{width: '100%'}}
+                        />
+                        <div style={{
+                            fontSize: 'var(--lumo-font-size-xs)',
+                            color: 'var(--lumo-secondary-text-color)',
+                            lineHeight: 'var(--lumo-line-height-s)'
+                        }}>
+                            * Note: When any participant uploads their CV document, the internal indexing framework
+                            parses
+                            matching words case-insensitively against the list above.
+                        </div>
+                    </VerticalLayout>
+                }
+            />
         </VerticalLayout>
     );
 }

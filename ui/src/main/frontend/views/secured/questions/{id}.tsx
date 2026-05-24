@@ -23,6 +23,7 @@ import {Notify, Objects} from "Frontend/util";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import {useParams} from 'react-router-dom';
 import {Navigate} from "Frontend/util/navigate";
+import {Ban, Trash2} from "lucide-react";
 
 export default function QuestionDetailPage() {
     const {id} = useParams<{ id: string }>();
@@ -112,20 +113,20 @@ export default function QuestionDetailPage() {
             </HorizontalLayout>
 
             <Dialog
-                headerTitle={`Delete question "${question.title}"?`} // Fixed: Fixed title context from 'user' to 'question'
+                headerTitle={`Delete question "${question.title}"?`}
                 opened={isDialogOpen}
                 onClosed={close}
                 footer={
                     <>
                         <Button
-                            theme={ElementStylingTypes.PRIMARY_ERROR}
+                            theme={ElementStylingTypes.TERTIARY_ICON_RED}
                             onClick={deleteQuestion}
                             style={{marginRight: 'auto'}}
                         >
-                            Delete
+                            <Trash2 size={24}/>
                         </Button>
-                        <Button theme="tertiary" onClick={close}>
-                            Cancel
+                        <Button theme={ElementStylingTypes.TERTIARY_ICON} onClick={close}>
+                            <Ban size={24}/>
                         </Button>
                     </>
                 }
@@ -171,7 +172,6 @@ export default function QuestionDetailPage() {
                 </FormLayout>
 
                 <HorizontalLayout className={styles.full_width_layout}>
-                    {/* Fixed: Conditional check mapping ensures sync with edited form layout change updates */}
                     {updateQuestion.type !== "REVIEW" && <AnswersTable questionId={question.id!!}/>}
                 </HorizontalLayout>
             </VerticalLayout>

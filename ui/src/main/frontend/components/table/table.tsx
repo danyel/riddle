@@ -57,7 +57,7 @@ export default function RiddlerTable(
                                             renderer={columnName.renderer}/>
                             ))
                         }
-                        {actionButtons && (<GridColumn header={'Actions'} width="240px"
+                        {actionButtons && (<GridColumn header={'Actions'} width="150px"
                                                        flexGrow={0} renderer={actionButtons}/>)}
                     </Grid>
                 ) : (

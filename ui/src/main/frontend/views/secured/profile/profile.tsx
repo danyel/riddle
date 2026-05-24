@@ -1,5 +1,5 @@
 import {useSettingsState} from "../settings-context-provider";
-import {Dialog, Grid, GridColumn, HorizontalLayout, VerticalLayout} from "@vaadin/react-components";
+import {Dialog, HorizontalLayout, VerticalLayout} from "@vaadin/react-components";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
 import {CloseButton, DeleteButton, ViewDetailButton} from "Frontend/components";
@@ -9,33 +9,13 @@ import {Button} from "@vaadin/react-components/Button";
 import {ElementStylingTypes} from "Frontend/constant";
 import {ReactNode, useState} from "react";
 import {useSignal} from "@vaadin/hilla-react-signals";
-import {Collections, Logs} from "Frontend/util";
+import {Collections, LOGGER} from "Frontend/util";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import Participant from "Frontend/generated/be/riddler/v1/participant/client/model/Participant";
 import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
-
-
-interface DisplayModalProperties {
-    children: ReactNode;
-    onClose: () => void;
-    isOpen: boolean;
-    title: string;
-}
-
-function DisplayModal(props: DisplayModalProperties) {
-    return (
-        <Dialog
-            headerTitle={props.title}
-            opened={props.isOpen}
-            onClosed={() => props.onClose()}
-            footer={<CloseButton onClick={props.onClose}/>}
-        >
-            <div style={{minWidth: '800px', maxWidth: '1000px', minHeight: '900px', maxHeight: '1200px'}}>
-                {props.children}
-            </div>
-        </Dialog>
-    );
-}
+import RiddlerTable from "Frontend/components/table/table";
+import {Ban, Trash2} from "lucide-react";
+import RiddlerModal from "Frontend/components/ui/modal/modal";
 
 export default function ProfilePage() {
     const {settings, setSettings} = useSettingsState();
@@ -44,20 +24,19 @@ export default function ProfilePage() {
     const displayModelOpened = useSignal(false);
     const title = useSignal('');
     const child = useSignal<ReactNode>(null);
-    const logger = new Logs("ProfilePage");
-    const bookmarksActions = ({model}: { model: { item: Bookmark } }) => {
+    const bookmarksActions = ({item}: { item: Bookmark }) => {
         return (
             <>
                 <DeleteButton
                     onClick={() => {
-                        setBookmark(model.item);
+                        setBookmark(item);
                         dialogOpened.value = true;
                     }}
                 />
                 <ViewDetailButton onClick={() => {
-                    const id = model.item.path.replace(`/${model.item.bookmark_type.toLocaleLowerCase()}/`, '');
-                    logger.debug('Detail button clicked: [{}], {}', model.item, id);
-                    if (model.item.bookmark_type === BookmarkType.PARTICIPANTS) {
+                    const id = item.path.replace(`/${item.bookmark_type.toLocaleLowerCase()}/`, '');
+                    LOGGER.debug('Detail button clicked: [{}], {}', item, id);
+                    if (item.bookmark_type === BookmarkType.PARTICIPANTS) {
                         ParticipantAdminEndpoint.findById(id)
                             .then((participant: Participant) => {
                                 child.value = (
@@ -98,7 +77,7 @@ export default function ProfilePage() {
                                 );
                                 displayModelOpened.value = true;
                             });
-                    } else if (model.item.bookmark_type === BookmarkType.QUESTIONS) {
+                    } else if (item.bookmark_type === BookmarkType.QUESTIONS) {
                         QuestionEndpoint.get(id)
                             .then((question: Question) => {
                                 child.value = (
@@ -198,14 +177,14 @@ export default function ProfilePage() {
                 }}
                 footer={
                     <>
-                        <Button theme={ElementStylingTypes.PRIMARY_ERROR} onClick={removeBookmark}
+                        <Button theme={ElementStylingTypes.TERTIARY_ICON_RED} onClick={removeBookmark}
                                 style={{marginRight: 'auto'}}>
-                            Delete
+                            <Trash2 size={24}/>
                         </Button>
-                        <Button theme="tertiary" onClick={() => {
+                        <Button theme={ElementStylingTypes.TERTIARY_ICON} onClick={() => {
                             dialogOpened.value = false;
                         }}>
-                            Cancel
+                            <Ban size={24}/>
                         </Button>
                     </>
                 }
@@ -216,20 +195,42 @@ export default function ProfilePage() {
                 </div>
             </Dialog>
 
-            <DisplayModal
-                onClose={() => displayModelOpened.value = false}
-                isOpen={displayModelOpened.value}
-                title={title.value}
-            >
-                {child.value}
-            </DisplayModal>
 
-            <Grid items={settings.bookmarks} className={styles.riddler_table} allRowsVisible={true}>
-                <GridColumn path="bookmark_type" header="Bookmark Type"/>
-                <GridColumn path="path" header="Path"/>
-                <GridColumn path="label" header="Label"/>
-                <GridColumn header="Action" renderer={bookmarksActions}/>
-            </Grid>
+            <RiddlerModal
+                headerTitle={title.value}
+                opened={displayModelOpened.value}
+                onClosed={() => displayModelOpened.value = false}
+                footer={<CloseButton onClick={() => displayModelOpened.value = false}/>}
+                content={child.value}
+            />
+            <RiddlerTable
+                elements={settings.bookmarks}
+                columnNames={
+                    [
+                        {
+                            path: 'bookmark_type',
+                            header: 'Bookmark Type',
+                            width: '150px',
+                            flexGrow: 0,
+                        },
+                        {
+                            path: 'path',
+                            header: 'Path',
+                            width: '240px',
+                            flexGrow: 1,
+                        },
+                        {
+                            path: 'label',
+                            header: 'Label',
+                            width: '240px',
+                            flexGrow: 1,
+                        },
+                    ]
+                }
+                emptyMessage={"No bookmarks found"}
+                helperMessage={"Click \"star\" to bookmark a page."}
+                actionButtons={bookmarksActions}
+            />
         </VerticalLayout>
     );
 }

@@ -1,5 +1,5 @@
 import Participant from "Frontend/generated/be/riddler/v1/participant/client/model/Participant";
-import {Button, FormLayout, Grid, GridColumn, HorizontalLayout, TextField} from "@vaadin/react-components";
+import {Button, FormLayout, HorizontalLayout, TextField} from "@vaadin/react-components";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
 import {useEffect, useState} from "react";
@@ -12,12 +12,37 @@ import {Notify, Strings} from "Frontend/util";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import RiddlerModal from "Frontend/components/ui/modal/modal";
 import FormItem from "Frontend/components/ui/form/form-item.component";
-import Empty from "Frontend/components/ui/empty/empty";
 import {Navigate} from "Frontend/util/navigate";
+import RiddlerTable from "Frontend/components/table/table";
+import {ElementStylingTypes} from "Frontend/constant";
+import {Plus} from "lucide-react";
 
 function ParticipantTable() {
     const [open, setOpen] = useState(false);
     const [participants, setParticipants] = useState<Participant[]>([]);
+    const createParticipant = useSignal<CreateParticipant>({});
+
+    useEffect(() => {
+        if (open) {
+            // Clear input value when the modal opens
+            createParticipant.value.email_address = '';
+            createParticipant.value.first_name = '';
+            createParticipant.value.last_name = '';
+        }
+    }, [open]);
+
+    function saveParticipant() {
+        const payload: CreateParticipant = {
+            email_address: createParticipant.value.email_address,
+            first_name: createParticipant.value.first_name,
+            last_name: createParticipant.value.last_name,
+        }
+        ParticipantAdminEndpoint.create(payload)
+            .then(() => {
+                fetchParticipants();
+                setOpen(false);
+            });
+    }
 
     function fetchParticipants() {
         ParticipantAdminEndpoint.findAll()
@@ -55,114 +80,99 @@ function ParticipantTable() {
         <>
             <HorizontalLayout className={styles.full_width_layout}>
                 <div className={styles.menu_bar_layout}>
-                    <Button theme="primary" onClick={() => setOpen(true)}>Add New Participant</Button>
+                    <Button theme={ElementStylingTypes.TERTIARY_ICON} onClick={() => setOpen(true)}><Plus
+                        size={24}/></Button>
                 </div>
             </HorizontalLayout>
-            <CreateParticipantDialogModal show={open}
-                                          onParticipantCreated={fetchParticipants}
-                                          onClose={() => setOpen(false)}/>
-            {participants.length > 0 ? (
-                <HorizontalLayout className={styles.full_width_layout}>
-                    <Grid key={"id"} items={participants} className={styles.riddler_table} allRowsVisible={true}>
-                        <GridColumn key={"first_name"} header={'First Name'} path={"first_name"}/>
-                        <GridColumn key={"last_name"} header={'Last Name'} path={"last_name"}/>
-                        <GridColumn key={"email_address"} header={'Email'} path={"email_address"}/>
-                        <GridColumn key={"stored_token"} header={'Token'} renderer={tokenIndicator}/>
-                        <GridColumn header={'Actions'} renderer={actionButtons}/>
-                    </Grid>
-                </HorizontalLayout>
-            ) : (
-                <Empty emptyMessage={"No participant found"}
-                       helperMessage={"Click \"Add New Participant\" to add a new participant."}/>
-            )}
+            <RiddlerModal
+                headerTitle="Add participant"
+                opened={open}
+                onClosed={() => {
+                    setOpen(false);
+                }}
+                footer={
+                    <>
+                        <CheckButton onClick={saveParticipant}/>
+                        <CloseButton onClick={() => setOpen(false)}/>
+                    </>
+                }
+                content={
+                    <>
+                        <FormLayout style={{width: '100%'}}
+                                    autoResponsive
+                                    columnWidth="8em"
+                                    expandColumns
+                                    expandFields>
+                            <FormItem key={"firstName"}
+                                      children={
+                                          <TextField
+                                              label="First Name"
+                                              value={createParticipant.value.first_name}
+                                              onValueChanged={(e) => (createParticipant.value.first_name = e.detail.value)}
+                                              className={styles.text_full}
+                                          />
+                                      }/>
+                            <FormItem key={"lastName"}
+                                      children={
+                                          <TextField
+                                              label="Last Name"
+                                              value={createParticipant.value.last_name}
+                                              onValueChanged={(e) => (createParticipant.value.last_name = e.detail.value)}
+                                              className={styles.text_full}
+                                          />
+                                      }/>
+                            <FormItem key={"emailAddress"}
+                                      children={
+                                          <TextField
+                                              label="Email"
+                                              value={createParticipant.value.email_address}
+                                              onValueChanged={(e) => (createParticipant.value.email_address = e.detail.value)}
+                                              className={styles.text_full}
+                                          />
+                                      }/>
+                        </FormLayout>
+
+                    </>
+                }
+            />
+
+            <RiddlerTable
+                elements={participants}
+                columnNames={
+                    [
+                        {
+                            path: 'first_name',
+                            header: "First Name",
+                            width: '100px',
+                            flexGrow: 1
+                        },
+                        {
+                            path: 'last_name',
+                            header: "Last Name",
+                            width: '100px',
+                            flexGrow: 1
+                        },
+                        {
+                            path: 'email_address',
+                            header: "Email",
+                            width: '100px',
+                            flexGrow: 1
+                        },
+                        {
+                            path: 'stored_token',
+                            header: "Token",
+                            renderer: tokenIndicator,
+                            width: '50px',
+                            flexGrow: 1
+                        }
+                    ]
+                }
+                actionButtons={actionButtons}
+                emptyMessage={"No participant found"}
+                helperMessage={"Click \"Add New Participant\" to add a new participant."}/>
         </>
     );
 }
-
-function CreateParticipantDialogModal(props: {
-    show: boolean;
-    onParticipantCreated: () => void;
-    onClose: () => void;
-}) {
-    const createParticipant = useSignal<CreateParticipant>({});
-
-    useEffect(() => {
-        if (props.show) {
-            // Clear input value when the modal opens
-            createParticipant.value.email_address = '';
-            createParticipant.value.first_name = '';
-            createParticipant.value.last_name = '';
-        }
-    }, [props.show]);
-
-    function saveParticipant() {
-        const payload: CreateParticipant = {
-            email_address: createParticipant.value.email_address,
-            first_name: createParticipant.value.first_name,
-            last_name: createParticipant.value.last_name,
-        }
-        ParticipantAdminEndpoint.create(payload)
-            .then(() => {
-                props.onParticipantCreated();
-                props.onClose();
-            });
-    }
-
-    return (
-        <RiddlerModal
-            headerTitle="Add participant"
-            opened={props.show}
-            onClosed={() => {
-                props.onClose()
-            }}
-            footer={
-                <>
-                    <CheckButton onClick={saveParticipant}/>
-                    <CloseButton onClick={props.onClose}/>
-                </>
-            }
-            content={
-                <>
-                    <FormLayout style={{width: '100%'}}
-                                autoResponsive
-                                columnWidth="8em"
-                                expandColumns
-                                expandFields>
-                        <FormItem key={"firstName"}
-                                  children={
-                                      <TextField
-                                          label="First Name"
-                                          value={createParticipant.value.first_name}
-                                          onValueChanged={(e) => (createParticipant.value.first_name = e.detail.value)}
-                                          className={styles.text_full}
-                                      />
-                                  }/>
-                        <FormItem key={"lastName"}
-                                  children={
-                                      <TextField
-                                          label="Last Name"
-                                          value={createParticipant.value.last_name}
-                                          onValueChanged={(e) => (createParticipant.value.last_name = e.detail.value)}
-                                          className={styles.text_full}
-                                      />
-                                  }/>
-                        <FormItem key={"emailAddress"}
-                                  children={
-                                      <TextField
-                                          label="Email"
-                                          value={createParticipant.value.email_address}
-                                          onValueChanged={(e) => (createParticipant.value.email_address = e.detail.value)}
-                                          className={styles.text_full}
-                                      />
-                                  }/>
-                    </FormLayout>
-
-                </>
-            }
-        />
-    );
-}
-
 export default function ParticipantsPage() {
     return (
         <>

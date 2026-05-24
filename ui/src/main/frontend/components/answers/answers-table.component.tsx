@@ -6,7 +6,7 @@ import {AnswerEndpoint} from "Frontend/generated/endpoints";
 import Answer from "Frontend/generated/be/riddler/v1/answer/client/model/Answer";
 import {useSignal} from "@vaadin/hilla-react-signals";
 import CreateAnswer from "Frontend/generated/be/riddler/v1/answer/client/model/CreateAnswer";
-import {CheckButton, CloseButton, PlusButton, ViewDetailButton} from "Frontend/components/ui/button";
+import {CloseButton, PlusButton, SaveButton, ViewDetailButton} from "Frontend/components/ui/button";
 import UpdateAnswer from "Frontend/generated/be/riddler/v1/answer/client/model/UpdateAnswer";
 import FormItem from "Frontend/components/ui/form/form-item.component";
 import RiddlerModal from "Frontend/components/ui/modal/modal";
@@ -111,7 +111,7 @@ function CreateAnswerDialogModal(
             onClosed={onClose}
             footer={
                 <>
-                    <CheckButton onClick={() => {
+                    <SaveButton onClick={() => {
                         const payload: CreateAnswer = {question_id: questionId, value: answerValue.value};
                         AnswerEndpoint.create(payload)
                             .then(() => {
@@ -172,7 +172,7 @@ function EditAnswerDialogModal(
             opened={show}
             footer={
                 <>
-                    <CheckButton onClick={() => {
+                    <SaveButton onClick={() => {
                         const payload: UpdateAnswer = {value: answerValue.value};
                         AnswerEndpoint.update(answerId, payload)
                             .then(() => {
