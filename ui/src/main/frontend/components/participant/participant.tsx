@@ -12,14 +12,12 @@ export default function ParticipantProfileDetail(
     {
         participant,
         setParticipant,
-        setModalType,
-        setOpen
+        openModal
     }:
     {
         participant: Participant,
-        setModalType: (modalType: ModalType) => void,
-        setOpen: (open: boolean) => void,
         setParticipant: (participant: Participant) => void,
+        openModal: (id: string, modalType: ModalType) => void,
     }
 ) {
     const params = useParams();
@@ -156,8 +154,7 @@ export default function ParticipantProfileDetail(
                                         theme="primary"
                                         disabled={!participant?.cv}
                                         onClick={() => {
-                                            setModalType('CV');
-                                            setOpen(true);
+                                            openModal(participant.id, 'CV');
                                         }}
                                     >
                                         View CV Document

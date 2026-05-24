@@ -3,8 +3,8 @@ import styles from 'Frontend/themes/riddler/common.module.css';
 import {DrawerToggle} from "@vaadin/react-components/DrawerToggle";
 import {Icon, MenuBar, MenuBarItem, MenuBarItemSelectedEvent} from "@vaadin/react-components";
 import {CSSProperties} from "react";
-import {useNavigate} from "react-router-dom";
 import {useSettingsState} from "Frontend/views/secured/settings-context-provider";
+import {Navigate} from "Frontend/util/navigate";
 
 export interface NavigationProperties {
     noMenu: boolean
@@ -32,7 +32,6 @@ function renderItemComponent(iconName: string, text: string) {
 
 export default function Navigation(props: NavigationProperties) {
     const {settings} = useSettingsState();
-    const navigate = useNavigate();
 
     const items: CustomMenuItem[] = [
         {
@@ -50,7 +49,7 @@ export default function Navigation(props: NavigationProperties) {
         const selectedItem = event.detail.value as CustomMenuItem;
 
         if (selectedItem && selectedItem.path) {
-            navigate(selectedItem.path);
+            Navigate.path(selectedItem.path);
         }
     };
 

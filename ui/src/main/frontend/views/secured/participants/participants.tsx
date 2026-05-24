@@ -8,17 +8,16 @@ import {useSignal} from "@vaadin/hilla-react-signals";
 import {CheckButton, CloseButton, GenerateToken, ViewDetailButton} from "Frontend/components/ui/button";
 import CreateParticipant from "Frontend/generated/be/riddler/v1/participant/client/model/CreateParticipant";
 import {CheckIcon, CloseIcon} from "Frontend/components/ui/icons";
-import {useNavigate} from "react-router";
-import {Notify, Strings, Urls} from "Frontend/util";
+import {Notify, Strings} from "Frontend/util";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import RiddlerModal from "Frontend/components/ui/modal/modal";
 import FormItem from "Frontend/components/ui/form/form-item.component";
 import Empty from "Frontend/components/ui/empty/empty";
+import {Navigate} from "Frontend/util/navigate";
 
 function ParticipantTable() {
     const [open, setOpen] = useState(false);
     const [participants, setParticipants] = useState<Participant[]>([]);
-    const navigate = useNavigate();
 
     function fetchParticipants() {
         ParticipantAdminEndpoint.findAll()
@@ -37,7 +36,7 @@ function ParticipantTable() {
                     Notify.success('Token generated successfully for {} {}', item.first_name, item.last_name);
                 })}/>
                 <ViewDetailButton onClick={() => {
-                    navigate(Urls.makePath(BookmarkType.PARTICIPANTS, item.id));
+                    Navigate.to(BookmarkType.PARTICIPANTS, item.id);
                 }}/>
             </>
         );

@@ -1,28 +1,25 @@
-import {ReactNode, useEffect, useState} from "react";
-import {
-    Dialog,
-    FormLayout,
-    Grid,
-    GridColumn,
-    HorizontalLayout,
-    TextArea,
-    VerticalLayout
-} from "@vaadin/react-components";
+import {useEffect, useState} from "react";
+import {FormLayout, HorizontalLayout, TextArea, VerticalLayout} from "@vaadin/react-components";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
 import {AnswerEndpoint} from "Frontend/generated/endpoints";
 import Answer from "Frontend/generated/be/riddler/v1/answer/client/model/Answer";
 import {useSignal} from "@vaadin/hilla-react-signals";
 import CreateAnswer from "Frontend/generated/be/riddler/v1/answer/client/model/CreateAnswer";
-import {CancelButton, CheckButton, CloseButton, PlusButton, ViewDetailButton} from "Frontend/components/ui/button";
+import {CheckButton, CloseButton, PlusButton, ViewDetailButton} from "Frontend/components/ui/button";
 import UpdateAnswer from "Frontend/generated/be/riddler/v1/answer/client/model/UpdateAnswer";
 import FormItem from "Frontend/components/ui/form/form-item.component";
+import RiddlerModal from "Frontend/components/ui/modal/modal";
+import RiddlerTable from "Frontend/components/table/table";
 
-export interface AnswersTableProperties {
-    questionId: string;
-}
-
-export default function AnswersTable({questionId}: AnswersTableProperties) {
+export default function AnswersTable(
+    {
+        questionId
+    }:
+    {
+        questionId: string;
+    }
+) {
     const [answers, setAnswers] = useState<Answer[]>([]);
     const [open, setOpen] = useState(false);
     const [answer, setAnswer] = useState<Answer>();
@@ -52,7 +49,6 @@ export default function AnswersTable({questionId}: AnswersTableProperties) {
                     <PlusButton onClick={() => setOpen(true)}/>
                 </div>
             </HorizontalLayout>
-            {/* 1. We pass down a close handler to reset parent state */}
             <CreateAnswerDialogModal
                 show={open}
                 questionId={questionId}
@@ -67,56 +63,39 @@ export default function AnswersTable({questionId}: AnswersTableProperties) {
                 answerId={answer?.id!!}
             />
             <HorizontalLayout className={styles.full_width_layout}>
-                <Grid items={answers} className={styles.riddler_table} allRowsVisible={true}>
-                    <GridColumn path="value" header="Answer Value"/>
-                    <GridColumn header={'Action'} renderer={answerActions}/>
-                </Grid>
+                <RiddlerTable elements={answers}
+                              columnNames={
+                                  [
+                                      {
+                                          path: 'value',
+                                          header: 'Answer',
+                                          width: '240px',
+                                          flexGrow: 1,
+                                      }
+                                  ]
+                              }
+                              emptyMessage={'No answers found'}
+                              helperMessage={'Click \"+\" to add a new answer.'}
+                              actionButtons={answerActions}/>
             </HorizontalLayout>
         </VerticalLayout>
     );
 }
 
-function AnswerDialogModal({label, show, onCheckButtonClicked, onClose, children}: {
-    label: string,
-    show: boolean,
-    onCheckButtonClicked: () => void,
-    onClose: () => void,
-    children: ReactNode
-}) {
-
-    return (
-        <Dialog
-            width={"100vh"}
-            height={"100vh"}
-            header-title={label}
-            onOpenedChanged={
-                (e: CustomEvent<{ value: boolean }>): void => {
-                    // Syncs background clicks / ESC keys directly back to parent
-                    if (!e.detail.value) {
-                        onClose();
-                    }
-                }
-            }
-            opened={show}
-            header={<CancelButton onClick={onClose}/>}
-            footerRenderer={() => (
-                <>
-                    <CheckButton onClick={onCheckButtonClicked}/>
-                    <CloseButton onClick={onClose}/>
-                </>
-            )}
-        >
-            {children}
-        </Dialog>
-    );
-}
-
-function CreateAnswerDialogModal({show, questionId, onAnswerCreated, onClose}: {
-    show: boolean;
-    questionId: string;
-    onAnswerCreated: () => void;
-    onClose: () => void;
-}) {
+function CreateAnswerDialogModal(
+    {
+        show,
+        questionId,
+        onAnswerCreated,
+        onClose
+    }:
+    {
+        show: boolean;
+        questionId: string;
+        onAnswerCreated: () => void;
+        onClose: () => void;
+    }
+) {
     const answerValue = useSignal('');
 
     useEffect(() => {
@@ -126,21 +105,24 @@ function CreateAnswerDialogModal({show, questionId, onAnswerCreated, onClose}: {
     }, [show]);
 
     return (
-        <AnswerDialogModal
-            label={"Create answer"}
-            show={show}
-            onCheckButtonClicked={
-                () => {
-                    const payload: CreateAnswer = {question_id: questionId, value: answerValue.value};
-                    AnswerEndpoint.create(payload)
-                        .then(() => {
-                            onAnswerCreated();
-                            onClose();
-                        });
-                }
+        <RiddlerModal
+            headerTitle={"Create answer"}
+            opened={show}
+            onClosed={onClose}
+            footer={
+                <>
+                    <CheckButton onClick={() => {
+                        const payload: CreateAnswer = {question_id: questionId, value: answerValue.value};
+                        AnswerEndpoint.create(payload)
+                            .then(() => {
+                                onAnswerCreated();
+                                onClose();
+                            });
+                    }}/>
+                    <CloseButton onClick={onClose}/>
+                </>
             }
-            onClose={onClose}
-            children={
+            content={
                 <FormLayout
                     style={{width: '100%'}}
                     autoResponsive
@@ -159,23 +141,24 @@ function CreateAnswerDialogModal({show, questionId, onAnswerCreated, onClose}: {
                 </FormLayout>
             }
         />
-    )
-        ;
+    );
 }
 
-function EditAnswerDialogModal({
-                                   show,
-                                   onAnswerCreated,
-                                   onClose,
-                                   answer,
-                                   answerId
-                               }: {
-    show: boolean;
-    onAnswerCreated: () => void;
-    onClose: () => void;
-    answer: string;
-    answerId: string;
-}) {
+function EditAnswerDialogModal(
+    {
+        show,
+        onAnswerCreated,
+        onClose,
+        answer,
+        answerId
+    }: {
+        show: boolean;
+        onAnswerCreated: () => void;
+        onClose: () => void;
+        answer: string;
+        answerId: string;
+    }
+) {
     const answerValue = useSignal<string>('');
 
     useEffect(() => {
@@ -184,21 +167,24 @@ function EditAnswerDialogModal({
     }, [answer]);
 
     return (
-        <AnswerDialogModal
-            label={"Update answer"}
-            show={show}
-            onCheckButtonClicked={
-                () => {
-                    const payload: UpdateAnswer = {value: answerValue.value};
-                    AnswerEndpoint.update(answerId, payload)
-                        .then(() => {
-                            onAnswerCreated();
-                            onClose();
-                        });
-                }
+        <RiddlerModal
+            headerTitle={"Update answer"}
+            opened={show}
+            footer={
+                <>
+                    <CheckButton onClick={() => {
+                        const payload: UpdateAnswer = {value: answerValue.value};
+                        AnswerEndpoint.update(answerId, payload)
+                            .then(() => {
+                                onAnswerCreated();
+                                onClose();
+                            });
+                    }}/>
+                    <CloseButton onClick={onClose}/>
+                </>
             }
-            onClose={onClose}
-            children={
+            onClosed={onClose}
+            content={
                 <FormLayout
                     style={{width: '100%'}}
                     autoResponsive

@@ -17,13 +17,13 @@ import {CancelButton, CheckButton, ViewDetailButton} from "Frontend/components";
 import CreatePublication from "Frontend/generated/be/riddler/v1/publication/client/model/CreatePublication";
 import {LevelSelector} from "Frontend/components/publication/level-selector-component";
 import {PositionSelector} from "Frontend/components/publication/position-selector-component";
-import {Notify, Urls} from "Frontend/util";
+import {Notify} from "Frontend/util";
 import {ElementStylingTypes} from "Frontend/constant";
 import {PublicationsEndpoint} from "Frontend/generated/endpoints";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
-import {useNavigate} from "react-router";
 import FormItem from "Frontend/components/ui/form/form-item.component";
 import Empty from "Frontend/components/ui/empty/empty";
+import {Navigate} from "Frontend/util/navigate";
 
 export default function PublicationsPage() {
     const [publications, setPublications] = useState<Publication[]>([]);
@@ -35,7 +35,6 @@ export default function PublicationsPage() {
         level_id: '',
         position_id: ''
     });
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (!createPublicationOpened.value) {
@@ -52,7 +51,7 @@ export default function PublicationsPage() {
         return (
             <>
                 <ViewDetailButton onClick={() => {
-                    navigate(Urls.makePath(BookmarkType.PUBLICATIONS, item.id));
+                    Navigate.to(BookmarkType.PUBLICATIONS, item.id);
                 }}/>
             </>
         );
@@ -141,6 +140,8 @@ export default function PublicationsPage() {
                         />
                     </VerticalLayout>
                 </Dialog>
+
+
                 {publications.length > 0 ?
                     (
                         <Grid key={"id"} items={publications} className={styles.riddler_table} allRowsVisible={true}>

@@ -40,3 +40,5 @@ export class Logs {
             .then();
     }
 }
+
+export const LOGGER = new Logs('Riddler');

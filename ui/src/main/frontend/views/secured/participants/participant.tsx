@@ -1,4 +1,4 @@
-import {FormLayout, Grid, GridColumn, HorizontalLayout, Select} from "@vaadin/react-components";
+import {Dialog, FormLayout, HorizontalLayout, Select} from "@vaadin/react-components";
 import {useParams} from "react-router";
 import {useEffect, useState} from "react";
 import {InvitationEndpoint, ParticipantAdminEndpoint, PublicationsEndpoint} from "Frontend/generated/endpoints";
@@ -15,12 +15,13 @@ import FormItem from "Frontend/components/ui/form/form-item.component";
 import RiddlerModal from "Frontend/components/ui/modal/modal";
 import ParticipantProfileDetail from "Frontend/components/participant/participant";
 import PublicationDetail from "Frontend/components/publication/publication";
-import Empty from "Frontend/components/ui/empty/empty";
+import {Ban, Newspaper, Save, Trash2} from "lucide-react";
+import RiddlerTable from "Frontend/components/table/table";
 
-export type ModalType = 'PUBLICATION' | 'INVITATION' | 'CV' | 'PHOTO';
+export type ModalType = 'PUBLICATION' | 'INVITATION' | 'CV' | 'PHOTO' | 'TODO' | 'NONE';
 
 export function AdminParticipant() {
-    const [modalType, setModalType] = useState<ModalType>();
+    const [modalType, setModalType] = useState<ModalType>('NONE');
     const [open, setOpen] = useState(false);
     const [publicationId, setPublicationId] = useState<string>();
     const [publications, setPublications] = useState<Publication[]>([]);
@@ -84,6 +85,24 @@ export function AdminParticipant() {
         }
     }, [params.id]);
 
+    function closeModal() {
+        setModalType('NONE')
+        setOpen(false);
+    }
+
+    function openModal(publicationId: string, modalType: ModalType) {
+        setPublicationId(publicationId);
+        if (publicationId) {
+            PublicationsEndpoint.findPublicationById(publicationId)
+                .then((publication) => {
+                    setPublication(publication);
+                    setOpen(true);
+                });
+        }
+        setModalType(modalType);
+        setOpen(true);
+    }
+
     useEffect(() => {
         if (publicationId) {
             PublicationsEndpoint.findPublicationById(publicationId)
@@ -140,12 +159,35 @@ export function AdminParticipant() {
             />
             {participant && (
                 <ParticipantProfileDetail
-                    setOpen={setOpen}
+                    openModal={openModal}
                     setParticipant={setParticipant}
                     participant={participant}
-                    setModalType={setModalType}
                 />
             )}
+            <Dialog
+                headerTitle="TODO"
+                opened={open && modalType === 'TODO'}
+                onClosed={() => {
+                    closeModal();
+                }}
+                footer={
+                    <>
+                        <Button theme={ElementStylingTypes.PRIMARY_ERROR} onClick={closeModal}
+                                style={{marginRight: 'auto'}}>
+                            Delete
+                        </Button>
+                        <Button theme="tertiary" onClick={() => {
+                            closeModal();
+                        }}>
+                            Cancel
+                        </Button>
+                    </>
+                }
+            >
+                <div style={{padding: 'var(--lumo-space-xs)'}}>
+                    TODO
+                </div>
+            </Dialog>
             <RiddlerModal
                 headerTitle="Create invitation"
                 opened={open && modalType === 'INVITATION'}
@@ -154,14 +196,13 @@ export function AdminParticipant() {
                 }}
                 footer={
                     <>
-                        <Button theme={ElementStylingTypes.PRIMARY_ERROR} onClick={() => {
+                        <Button theme={ElementStylingTypes.TERTIARY_ICON} onClick={() => {
                             createInvitation(params.id!!)
-                        }}
-                                style={{marginRight: 'auto'}}>
-                            Create Invitation
+                        }}>
+                            <Save size={24}/>
                         </Button>
-                        <Button theme="tertiary" onClick={() => setOpen(false)}>
-                            Cancel
+                        <Button theme={ElementStylingTypes.TERTIARY_ICON_RED} onClick={() => setOpen(false)}>
+                            <Ban size={24}/>
                         </Button>
                     </>
                 }
@@ -216,101 +257,70 @@ export function AdminParticipant() {
                 </div>
             </HorizontalLayout>
             <HorizontalLayout className={styles.full_width_layout}>
-                <InvitationTable invitations={invitations} openModal={(publicationId: string) => {
-                    if (publicationId) {
-                        PublicationsEndpoint.findPublicationById(publicationId)
-                            .then((publication) => {
-                                setPublication(publication);
-                                setModalType('PUBLICATION');
-                                setOpen(true);
-                            });
-                    }
-                }}/>
+                <RiddlerTable elements={invitations}
+                              columnNames={
+                                  [
+                                      {
+                                          path: 'id',
+                                          flexGrow: 0,
+                                          width: "140px",
+                                          renderer: ({item}) => (
+                                              <code
+                                                  title={item.id}
+                                                  style={{
+                                                      background: 'var(--lumo-contrast-5pct)',
+                                                      color: 'var(--lumo-primary-text-color)',
+                                                      padding: '2px 6px',
+                                                      borderRadius: '4px',
+                                                      fontSize: 'var(--lumo-font-size-xs)',
+                                                      fontFamily: 'var(--lumo-font-family-monospace)',
+                                                      fontWeight: 'bold',
+                                                      textTransform: 'uppercase'
+                                                  }}
+                                              >
+                                                  {item.id ? `${item.id.substring(0, 8)}...` : 'N/A'}
+                                              </code>
+                                          )
+                                      },
+                                      {
+                                          path: 'publication.title',
+                                          flexGrow: 1,
+                                          renderer: ({item}) => (
+                                              <div style={{
+                                                  fontWeight: 500,
+                                                  color: 'var(--lumo-heading-text-color)',
+                                                  fontSize: 'var(--lumo-font-size-m)',
+                                                  whiteSpace: 'normal', // Forces text to wrap beautifully instead of overflowing columns
+                                                  wordBreak: 'break-word',
+                                                  lineHeight: 'var(--lumo-line-height-m)'
+                                              }}>
+                                                  {item.publication?.title || (
+                                                      <span style={{
+                                                          color: 'var(--lumo-disabled-text-color)',
+                                                          fontStyle: 'italic'
+                                                      }}>
+                                                          Untitled Publication
+                                                      </span>
+                                                  )}
+                                              </div>
+                                          )
+                                      }
+                                  ]
+                              }
+                              emptyMessage={'No active invitations found'}
+                              helperMessage={'Sent or pending invitations will appear here in this list view.'}
+                              actionButtons={({item}: { item: Invitation }) => {
+                                  return (
+                                      <>
+                                          <Button theme={ElementStylingTypes.TERTIARY_ICON}
+                                                  onClick={() => openModal(item.publication.id, 'PUBLICATION')}><Newspaper/></Button>
+                                          <Button theme={ElementStylingTypes.TERTIARY_ICON_RED}
+                                                  onClick={() => openModal(item.publication.id, 'TODO')}><Trash2/></Button>
+                                      </>
+                                  );
+                              }}
+                />
             </HorizontalLayout>
         </>
     )
-}
-
-function InvitationTable(
-    {
-        invitations,
-        openModal
-    }:
-    {
-        invitations: Invitation[],
-        openModal: (publicationId: string) => void
-    }
-) {
-    const actionButtons = ({item}: { item: Invitation }) => {
-        return (
-            <>
-                <Button theme="small secondary" onClick={() => openModal(item.publication.id)}>Publication</Button>
-            </>
-        );
-    };
-    if (!invitations || invitations.length === 0) {
-        return (<Empty emptyMessage={"No active invitations found"}
-                       helperMessage={"Sent or pending invitations will appear here in this list view."}/>);
-    }
-
-    return (
-        <Grid
-            items={invitations}
-            allRowsVisible={true}
-            style={{
-                borderRadius: 'var(--lumo-base-border-radius)',
-                border: '1px solid var(--lumo-contrast-10pct)',
-                boxShadow: 'var(--lumo-box-shadow-xs)'
-            }}
-        >
-            <GridColumn
-                header="Invitation ID"
-                width="140px"
-                flexGrow={0}
-                renderer={({item}) => (
-                    <code
-                        title={item.id}
-                        style={{
-                            background: 'var(--lumo-contrast-5pct)',
-                            color: 'var(--lumo-primary-text-color)',
-                            padding: '2px 6px',
-                            borderRadius: '4px',
-                            fontSize: 'var(--lumo-font-size-xs)',
-                            fontFamily: 'var(--lumo-font-family-monospace)',
-                            fontWeight: 'bold',
-                            textTransform: 'uppercase'
-                        }}
-                    >
-                        {item.id ? `${item.id.substring(0, 8)}...` : 'N/A'}
-                    </code>
-                )}
-            />
-            <GridColumn
-                header="Publication Title"
-                flexGrow={1}
-                renderer={({item}) => (
-                    <div style={{
-                        fontWeight: 500,
-                        color: 'var(--lumo-heading-text-color)',
-                        fontSize: 'var(--lumo-font-size-m)',
-                        whiteSpace: 'normal', // Forces text to wrap beautifully instead of overflowing columns
-                        wordBreak: 'break-word',
-                        lineHeight: 'var(--lumo-line-height-m)'
-                    }}>
-                        {item.publication?.title || (
-                            <span style={{color: 'var(--lumo-disabled-text-color)', fontStyle: 'italic'}}>
-                                Untitled Publication
-                            </span>
-                        )}
-                    </div>
-                )}
-            />
-            <GridColumn
-                header="Actions"
-                renderer={actionButtons}
-                width="240px"
-                flexGrow={0}
-            />
-        </Grid>
-    );
 }

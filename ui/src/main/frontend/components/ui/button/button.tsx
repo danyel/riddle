@@ -1,23 +1,15 @@
 import {Button, ButtonProps} from "@vaadin/react-components/Button.js";
 import {ReactNode} from "react";
-import {
-    BanIcon,
-    CheckIcon,
-    CloseIcon,
-    EyeIcon,
-    KeyIcon,
-    NewsPaperIcon,
-    PlusIcon,
-    RotateLeftIcon
-} from "Frontend/components/ui/icons";
+import {CloseIcon, KeyIcon, NewsPaperIcon} from "Frontend/components/ui/icons";
 import {ElementStylingTypes} from "Frontend/constant";
+import {ArrowLeft, Ban, Glasses, Plus, RefreshCw, Save} from "lucide-react";
 
 export function CheckButton(props: ButtonDecorationProps) {
     return (
         <BaseButton
-            icon={CheckIcon()}
+            icon={(<Plus size={24}/>)}
             onClick={props.onClick}
-            theme={ElementStylingTypes.PRIMARY}
+            theme={ElementStylingTypes.TERTIARY_ICON}
             disabled={props.disabled}
         />
     );
@@ -28,7 +20,30 @@ export function CloseButton(props: ButtonDecorationProps) {
         <BaseButton
             icon={CloseIcon()}
             onClick={props.onClick}
-            theme={ElementStylingTypes.PRIMARY_ERROR}
+            theme={ElementStylingTypes.TERTIARY_ICON_RED}
+            disabled={props.disabled}
+        />
+    );
+}
+
+
+export function BackButton(props: ButtonDecorationProps) {
+    return (
+        <BaseButton
+            icon={<ArrowLeft size={24}/>}
+            onClick={props.onClick}
+            theme={ElementStylingTypes.TERTIARY_ICON_BLUE}
+            disabled={props.disabled}
+        />
+    );
+}
+
+export function SaveButton(props: ButtonDecorationProps) {
+    return (
+        <BaseButton
+            icon={(<Save size={24}/>)}
+            onClick={props.onClick}
+            theme={ElementStylingTypes.TERTIARY_ICON}
             disabled={props.disabled}
         />
     );
@@ -37,9 +52,9 @@ export function CloseButton(props: ButtonDecorationProps) {
 export function PlusButton(props: ButtonDecorationProps) {
     return (
         <BaseButton
-            icon={PlusIcon()}
+            icon={(<Plus size={24}/>)}
             onClick={props.onClick}
-            theme={ElementStylingTypes.PRIMARY}
+            theme={ElementStylingTypes.TERTIARY_ICON}
             disabled={props.disabled}
         />
     );
@@ -59,7 +74,7 @@ export function CancelButton(props: ButtonDecorationProps, theme: string = Eleme
 export function ViewDetailButton(props: ButtonDecorationProps) {
     return (
         <BaseButton
-            icon={EyeIcon()}
+            icon={<Glasses/>}
             onClick={props.onClick}
             theme={ElementStylingTypes.TERTIARY_INLINE}
             disabled={props.disabled}
@@ -81,9 +96,9 @@ export function NewsPaperButton(props: ButtonDecorationProps) {
 export function BanButton(props: ButtonDecorationProps) {
     return (
         <BaseButton
-            icon={BanIcon()}
+            icon={<Ban size={24}/>}
             onClick={props.onClick}
-            theme={ElementStylingTypes.ERROR}
+            theme={ElementStylingTypes.TERTIARY_ICON_RED}
             disabled={props.disabled}
         />
     );
@@ -103,9 +118,9 @@ export function GenerateToken(props: ButtonDecorationProps) {
 export function RefreshButton(props: ButtonDecorationProps) {
     return (
         <BaseButton
-            icon={RotateLeftIcon()}
+            icon={<RefreshCw size={24}/>}
             onClick={props.onClick}
-            theme={ElementStylingTypes.TERTIARY_INLINE}
+            theme={ElementStylingTypes.TERTIARY_ICON}
             disabled={props.disabled}
         />
     );

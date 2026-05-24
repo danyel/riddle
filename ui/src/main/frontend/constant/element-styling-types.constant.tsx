@@ -15,6 +15,8 @@ export enum ElementStylingTypes {
     PRIMARY_ERROR = 'primary error',
     TERTIARY = 'tertiary',
     TERTIARY_ICON = 'tertiary icon',
+    TERTIARY_ICON_RED = 'tertiary icon error',
+    TERTIARY_ICON_BLUE = 'tertiary icon secondary',
     TERTIARY_INLINE = 'tertiary-inline',
     ICON = 'icon',
     SMALL = 'small',

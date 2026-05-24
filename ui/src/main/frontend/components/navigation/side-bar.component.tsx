@@ -9,7 +9,7 @@ import {
     SettingsEndpoint
 } from "Frontend/generated/endpoints";
 import Menu from "Frontend/generated/be/riddler/v1/menu/client/model/Menu";
-import {useLocation, useNavigate, useParams} from "react-router";
+import {useLocation, useParams} from "react-router";
 import Participant from "Frontend/generated/be/riddler/v1/participant/client/model/Participant";
 import Bookmark from "Frontend/generated/be/riddler/v1/settings/model/Bookmark";
 import {Button} from "@vaadin/react-components/Button.js";
@@ -20,6 +20,7 @@ import {Logs, Notify, Objects, Strings, Urls} from "Frontend/util";
 // @ts-ignore
 import styles from 'Frontend/themes/riddler/common.module.css';
 import Publication from "Frontend/generated/be/riddler/v1/publication/client/model/Publication";
+import {Navigate} from "Frontend/util/navigate";
 
 export function SideBar() {
     const [menus, setMenus] = useState<Menu[]>([]);
@@ -29,7 +30,6 @@ export function SideBar() {
     const [administration, setAdministration] = useState<string>("");
     const [, setBookmarkTypes] = useState<String[]>([]);
     const {settings, setSettings} = useSettingsState();
-    const navigate = useNavigate();
     const location = useLocation();
     const params = useParams();
     const logger = new Logs("SideBar");
@@ -204,7 +204,7 @@ export function SideBar() {
                     }}
                     onClick={(e) => {
                         e.preventDefault();
-                        navigate(routingPath);
+                        Navigate.path(routingPath);
                     }}
                 >
                     <div style={{
@@ -214,7 +214,7 @@ export function SideBar() {
                         width: '100%',
                         minWidth: 0
                     }}>
-                        <span onClick={() => navigate(routingPath)} style={{cursor: 'pointer', flexGrow: 1}}>
+                        <span onClick={() => Navigate.path(routingPath)} style={{cursor: 'pointer', flexGrow: 1}}>
                             {menu.label}
                         </span>
                     </div>
@@ -238,7 +238,7 @@ export function SideBar() {
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     e.preventDefault();
-                                    navigate(childBookmark.path!!);
+                                    Navigate.path(childBookmark.path!!);
                                 }}
                             >
                                 <div style={{
@@ -252,7 +252,7 @@ export function SideBar() {
                                     <div
                                         className={styles.ellipsis_single}
                                         title={childBookmark.label}
-                                        onClick={() => navigate(childBookmark.path!!)}
+                                        onClick={() => Navigate.path(childBookmark.path!!)}
                                         style={{
                                             cursor: 'pointer',
                                             flexGrow: 1,

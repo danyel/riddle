@@ -1,10 +1,11 @@
-import {useNavigate, useParams} from "react-router";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {QuestionEndpoint, QuestionTypeEndpoint} from "Frontend/generated/endpoints";
 import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
 import AnswersTable from "Frontend/components/answers/answers-table.component";
 import {
+    Button,
     Dialog,
+    FormItem,
     FormLayout,
     HorizontalLayout,
     Select,
@@ -16,16 +17,15 @@ import {
 import styles from 'Frontend/themes/riddler/common.module.css';
 import QuestionType from "Frontend/generated/be/riddler/v1/question/client/model/QuestionType";
 import UpdateQuestion from "Frontend/generated/be/riddler/v1/question/client/model/UpdateQuestion";
-import {BanButton, CheckButton, CloseButton, RefreshButton} from "Frontend/components/ui/button";
-import {useSignal} from "@vaadin/hilla-react-signals";
-import {Button} from "@vaadin/react-components/Button.js";
+import {BackButton, BanButton, RefreshButton, SaveButton} from "Frontend/components/ui/button";
 import {ElementStylingTypes} from "Frontend/constant";
-import {Notify, Objects, Urls} from "Frontend/util";
+import {Notify, Objects} from "Frontend/util";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
-import FormItem from "Frontend/components/ui/form/form-item.component";
-
+import {useParams} from 'react-router-dom';
+import {Navigate} from "Frontend/util/navigate";
 
 export default function QuestionDetailPage() {
+    const {id} = useParams<{ id: string }>();
     const [question, setQuestion] = useState<Question>();
     const [updateQuestion, setUpdateQuestion] = useState<UpdateQuestion>({
         question: '',
@@ -33,82 +33,95 @@ export default function QuestionDetailPage() {
         title: ''
     });
     const [items, setItems] = useState<{ label: string, value: string }[]>([]);
-    const {id} = useParams();
-    const navigate = useNavigate();
-    const dialogOpened = useSignal(false);
+    const [isDialogOpen, setIsDialogOpen] = useState(false); // Fixed: Replaced raw signal with state
 
     function open() {
-        dialogOpened.value = true;
+        setIsDialogOpen(true);
     }
 
     function close() {
-        dialogOpened.value = false;
+        setIsDialogOpen(false);
     }
 
     function isSame(): boolean {
-        return Objects.isEqual(question?.question, updateQuestion.question) && Objects.isEqual(question?.type, updateQuestion.type);
+        if (!question) return true;
+        return Objects.isEqual(question.title, updateQuestion.title) &&
+            Objects.isEqual(question.question, updateQuestion.question) &&
+            Objects.isEqual(question.type, updateQuestion.type);
     }
 
     function deleteQuestion() {
-        QuestionEndpoint.delete(id!!)
+        if (!id) return;
+        QuestionEndpoint.delete(id)
             .then(() => {
-                Notify.success('Question {} deleted!', id);
-                navigate(Urls.makePath(BookmarkType.QUESTIONS));
+                Notify.error('Question "{}" deleted!', question?.title);
+                Navigate.to(BookmarkType.QUESTIONS);
             });
     }
 
     useEffect(() => {
-        QuestionEndpoint.get(id).then(question => {
-            setQuestion(question);
-            setUpdateQuestion({question: question.question, type: question.type, title: question.title});
+        if (!id) return;
+
+        QuestionEndpoint.get(id).then(fetchedQuestion => {
+            setQuestion(fetchedQuestion);
+            setUpdateQuestion({
+                question: fetchedQuestion.question,
+                type: fetchedQuestion.type,
+                title: fetchedQuestion.title
+            });
         });
+
         QuestionTypeEndpoint.questionTypes()
             .then((questionTypes: string[]) => {
-                setItems(questionTypes.map(e => {
-                    return {label: `label.${e}`, value: e};
-                }));
+                setItems(questionTypes.map(e => ({
+                    label: `label.${e}`,
+                    value: e
+                })));
             });
     }, [id]);
 
-    return question && (<>
+    return question ? (
+        <>
             <HorizontalLayout className={styles.full_width_layout}>
                 <div className={styles.menu_bar_layout}>
-                    <CheckButton onClick={() => {
-                        const updateQuestion: UpdateQuestion = {
+                    <BackButton onClick={() => Navigate.to(BookmarkType.QUESTIONS)}/>
+
+                    <SaveButton
+                        onClick={() => {
+                            // Fixed: Now accurately targets updateQuestion state variables
+                            QuestionEndpoint.update(question.id!!, updateQuestion)
+                                .then(() => {
+                                    Notify.success('Question updated: ', updateQuestion.title);
+                                    Navigate.to(BookmarkType.QUESTIONS);
+                                });
+                        }}
+                        disabled={isSame()}
+                    />
+
+                    <RefreshButton
+                        onClick={() => setUpdateQuestion({
+                            title: question.title,
                             question: question.question,
-                            type: question.type,
-                            title: question.title
-                        };
-                        QuestionEndpoint.update(question?.id!!, updateQuestion)
-                            .then(() => {
-                                Notify.success('Question updated: ', question.title)
-                                navigate(Urls.makePath(BookmarkType.QUESTIONS));
-                            });
-                    }} disabled={isSame()}/>
-                    <RefreshButton onClick={() => setUpdateQuestion({
-                        title: question.title,
-                        question: question.question,
-                        type: question.type
-                    })}
-                                   disabled={isSame()}/>
-                    <BanButton onClick={() => {
-                        open();
-                    }}/>
-                    <CloseButton onClick={() => {
-                        navigate(Urls.makePath(BookmarkType.QUESTIONS));
-                    }}/>
+                            type: question.type
+                        })}
+                        disabled={isSame()}
+                    />
+
+                    <BanButton onClick={open}/>
                 </div>
             </HorizontalLayout>
+
             <Dialog
-                headerTitle={`Delete user "${question.question}"?`}
-                opened={dialogOpened.value}
-                onClosed={() => {
-                    dialogOpened.value = false;
-                }}
+                headerTitle={`Delete question "${question.title}"?`} // Fixed: Fixed title context from 'user' to 'question'
+                opened={isDialogOpen}
+                onClosed={close}
                 footer={
                     <>
-                        <Button theme={ElementStylingTypes.PRIMARY_ERROR} onClick={deleteQuestion}
-                                style={{marginRight: 'auto'}}>
+                        <Button
+                            theme={ElementStylingTypes.PRIMARY_ERROR}
+                            onClick={deleteQuestion}
+                            style={{marginRight: 'auto'}}
+                        >
                             Delete
                         </Button>
                         <Button theme="tertiary" onClick={close}>
@@ -117,51 +130,52 @@ export default function QuestionDetailPage() {
                     </>
                 }
             >
-                Are you sure you want to delete this user permanently?
+                Are you sure you want to delete this question permanently?
             </Dialog>
+
             <VerticalLayout className={styles.full_width_layout}>
-                <FormLayout
-                    style={{width: '100%'}}
-                    autoResponsive
-                    columnWidth="8em"
-                    expandColumns
-                    expandFields
-                >
-                    <FormItem children={
-                        <TextField value={question.title}
-                                   className={styles.text_full}
-                                   onValueChanged={(e) => {
-                                       setQuestion(prev => prev ? {...prev, title: e.detail.value} : undefined);
-                                   }}
+                <FormLayout style={{width: '100%'}} autoResponsive columnWidth="8em" expandColumns expandFields>
+                    <FormItem>
+                        <TextField
+                            label="Title"
+                            value={updateQuestion.title}
+                            className={styles.text_full}
+                            onValueChanged={(e) => {
+                                setUpdateQuestion(prev => ({...prev, title: e.detail.value}));
+                            }}
                         />
-                    }/>
-                    <FormItem children={
-                        <TextArea value={question.question}
-                                  className={styles.text_area_full}
-                                  onValueChanged={(e) => {
-                                      setQuestion(prev => prev ? {...prev, question: e.detail.value} : undefined);
-                                  }}
+                    </FormItem>
+
+                    <FormItem>
+                        <TextArea
+                            label="Question"
+                            value={updateQuestion.question}
+                            className={styles.text_area_full}
+                            onValueChanged={(e) => {
+                                setUpdateQuestion(prev => ({...prev, question: e.detail.value}));
+                            }}
                         />
-                    }/>
-                    <FormItem children={
+                    </FormItem>
+
+                    <FormItem>
                         <Select
                             label="Question Type"
                             items={items}
-                            value={question.type}
+                            value={updateQuestion.type}
                             onValueChanged={(e) => {
-                                const newType = e.detail.value as QuestionType; // String to QuestionType conversion
-
-                                // Mutate state correctly using the updater function
-                                setQuestion(prev => prev ? {...prev, type: newType} : undefined);
+                                const newType = e.detail.value as QuestionType;
+                                setUpdateQuestion(prev => ({...prev, type: newType}));
                             }}
-                        />}
-                    />
+                        />
+                    </FormItem>
                 </FormLayout>
+
                 <HorizontalLayout className={styles.full_width_layout}>
-                    {question.type !== "REVIEW" && (<AnswersTable questionId={question.id!!}/>)}
+                    {/* Fixed: Conditional check mapping ensures sync with edited form layout change updates */}
+                    {updateQuestion.type !== "REVIEW" && <AnswersTable questionId={question.id!!}/>}
                 </HorizontalLayout>
             </VerticalLayout>
         </>
-    )
-        ;
+    ) : null;
 }
+
