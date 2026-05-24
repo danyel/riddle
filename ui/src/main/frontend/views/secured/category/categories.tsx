@@ -142,14 +142,18 @@ export default function CategoryManagementPage() {
     return (
         <>
             <HorizontalLayout className={styles.full_width_layout}>
-                <div>
-                    <h1 style={{margin: 0, fontSize: 'var(--lumo-font-size-xxl)'}}>CV Category Rules Management</h1>
-                    <div style={{color: 'var(--lumo-secondary-text-color)', fontSize: 'var(--lumo-font-size-s)'}}>
+
+                <div className={styles.menu_title_layout}>
+                    <h1>CV Category Rules Management</h1>
+                    <div className={styles.code}>
                         Define target profile classification tracks and system text scanning keyword anchors
                         dynamically.
                     </div>
                 </div>
-                <PlusButton onClick={() => openEditor(null)}/>
+                <div className={styles.menu_bar_title_layout}>
+                    <PlusButton onClick={() => openEditor(null)}/>
+                </div>
+
             </HorizontalLayout>
 
             <Dialog

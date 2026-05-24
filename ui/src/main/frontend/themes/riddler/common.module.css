@@ -113,6 +113,37 @@
     background-color: var(--lumo-base-color);
 }
 
+.menu_bar_title_layout {
+    display: flex;
+    justify-content: flex-end; /* Pushes content to the right */
+    align-items: center; /* Centers button vertically */
+    width: 20%; /* Ensures layout spans full width */
+    box-sizing: border-box;
+    background-color: var(--lumo-base-color);
+}
+
+.menu_title_layout {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Pushes content to the right */
+    align-items: center; /* Centers button vertically */
+    width: 100%; /* Ensures layout spans full width */
+    box-sizing: border-box;
+    background-color: var(--lumo-base-color);
+}
+
+.code {
+    color: var(--lumo-secondary-text-color);
+    font-size: var(--lumo-font-size-s);
+}
+
+.menu_title_layout > h1 {
+    margin: 0;
+    font-size: var(--lumo-font-size-xxl);
+    justify-content: flex-start;
+    width: 100%;
+}
+
 .ellipsis_single {
     white-space: nowrap; /* Prevents text from wrapping to a new line */
     overflow: hidden; /* Hides the text that overflows the container */
