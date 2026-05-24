@@ -16,7 +16,7 @@ function clean() {
     if [ -f "$LOCAL_KEY" ]; then rm "$LOCAL_KEY"; fi
     if [ -f "$CSR_FILE" ]; then rm "$CSR_FILE"; fi
     if [ -f "$CRT_FILE" ]; then rm "$CRT_FILE"; fi
-#    if [ -f "$PEM_FILE" ]; then rm "$PEM_FILE"; fi
+    if [ -f "$PEM_FILE" ]; then rm "$PEM_FILE"; fi
     if [ -f "$KEY_FILE" ]; then rm "$KEY_FILE"; fi
     if [ -f "$SRL_FILE" ]; then rm "$SRL_FILE"; fi
 }
