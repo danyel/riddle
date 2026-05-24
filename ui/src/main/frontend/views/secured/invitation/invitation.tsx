@@ -2,11 +2,11 @@ import {useParams} from "react-router";
 import React, {useEffect, useState} from "react";
 import {InvitationEndpoint, PublicationsEndpoint, QuestionEndpoint} from "Frontend/generated/endpoints";
 import Invitation from "Frontend/generated/be/riddler/v1/invitation/client/model/Invitation";
-import {LOGGER, Notify, Strings} from "Frontend/util";
+import {Notify, Strings} from "Frontend/util";
 import Publication from "Frontend/generated/be/riddler/v1/publication/client/model/Publication";
 import {HorizontalLayout, Select} from "@vaadin/react-components";
 import RiddlerTable from "Frontend/components/table/table";
-import {BackButton, PlusButton, SaveButton} from "Frontend/components";
+import {BackButton, DeleteButton, PlusButton, SaveButton} from "Frontend/components";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";
 import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
@@ -51,7 +51,6 @@ export default function InvitationPage() {
             const remainingQuestions = fetchedQuestions.filter(e => invitation.questions.indexOf(e.id!!) == -1).map(e => {
                 return {value: e.id, label: e.title} as OptionItem
             });
-            LOGGER.debug('Invitation {} {} {}', selectedItems, remainingQuestions, invitation.questions)
             setSelectedQuestions(selectedItems);
             setQuestions(remainingQuestions);
             PublicationsEndpoint.findPublicationById(invitation.publication.id)
@@ -66,7 +65,7 @@ export default function InvitationPage() {
         <>
             <HorizontalLayout className={styles.full_width_layout}>
                 <div className={styles.menu_bar_layout}>
-                    <BackButton onClick={() => Navigate.to(BookmarkType.PARTICIPANTS, invitation?.participantId)}/>
+                    <BackButton onClick={() => Navigate.to(BookmarkType.PARTICIPANTS, invitation?.participant_id)}/>
                     {
                         invitation?.id && (
                             <SaveButton onClick={() => {
@@ -96,7 +95,6 @@ export default function InvitationPage() {
                 }
                 {Strings.isNotEmpty(selectedQuestion) && (
                     <PlusButton onClick={() => {
-                        LOGGER.debug('Click {} {}', selectedQuestion, selectedQuestions);
                         const matchedQuestion = questions.find(o => o.value === selectedQuestion);
                         if (matchedQuestion) {
                             if (selectedQuestions.some(q => q.value === matchedQuestion.value)) {
@@ -104,9 +102,7 @@ export default function InvitationPage() {
                                 return;
                             }
                             setSelectedQuestions(prev => {
-                                const nextList = [...prev, matchedQuestion];
-                                LOGGER.debug('Added item: {}', matchedQuestion.value);
-                                return nextList;
+                                return [...prev, matchedQuestion];
                             });
                             setQuestions(prev => prev.filter(q => q.value !== matchedQuestion.value));
                             setSelectedQuestion('');
@@ -119,6 +115,18 @@ export default function InvitationPage() {
                 columnNames={[{path: 'value', width: '200px'}, {path: 'label', width: '200px'}]}
                 emptyMessage={"No questions added to this invitation"}
                 helperMessage={"Select a question and add it."}
+                actionButtons={({item}: { item: OptionItem }) => {
+                    return (
+                        <>
+                            <DeleteButton onClick={() => {
+                                setSelectedQuestions(prev => prev.filter(q => q.value !== item.value))
+                                setQuestions(prev => {
+                                    return [...prev, item];
+                                })
+                            }}/>
+                        </>
+                    )
+                }}
             />
         </>
     );

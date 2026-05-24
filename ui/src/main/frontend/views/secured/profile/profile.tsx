@@ -60,7 +60,7 @@ export default function ProfilePage() {
                                             <span
                                                 style={{fontFamily: 'var(--lumo-font-family)'}}>{participant.email_address}</span>
                                         </HorizontalLayout>
-                                        <HorizontalLayout style={{
+                                        {/*  <HorizontalLayout style={{
                                             justifyContent: 'space-between',
                                             paddingTop: 'var(--lumo-space-xs)'
                                         }}>
@@ -72,7 +72,7 @@ export default function ProfilePage() {
                                                 borderRadius: '4px',
                                                 fontSize: 'var(--lumo-font-size-s)'
                                             }}>{participant.stored_token}</code>
-                                        </HorizontalLayout>
+                                        </HorizontalLayout>*/}
                                     </VerticalLayout>
                                 );
                                 displayModelOpened.value = true;

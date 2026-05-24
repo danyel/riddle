@@ -8,19 +8,21 @@ import styles from "Frontend/themes/riddler/common.module.css";
 import {CloseButton, PlusButton} from "Frontend/components/ui/button";
 import {Button} from "@vaadin/react-components/Button";
 import {ElementStylingTypes} from "Frontend/constant";
-import {Notify} from "Frontend/util";
+import {LOGGER, Notify, Strings} from "Frontend/util";
 import Invitation from "Frontend/generated/be/riddler/v1/invitation/client/model/Invitation";
 import Publication from "Frontend/generated/be/riddler/v1/publication/client/model/Publication";
 import FormItem from "Frontend/components/ui/form/form-item.component";
 import RiddlerModal from "Frontend/components/ui/modal/modal";
 import ParticipantProfileDetail from "Frontend/components/participant/participant";
 import PublicationDetail from "Frontend/components/publication/publication";
-import {Ban, Glasses, Newspaper, Save, Trash2} from "lucide-react";
+import {Ban, Glasses, Key, Newspaper, RotateCcwKey, Save, Trash2} from "lucide-react";
 import RiddlerTable from "Frontend/components/table/table";
 import {Navigate} from "Frontend/util/navigate";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
+import {CheckIcon, CloseIcon} from "Frontend/components";
+import {useSignal} from "@vaadin/hilla-react-signals";
 
-export type ModalType = 'PUBLICATION' | 'INVITATION' | 'CV' | 'PHOTO' | 'TODO' | 'NONE';
+export type ModalType = 'PUBLICATION' | 'INVITATION' | 'CV' | 'PHOTO' | 'TODO' | 'NONE' | 'TOKEN';
 
 export function AdminParticipant() {
     const [modalType, setModalType] = useState<ModalType>('NONE');
@@ -32,6 +34,7 @@ export function AdminParticipant() {
     const params = useParams();
     const [participant, setParticipant] = useState<Participant>();
     const [invitations, setInvitations] = useState<Invitation[]>([]);
+    const tokenSignal = useSignal<string>();
 
     function fetchInvitations() {
         if (params.id) {
@@ -94,13 +97,6 @@ export function AdminParticipant() {
 
     function openModal(publicationId: string, modalType: ModalType) {
         setPublicationId(publicationId);
-        if (publicationId) {
-            PublicationsEndpoint.findPublicationById(publicationId)
-                .then((publication) => {
-                    setPublication(publication);
-                    setOpen(true);
-                });
-        }
         setModalType(modalType);
         setOpen(true);
     }
@@ -122,11 +118,53 @@ export function AdminParticipant() {
             });
     }
 
+    const tokenIndicator = ({item}: { item: Invitation }) => {
+        return (
+            <>
+                {Strings.isNotEmpty(item.stored_token) && (
+                    <>
+                        <CheckIcon/>
+                        <Button theme={ElementStylingTypes.TERTIARY_ICON}
+                                onClick={() => {
+                                    tokenSignal.value = item.stored_token;
+                                    openModal("", 'TOKEN');
+                                }}>
+                            <Key size={24}/>
+                        </Button>
+                    </>
+                )}
+                {Strings.isEmpty(item.stored_token) && (<CloseIcon/>)}
+            </>
+        );
+    };
+    const isOpenModal = (mt: ModalType) => {
+        return open && modalType === mt;
+    }
     return (
         <>
+            <Dialog
+                headerTitle={`Token ${participant?.first_name} ${participant?.last_name}`}
+                opened={isOpenModal('TOKEN')}
+                onClosed={closeModal}
+                footer={
+                    <>
+                        <Button theme={ElementStylingTypes.PRIMARY_ERROR} onClick={closeModal}
+                                style={{marginRight: 'auto'}}>
+                            Delete
+                        </Button>
+                        <Button theme="tertiary" onClick={() => {
+                            closeModal();
+                        }}>
+                            Cancel
+                        </Button>
+                    </>
+                }
+            >
+                {tokenSignal.value}
+            </Dialog>
             <RiddlerModal
                 headerTitle={publication?.title}
-                opened={open && modalType === 'PUBLICATION'}
+                opened={isOpenModal('PUBLICATION')}
                 onClosed={() => setOpen(false)}
                 footer={
                     <CloseButton onClick={() => setOpen(false)}/>
@@ -168,7 +206,7 @@ export function AdminParticipant() {
             )}
             <Dialog
                 headerTitle="TODO"
-                opened={open && modalType === 'TODO'}
+                opened={isOpenModal('TODO')}
                 onClosed={() => {
                     closeModal();
                 }}
@@ -192,7 +230,7 @@ export function AdminParticipant() {
             </Dialog>
             <RiddlerModal
                 headerTitle="Create invitation"
-                opened={open && modalType === 'INVITATION'}
+                opened={isOpenModal('INVITATION')}
                 onClosed={() => {
                     setOpen(false);
                 }}
@@ -307,6 +345,13 @@ export function AdminParticipant() {
                                                   )}
                                               </div>
                                           )
+                                      },
+                                      {
+                                          path: 'stored_token',
+                                          header: "Token",
+                                          renderer: tokenIndicator,
+                                          width: '50px',
+                                          flexGrow: 1
                                       }
                                   ]
                               }
@@ -315,6 +360,19 @@ export function AdminParticipant() {
                               actionButtons={({item}: { item: Invitation }) => {
                                   return (
                                       <>
+                                          <Button theme={ElementStylingTypes.TERTIARY_ICON}
+                                                  onClick={() => InvitationEndpoint.generateToken(item.id)
+                                                      .then(invitation => {
+                                                          invitations.forEach(e => {
+                                                              LOGGER.debug('Token {}', invitation.stored_token)
+                                                              if (e.id === invitation.id) {
+                                                                  e.stored_token = invitation.stored_token;
+                                                              }
+                                                          })
+                                                          Notify.success('Token generated successfully for {}', item.publication.title);
+                                                      })}>
+                                              <RotateCcwKey size={24}/>
+                                          </Button>
                                           <Button theme={ElementStylingTypes.TERTIARY_ICON}
                                                   onClick={() => openModal(item.publication.id, 'PUBLICATION')}><Newspaper
                                               size={24}/></Button>

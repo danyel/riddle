@@ -43,7 +43,6 @@ public class ParticipantEntity extends BaseEntity {
     private String firstName;
     private String lastName;
     private String email;
-    private String storedToken;
     private byte[] photo;
     @JdbcTypeCode(Types.BINARY)
     @Column(columnDefinition = "BYTEA")

@@ -5,10 +5,8 @@ import styles from "Frontend/themes/riddler/common.module.css";
 import {useEffect, useState} from "react";
 import {ParticipantAdminEndpoint} from "Frontend/generated/endpoints";
 import {useSignal} from "@vaadin/hilla-react-signals";
-import {CheckButton, CloseButton, GenerateToken, ViewDetailButton} from "Frontend/components/ui/button";
+import {CheckButton, CloseButton, ViewDetailButton} from "Frontend/components/ui/button";
 import CreateParticipant from "Frontend/generated/be/riddler/v1/participant/client/model/CreateParticipant";
-import {CheckIcon, CloseIcon} from "Frontend/components/ui/icons";
-import {Notify, Strings} from "Frontend/util";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import RiddlerModal from "Frontend/components/ui/modal/modal";
 import FormItem from "Frontend/components/ui/form/form-item.component";
@@ -21,10 +19,12 @@ function ParticipantTable() {
     const [open, setOpen] = useState(false);
     const [participants, setParticipants] = useState<Participant[]>([]);
     const createParticipant = useSignal<CreateParticipant>({});
+    const [participant, setParticipant] = useState<Participant>();
+    const [modalType, setModalType] = useState<ModalType>('NONE');
+    type ModalType = 'TOKEN' | 'NONE' | 'ADD';
 
     useEffect(() => {
         if (open) {
-            // Clear input value when the modal opens
             createParticipant.value.email_address = '';
             createParticipant.value.first_name = '';
             createParticipant.value.last_name = '';
@@ -56,10 +56,6 @@ function ParticipantTable() {
     const actionButtons = ({item}: { item: Participant }) => {
         return (
             <>
-                <GenerateToken onClick={() => ParticipantAdminEndpoint.generateToken(item.id).then(_ => {
-                    fetchParticipants();
-                    Notify.success('Token generated successfully for {} {}', item.first_name, item.last_name);
-                })}/>
                 <ViewDetailButton onClick={() => {
                     Navigate.to(BookmarkType.PARTICIPANTS, item.id);
                 }}/>
@@ -67,26 +63,32 @@ function ParticipantTable() {
         );
     };
 
-    const tokenIndicator = ({item}: { item: Participant }) => {
-        return (
-            <>
-                {Strings.isNotEmpty(item.stored_token) && (<CheckIcon/>)}
-                {Strings.isEmpty(item.stored_token) && (<CloseIcon/>)}
-            </>
-        );
-    };
+    const closeModal = () => {
+        setModalType('NONE')
+        setOpen(false);
+    }
+
+    const openModal = (modalType: ModalType) => {
+        setModalType(modalType);
+        setOpen(true);
+    }
+
+    const isOpenModal = (mt: ModalType) => {
+        return open && modalType === mt;
+    }
 
     return (
         <>
+
             <HorizontalLayout className={styles.full_width_layout}>
                 <div className={styles.menu_bar_layout}>
-                    <Button theme={ElementStylingTypes.TERTIARY_ICON} onClick={() => setOpen(true)}><Plus
+                    <Button theme={ElementStylingTypes.TERTIARY_ICON} onClick={() => openModal('ADD')}><Plus
                         size={24}/></Button>
                 </div>
             </HorizontalLayout>
             <RiddlerModal
                 headerTitle="Add participant"
-                opened={open}
+                opened={isOpenModal('ADD')}
                 onClosed={() => {
                     setOpen(false);
                 }}
@@ -157,13 +159,6 @@ function ParticipantTable() {
                             header: "Email",
                             width: '100px',
                             flexGrow: 1
-                        },
-                        {
-                            path: 'stored_token',
-                            header: "Token",
-                            renderer: tokenIndicator,
-                            width: '50px',
-                            flexGrow: 1
                         }
                     ]
                 }
@@ -173,6 +168,7 @@ function ParticipantTable() {
         </>
     );
 }
+
 export default function ParticipantsPage() {
     return (
         <>

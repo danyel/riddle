@@ -21,8 +21,6 @@ public record Participant(
         @NonNull String lastName,
         @JsonProperty("email_address")
         @NonNull String emailAddress,
-        @JsonProperty("stored_token")
-        String storedToken,
         String photo,
         String cv,
         @NonNull List<@NonNull Category> categories

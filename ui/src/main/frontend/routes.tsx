@@ -115,11 +115,11 @@ export const routes = protectRoutes([
         errorElement: <RootErrorBoundary/>,
         children: [
             {
-                path: '/participant',
+                path: '/candidate/:token',
                 element: <ParticipantPage/>
             },
             {
-                path: '/participant/question/:id',
+                path: '/candidate/question/:id',
                 element: <ParticipantQuestionsPage/>
             }
         ]

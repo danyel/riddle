@@ -1,5 +1,6 @@
 package be.riddler.v1.participant.api;
 
+import be.riddler.v1.invitation.feature.GenerateTokenFeature;
 import be.riddler.v1.participant.client.ParticipantClient;
 import be.riddler.v1.participant.client.model.CreateParticipant;
 import be.riddler.v1.participant.client.model.Participant;
@@ -7,7 +8,6 @@ import be.riddler.v1.participant.client.model.ParticipantId;
 import be.riddler.v1.participant.feature.CreateParticipantFeature;
 import be.riddler.v1.participant.feature.FindAllParticipantsFeature;
 import be.riddler.v1.participant.feature.FindByParticipantIdFeature;
-import be.riddler.v1.participant.feature.GenerateTokenFeature;
 import be.riddler.v1.participant.feature.UploadCvFeature;
 import be.riddler.v1.participant.feature.UploadPhotoFeature;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,11 +45,6 @@ class ParticipantResource implements ParticipantClient {
     @Override
     public @NonNull List<@NonNull Participant> findAll() {
         return findAllParticipantsFeature.findAll();
-    }
-
-    @Override
-    public void generateToken(@NonNull UUID participantId) {
-        generateTokenFeature.generate(ParticipantId.from(participantId));
     }
 
     @Override

@@ -3,7 +3,7 @@ import styles from "Frontend/themes/riddler/common.module.css";
 import Publication from "Frontend/generated/be/riddler/v1/publication/client/model/Publication";
 
 export default function PublicationDetail({publication}: { publication: Publication }) {
-    return (
+    return publication ? (
         <>
             <div style={{colspan: 2, marginTop: 'var(--lumo-space-m)'}}>
                 <div style={{
@@ -62,5 +62,5 @@ export default function PublicationDetail({publication}: { publication: Publicat
                 </div>
             </div>
         </>
-    );
+    ) : (<></>);
 }

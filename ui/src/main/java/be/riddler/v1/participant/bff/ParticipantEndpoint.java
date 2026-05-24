@@ -1,5 +1,9 @@
 package be.riddler.v1.participant.bff;
 
+import be.riddler.v1.invitation.client.InvitationClient;
+import be.riddler.v1.invitation.client.model.Invitation;
+import be.riddler.v1.invitation.mapper.InvitationMapper;
+import be.riddler.v1.invitation.repository.InvitationRepository;
 import be.riddler.v1.participant.client.ParticipantClient;
 import be.riddler.v1.participant.client.model.Participant;
 import be.riddler.v1.question.client.QuestionClient;
@@ -9,6 +13,7 @@ import com.vaadin.hilla.BrowserCallable;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,12 +25,13 @@ import java.util.UUID;
  * @version 1.0.0 09/05/2026
  */
 @BrowserCallable
-//@RolesAllowed("ADMIN")
 @AnonymousAllowed
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class ParticipantEndpoint {
     private final QuestionClient questionApi;
     private final ParticipantClient participantClient;
+    private final InvitationClient invitationClient;
+    private final InvitationRepository invitationRepository;
 
     public @NonNull List<@NonNull Question> getQuestions() {
         return questionApi.getQuestionsById(List.of());
@@ -37,5 +43,16 @@ public class ParticipantEndpoint {
 
     public @NonNull Participant findById(@NonNull UUID uuid) {
         return participantClient.findById(uuid);
+    }
+
+
+    public @NonNull Invitation findInvitationById(@NonNull UUID invitationId) {
+        return invitationClient.findById(invitationId);
+    }
+
+    @Transactional(readOnly = true)
+    public @NonNull Invitation findByToken(@NonNull String token) {
+        var invitationEntity = invitationRepository.findByStoredToken(token);
+        return invitationEntity.map(InvitationMapper::fromInvitationEntity).orElseThrow();
     }
 }

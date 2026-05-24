@@ -45,4 +45,5 @@ public class InvitationEntity extends BaseEntity {
     @OneToMany(mappedBy = "invitation", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     private List<InvitationQuestionEntity> questions = new ArrayList<>();
+    private String storedToken;
 }

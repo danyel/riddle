@@ -30,7 +30,7 @@ public class InvitationMapper {
                 .toList();
         var publication = PublicationMapper.fromEntity(invitationEntity.getPublication());
         return safeQuestions.isEmpty()
-                ? new Invitation(invitationEntity.getId(), invitationEntity.getParticipantId(), publication)
-                : new Invitation(invitationEntity.getId(), publication, invitationEntity.getParticipantId(), safeQuestions);
+                ? new Invitation(invitationEntity.getId(), invitationEntity.getParticipantId(), publication, invitationEntity.getStoredToken())
+                : new Invitation(invitationEntity.getId(), publication, invitationEntity.getParticipantId(), invitationEntity.getStoredToken(), safeQuestions);
     }
 }

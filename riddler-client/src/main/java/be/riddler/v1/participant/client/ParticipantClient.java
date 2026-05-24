@@ -92,35 +92,6 @@ public interface ParticipantClient {
     @NonNull List<@NonNull Participant> findAll();
 
     @Operation(
-            method = "GET",
-            tags = "participants",
-            summary = "Generates a token for the participant",
-            operationId = "generateToken",
-            parameters = {
-                    @Parameter(name = "X-Correlation-Id", in = ParameterIn.HEADER, schema = @Schema(implementation = UUID.class))
-            },
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            content = @Content(
-                                    mediaType = APPLICATION_JSON_VALUE,
-                                    array = @ArraySchema(schema = @Schema(implementation = Participant.class))
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            content = @Content(
-                                    mediaType = APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ProblemDetail.class)
-                            )
-                    )
-            }
-    )
-    @GetMapping(path = "/{id}/token", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    void generateToken(@PathVariable(name = "id") @NonNull UUID participantId);
-
-    @Operation(
             method = "POST",
             tags = "participants",
             operationId = "create",

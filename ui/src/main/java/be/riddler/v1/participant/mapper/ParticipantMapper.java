@@ -38,7 +38,7 @@ public class ParticipantMapper {
             cv = Base64.getEncoder().encodeToString(participant.getCv());
         }
 
-        return new Participant(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getEmail(), participant.getStoredToken(), photo, cv, Objects.requireNonNullElse(participant.getCategories(), List.<CategoryEntity>of())
+        return new Participant(participant.getId(), participant.getFirstName(), participant.getLastName(), participant.getEmail(), photo, cv, Objects.requireNonNullElse(participant.getCategories(), List.<CategoryEntity>of())
                 .stream()
                 .map(CategoryMapper::fromCategoryEntity)
                 .toList());

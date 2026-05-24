@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class UpdateInvitationFeatureImpl implements UpdateInvitationFeature {
+class UpdateInvitationFeatureImpl implements UpdateInvitationFeature {
     private final InvitationRepository invitationRepository;
 
     @Transactional
@@ -34,6 +34,11 @@ public class UpdateInvitationFeatureImpl implements UpdateInvitationFeature {
         var collect = invitationEntity.getQuestions()
                 .stream()
                 .collect(Collectors.toMap(invitationQuestionEntity -> invitationQuestionEntity.getId().questionId(), (q) -> q));
+        var questions = invitationEntity.getQuestions()
+                .stream()
+                .filter(question -> !updateInvitation.questions().contains(question.getId().questionId()))
+                .toList();
+        invitationEntity.getQuestions().removeAll(questions);
         updateInvitation.questions()
                 .forEach(e -> {
                     if (!collect.containsKey(e)) {

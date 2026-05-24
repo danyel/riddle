@@ -35,7 +35,7 @@ export default function Navigation(props: NavigationProperties) {
 
     const items: CustomMenuItem[] = [
         {
-            component: renderItemComponent('cog', settings.username!!),
+            component: renderItemComponent('cog', settings.username),
             children: [
                 {
                     component: renderItemComponent('user', 'Profile'),

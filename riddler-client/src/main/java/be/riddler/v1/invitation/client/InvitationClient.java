@@ -163,4 +163,27 @@ public interface InvitationClient {
     @DeleteMapping(path = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteById(@PathVariable(name = "id") @NonNull UUID invitationId);
+
+    @Operation(
+            method = "GET",
+            tags = "invitations",
+            summary = "Generates a token",
+            operationId = "generateToken",
+            parameters = {
+                    @Parameter(name = "X-Correlation-Id", in = ParameterIn.HEADER, schema = @Schema(implementation = UUID.class)),
+                    @Parameter(name = "id", in = ParameterIn.PATH, schema = @Schema(implementation = UUID.class))
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            content = @Content(schema = @Schema(implementation = ProblemDetail.class))
+                    )
+            }
+    )
+    @GetMapping(path = "{id}/generate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @NonNull Invitation generateToken(@PathVariable(name = "id") @NonNull UUID invitationId);
 }

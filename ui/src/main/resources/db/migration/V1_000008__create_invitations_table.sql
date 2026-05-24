@@ -5,6 +5,7 @@ CREATE TABLE invitations
     ID             UUID PRIMARY KEY,
     participant_id UUID NOT NULL,
     publication_id UUID NOT NULL,
+    stored_token VARCHAR(255) NULL,
     created_by     VARCHAR(50) NOT NULL,
     updated_by     VARCHAR(50),
     CREATED_AT     TIMESTAMP WITHOUT TIME ZONE default now(),

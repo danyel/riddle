@@ -7,6 +7,7 @@ import be.riddler.v1.invitation.client.model.UpdateInvitation;
 import be.riddler.v1.invitation.feature.DeleteByIdFeature;
 import be.riddler.v1.invitation.feature.FindAllByParticipantIdFeature;
 import be.riddler.v1.invitation.feature.FindByIdFeature;
+import be.riddler.v1.invitation.feature.GenerateTokenFeature;
 import be.riddler.v1.invitation.feature.SaveInvitationFeature;
 import be.riddler.v1.invitation.feature.UpdateInvitationFeature;
 import lombok.AccessLevel;
@@ -33,6 +34,7 @@ class InvitationResource implements InvitationClient {
     private final DeleteByIdFeature deleteByIdFeature;
     private final FindAllByParticipantIdFeature findAllByParticipantIdFeature;
     private final UpdateInvitationFeature updateInvitationFeature;
+    private final GenerateTokenFeature generateTokenFeature;
 
     @Override
     public @NonNull Invitation create(@NonNull CreateInvitation createInvitation) {
@@ -52,6 +54,11 @@ class InvitationResource implements InvitationClient {
     @Override
     public void deleteById(@NonNull UUID invitationId) {
         deleteByIdFeature.deleteById(invitationId);
+    }
+
+    @Override
+    public @NonNull Invitation generateToken(@NonNull UUID invitationId) {
+        return generateTokenFeature.generate(invitationId);
     }
 
     @Override

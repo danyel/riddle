@@ -32,10 +32,6 @@ public class ParticipantAdminEndpoint {
         return participantClient.findById(id);
     }
 
-    public void generateToken(UUID participantId) {
-        participantClient.generateToken(participantId);
-    }
-
     public @NonNull Participant create(CreateParticipant createParticipant) {
         return participantClient.create(createParticipant);
     }

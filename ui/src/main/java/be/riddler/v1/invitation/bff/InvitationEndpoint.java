@@ -4,6 +4,8 @@ import be.riddler.v1.invitation.client.InvitationClient;
 import be.riddler.v1.invitation.client.model.CreateInvitation;
 import be.riddler.v1.invitation.client.model.Invitation;
 import be.riddler.v1.invitation.client.model.UpdateInvitation;
+import be.riddler.v1.invitation.mapper.InvitationMapper;
+import be.riddler.v1.invitation.repository.InvitationRepository;
 import be.riddler.v1.question.client.QuestionClient;
 import be.riddler.v1.question.client.model.Question;
 import com.vaadin.hilla.BrowserCallable;
@@ -27,6 +29,7 @@ import java.util.UUID;
 public class InvitationEndpoint {
     private final InvitationClient invitationClient;
     private final QuestionClient questionClient;
+    private final InvitationRepository invitationRepository;
 
     public @NonNull Invitation create(@NonNull CreateInvitation createInvitation) {
         return invitationClient.create(createInvitation);
@@ -34,6 +37,11 @@ public class InvitationEndpoint {
 
     public @NonNull Invitation findById(@NonNull UUID invitationId) {
         return invitationClient.findById(invitationId);
+    }
+
+    public @NonNull Invitation findByToken(@NonNull String token) {
+        var invitationEntity = invitationRepository.findByStoredToken(token);
+        return invitationEntity.map(InvitationMapper::fromInvitationEntity).orElseThrow();
     }
 
     public void delete(@NonNull UUID invitationId) {
@@ -46,6 +54,10 @@ public class InvitationEndpoint {
 
     public @NonNull List<@NonNull Question> findByIds(@NonNull List<@NonNull UUID> questionIds) {
         return questionClient.getQuestionsById(questionIds);
+    }
+
+    public @NonNull Invitation generateToken(UUID participantId) {
+        return invitationClient.generateToken(participantId);
     }
 
     public @NonNull Invitation addQuestions(@NonNull UUID invitationId, @NonNull List<@NonNull UUID> questionIds) {
