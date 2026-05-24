@@ -11,6 +11,7 @@ import UpdateAnswer from "Frontend/generated/be/riddler/v1/answer/client/model/U
 import FormItem from "Frontend/components/ui/form/form-item.component";
 import RiddlerModal from "Frontend/components/ui/modal/modal";
 import RiddlerTable from "Frontend/components/table/table";
+import {Notify} from "Frontend/util";
 
 export default function AnswersTable(
     {
@@ -31,7 +32,8 @@ export default function AnswersTable(
 
     const fetchAnswers = () => {
         AnswerEndpoint.findByQuestion(questionId)
-            .then(setAnswers);
+            .then(setAnswers)
+            .catch(err => Notify.error('Could not fetch the answers {}', err));
     };
 
     const answerActions = ({item}: { item: Answer }) => {
@@ -117,7 +119,8 @@ function CreateAnswerDialogModal(
                             .then(() => {
                                 onAnswerCreated();
                                 onClose();
-                            });
+                            })
+                            .catch(err => Notify.error('Could not create an answer {}', err));
                     }}/>
                     <CloseButton onClick={onClose}/>
                 </>
@@ -178,7 +181,8 @@ function EditAnswerDialogModal(
                             .then(() => {
                                 onAnswerCreated();
                                 onClose();
-                            });
+                            })
+                            .catch(err => Notify.error('Could not update {}', err));
                     }}/>
                     <CloseButton onClick={onClose}/>
                 </>

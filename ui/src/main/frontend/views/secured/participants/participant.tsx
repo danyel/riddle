@@ -46,6 +46,7 @@ export function AdminParticipant() {
                         setPublications(publications.filter(e => publicationIds.indexOf(e.id) > 0));
                     }
                 })
+                .catch(err => Notify.error('Could not retrieve the invitaions {}', err));
         }
     }
 
@@ -62,8 +63,10 @@ export function AdminParticipant() {
                             } else {
                                 setPublications(elements);
                             }
-                        });
-                });
+                        })
+                        .catch(err => Notify.error('Could not retrieve the participant {}', err));
+                })
+                .catch(err => Notify.error('Could not retrieve the publications {}', err));
 
 
             requestAnimationFrame(() => {
@@ -104,7 +107,8 @@ export function AdminParticipant() {
     useEffect(() => {
         if (publicationId) {
             PublicationsEndpoint.findPublicationById(publicationId)
-                .then(setPublication);
+                .then(setPublication)
+                .catch(err => Notify.error('Could not retrieve publication {}', err));
         }
     }, [publicationId]);
 
@@ -115,25 +119,30 @@ export function AdminParticipant() {
                 Notify.success('Invitation {} created', invitation.id);
                 fetchInvitations();
                 setOpen(false);
-            });
+            })
+            .catch(err => Notify.error('Could not create invitation. {}', err));
     }
 
     const tokenIndicator = ({item}: { item: Invitation }) => {
         return (
             <>
-                {Strings.isNotEmpty(item.stored_token) && (
-                    <>
-                        <CheckIcon/>
-                        <Button theme={ElementStylingTypes.TERTIARY_ICON}
-                                onClick={() => {
-                                    tokenSignal.value = item.stored_token;
-                                    openModal("", 'TOKEN');
-                                }}>
-                            <Key size={24}/>
-                        </Button>
-                    </>
-                )}
-                {Strings.isEmpty(item.stored_token) && (<CloseIcon/>)}
+                {Strings.isNotEmpty(item.stored_token) ?
+                    (
+                        <>
+                            <CheckIcon/>
+                            <Button theme={ElementStylingTypes.TERTIARY_ICON}
+                                    onClick={() => {
+                                        tokenSignal.value = item.stored_token;
+                                        openModal("", 'TOKEN');
+                                    }}>
+                                <Key size={24}/>
+                            </Button>
+                        </>
+                    ) :
+                    (
+                        <CloseIcon/>
+                    )
+                }
             </>
         );
     };
@@ -370,7 +379,8 @@ export function AdminParticipant() {
                                                               }
                                                           })
                                                           Notify.success('Token generated successfully for {}', item.publication.title);
-                                                      })}>
+                                                      })
+                                                      .catch(err => Notify.error('Could not generate the token {}', err))}>
                                               <RotateCcwKey size={24}/>
                                           </Button>
                                           <Button theme={ElementStylingTypes.TERTIARY_ICON}

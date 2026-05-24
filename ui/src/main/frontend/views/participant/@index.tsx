@@ -19,7 +19,8 @@ export default function ParticipantPage() {
     useEffect(() => {
         if (params.token) {
             ParticipantEndpoint.findInvitationById(params.token)
-                .then(setInvitation);
+                .then(setInvitation)
+                .catch(err => Notify.error('Could not retrieve the invitation via token {}', err));
         }
     });
 

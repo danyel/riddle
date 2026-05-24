@@ -19,7 +19,9 @@ export function LevelSelector({selectedLevelId, onLevelChange}: LevelSelectorPro
     }, []);
 
     const loadLevels = () => {
-        PublicationsEndpoint.getLevels().then(setLevels);
+        PublicationsEndpoint.getLevels()
+            .then(setLevels)
+            .catch(err => Notify.error('Could not find the levels {}', err));
     };
 
     const handleBlur = () => {

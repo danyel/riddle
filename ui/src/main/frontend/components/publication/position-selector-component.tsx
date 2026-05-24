@@ -19,7 +19,9 @@ export function PositionSelector({selectedPositionId, onPositionChange}: Positio
     }, []);
 
     const loadPositions = () => {
-        PublicationsEndpoint.getPositions().then(setPositions);
+        PublicationsEndpoint.getPositions()
+            .then(setPositions)
+            .catch(err => Notify.error('Could not find the positions {}', err));
     };
 
     const handleBlur = () => {

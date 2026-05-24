@@ -41,8 +41,12 @@ export function SideBar() {
 
     useEffect(() => {
         LOGGER.debug('useEffect: {} {}', params.id, location.pathname);
-        MenuService.menu().then(setMenus);
-        BookmarkEndpoint.bookmarkTypes().then(setBookmarkTypes);
+        MenuService.menu()
+            .then(setMenus)
+            .catch(err => Notify.error('Could not fetch the menus {}', err));
+        BookmarkEndpoint.bookmarkTypes()
+            .then(setBookmarkTypes)
+            .catch(err => Notify.error('Could not fetch the bookmark types {}', err));
     }, []);
 
     useEffect(() => {
@@ -89,15 +93,21 @@ export function SideBar() {
 
     const searchQuestion = () => {
         LOGGER.debug('Fetching question {}', params.id);
-        QuestionEndpoint.get(params.id!!).then(setQuestion);
+        QuestionEndpoint.get(params.id!!)
+            .then(setQuestion)
+            .catch(err => Notify.error('Could not fetch the question {}', err));
     };
     const searchPublication = () => {
         LOGGER.debug('Fetching publication {}', params.id);
-        PublicationsEndpoint.findPublicationById(params.id!!).then(setPublication);
+        PublicationsEndpoint.findPublicationById(params.id!!)
+            .then(setPublication)
+            .catch(err => Notify.error('Could not find the publication {}', err));
     };
     const searchParticipant = () => {
         LOGGER.debug('Fetching participant {}', params.id);
-        ParticipantAdminEndpoint.findById(params.id!!).then(setParticipant);
+        ParticipantAdminEndpoint.findById(params.id!!)
+            .then(setParticipant)
+            .catch(err => Notify.error('Could not find the participant {}', err));
     };
 
     const addBookmark = (activeChildrenList: Bookmarkable[], bookmarkType: BookmarkType, label: string): Bookmarkable[] => {
@@ -181,18 +191,24 @@ export function SideBar() {
             path: bookmark.path,
             label: bookmark.label,
             bookmark_type: bookmark.bookmark_type
-        }).then(settings => {
-            Notify.success('Bookmark {} added', bookmark.label);
-            setSettings(settings);
-        });
+        })
+            .then(settings => {
+                Notify.success('Bookmark {} added', bookmark.label);
+                setSettings(settings);
+            })
+            .catch(err => Notify.error('Could not find the settings {}', err));
     };
 
     const deleteBookmark = (bookmark: Bookmarkable) => {
         LOGGER.debug('Bookmark {}', bookmark.id);
-        BookmarkEndpoint.deleteBookmark(bookmark).then(() => {
-            Notify.warn('Bookmark {} removed', bookmark.label)
-            SettingsEndpoint.getSettings().then(setSettings);
-        });
+        BookmarkEndpoint.deleteBookmark(bookmark)
+            .then(() => {
+                Notify.warn('Bookmark {} removed', bookmark.label)
+                SettingsEndpoint.getSettings()
+                    .then(setSettings)
+                    .catch(err => Notify.error('Could not retrieve the settings {}', err));
+            })
+            .catch(err => Notify.error('Could not delete the bookmark {}', err));
     };
 
     const isBookmarked = (path: string | undefined): boolean => {

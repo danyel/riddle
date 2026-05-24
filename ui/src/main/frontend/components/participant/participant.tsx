@@ -9,6 +9,7 @@ import {ModalType} from "Frontend/views/secured/participants/participant";
 import Category from "Frontend/generated/be/riddler/v1/category/client/model/Category";
 import {ElementStylingTypes} from "Frontend/constant";
 import {File} from "lucide-react";
+import {Notify} from "Frontend/util";
 
 export default function ParticipantProfileDetail(
     {
@@ -73,7 +74,9 @@ export default function ParticipantProfileDetail(
                                 }
                             }}
                             onUploadSuccess={() => {
-                                ParticipantAdminEndpoint.findById(params.id!!).then(setParticipant);
+                                ParticipantAdminEndpoint.findById(params.id!!)
+                                    .then(setParticipant)
+                                    .catch(err => Notify.error('Could not find the participant {}', err));
                             }}
                             style={{scale: '0.9'}}
                         />
@@ -186,7 +189,9 @@ export default function ParticipantProfileDetail(
                                         }
                                     }}
                                     onUploadSuccess={() => {
-                                        ParticipantAdminEndpoint.findById(params.id!!).then(setParticipant);
+                                        ParticipantAdminEndpoint.findById(params.id!!)
+                                            .then(setParticipant)
+                                            .catch(err => Notify.error('Could not find the participant {}', err));
                                     }}
                                     style={{margin: 0}}
                                 />

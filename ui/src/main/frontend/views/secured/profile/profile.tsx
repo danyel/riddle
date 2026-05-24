@@ -9,7 +9,7 @@ import {Button} from "@vaadin/react-components/Button";
 import {ElementStylingTypes} from "Frontend/constant";
 import {ReactNode, useState} from "react";
 import {useSignal} from "@vaadin/hilla-react-signals";
-import {Collections, LOGGER} from "Frontend/util";
+import {Collections, LOGGER, Notify} from "Frontend/util";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import Participant from "Frontend/generated/be/riddler/v1/participant/client/model/Participant";
 import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
@@ -126,6 +126,7 @@ export default function ProfilePage() {
                                 );
                                 displayModelOpened.value = true;
                             })
+                            .catch(err => Notify.error('Could not retrieve the question {}', err));
                     }
                 }}/>
             </>
@@ -141,7 +142,8 @@ export default function ProfilePage() {
                         bookmarks: Collections.removeElement(settings.bookmarks, (e: Bookmark) => e && e.id !== bookmark!.id)
                     });
                 }
-            );
+            )
+            .catch(err => Notify.error('Could not delete the bookmark {}', err));
     }
 
     return (

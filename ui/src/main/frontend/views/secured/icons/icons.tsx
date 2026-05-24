@@ -5,12 +5,15 @@ import '@vaadin/icons';
 import {useEffect, useState} from "react";
 import {UiService} from "Frontend/generated/endpoints";
 import {AbacusIcon} from "Frontend/components/ui/icons";
+import {Notify} from "Frontend/util";
 
 export default function IconsView() {
     const [icons, setIcons] = useState<string[]>([]);
 
     useEffect(() => {
-        UiService.icons().then(setIcons);
+        UiService.icons()
+            .then(setIcons)
+            .catch(err => Notify.error('Could not retrieve the icons {}', err));
     }, []);
     return (
         <div>

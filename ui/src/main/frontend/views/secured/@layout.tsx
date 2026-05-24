@@ -13,6 +13,7 @@ import {SideBar} from "Frontend/components";
 import {Navigate} from "Frontend/util/navigate";
 import {Authorisation} from "Frontend/util/authorisation";
 import {useAuth} from "Frontend/auth";
+import {Notify} from "Frontend/util";
 
 function MainLayoutContent() {
     const [isOpened, setIsOpened] = useState(true);
@@ -22,7 +23,8 @@ function MainLayoutContent() {
 
     useEffect(() => {
         SettingsEndpoint.getSettings()
-            .then(setSettings);
+            .then(setSettings)
+            .catch(err => Notify.error('Could not retreive the setting {}', err));
     }, []);
 
     useEffect(() => {

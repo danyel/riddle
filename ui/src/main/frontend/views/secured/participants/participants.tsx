@@ -14,12 +14,12 @@ import {Navigate} from "Frontend/util/navigate";
 import RiddlerTable from "Frontend/components/table/table";
 import {ElementStylingTypes} from "Frontend/constant";
 import {Plus} from "lucide-react";
+import {Notify} from "Frontend/util";
 
 function ParticipantTable() {
     const [open, setOpen] = useState(false);
     const [participants, setParticipants] = useState<Participant[]>([]);
     const createParticipant = useSignal<CreateParticipant>({});
-    const [participant, setParticipant] = useState<Participant>();
     const [modalType, setModalType] = useState<ModalType>('NONE');
     type ModalType = 'TOKEN' | 'NONE' | 'ADD';
 
@@ -41,12 +41,14 @@ function ParticipantTable() {
             .then(() => {
                 fetchParticipants();
                 setOpen(false);
-            });
+            })
+            .catch(err => Notify.error('Could not create a participant {}', err));
     }
 
     function fetchParticipants() {
         ParticipantAdminEndpoint.findAll()
-            .then(setParticipants);
+            .then(setParticipants)
+            .catch(err => Notify.error('Could not retrieve the participants {}', err));
     }
 
     useEffect(() => {
@@ -89,13 +91,11 @@ function ParticipantTable() {
             <RiddlerModal
                 headerTitle="Add participant"
                 opened={isOpenModal('ADD')}
-                onClosed={() => {
-                    setOpen(false);
-                }}
+                onClosed={closeModal}
                 footer={
                     <>
                         <CheckButton onClick={saveParticipant}/>
-                        <CloseButton onClick={() => setOpen(false)}/>
+                        <CloseButton onClick={closeModal}/>
                     </>
                 }
                 content={

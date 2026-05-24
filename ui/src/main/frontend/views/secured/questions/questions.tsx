@@ -15,6 +15,7 @@ import FormItem from "Frontend/components/ui/form/form-item.component";
 import RiddlerTable from "Frontend/components/table/table";
 import RiddlerModal from "Frontend/components/ui/modal/modal";
 import {Navigate} from "Frontend/util/navigate";
+import {Notify} from "Frontend/util";
 
 export default function QuestionsView() {
     const [open, setOpen] = useState(false);
@@ -62,7 +63,8 @@ export default function QuestionsView() {
             .then(() => {
                 fetchQuestions();
                 setOpen(false);
-            });
+            })
+            .catch(err => Notify.error('Could not create the question {}', err));
     }
 
     function closeIfNotValue(e: CustomEvent<{ value: boolean }>) {
@@ -71,7 +73,9 @@ export default function QuestionsView() {
     }
 
     function fetchQuestions() {
-        QuestionEndpoint.getQuestions().then(setQuestions);
+        QuestionEndpoint.getQuestions()
+            .then(setQuestions)
+            .catch(err => Notify.error('Could not retrieve the questions {}', err));
     }
 
     useEffect(() => {

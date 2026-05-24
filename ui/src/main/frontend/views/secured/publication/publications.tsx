@@ -61,7 +61,8 @@ export default function PublicationsPage() {
 
     function getPublications() {
         PublicationsEndpoint.getPublications()
-            .then(setPublications);
+            .then(setPublications)
+            .catch(err => Notify.error('Could not retrieve the publications {}', err));
     }
 
     const actionButtons = ({item}: { item: Publication }) => {

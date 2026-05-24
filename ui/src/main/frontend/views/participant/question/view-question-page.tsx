@@ -5,6 +5,7 @@ import {ParticipantEndpoint} from "Frontend/generated/endpoints";
 import {useActivityTracker} from "Frontend/views/participant/useActivityTracker";
 import {TextArea} from "@vaadin/react-components";
 import {useSignal} from "@vaadin/hilla-react-signals";
+import {Notify} from "Frontend/util";
 
 function ViewQuestionPage() {
     const [question, setQuestion] = useState<Question>();
@@ -15,7 +16,8 @@ function ViewQuestionPage() {
 
     useEffect(() => {
         ParticipantEndpoint.get(questionId)
-            .then(setQuestion);
+            .then(setQuestion)
+            .catch(err => Notify.error('Could not find the question {}', err));
     }, [questionId])
 
     return (

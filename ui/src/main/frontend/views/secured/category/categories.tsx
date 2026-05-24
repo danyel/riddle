@@ -27,7 +27,9 @@ export default function CategoryManagementPage() {
     type ModalType = 'DELETE' | 'EDIT' | 'NONE';
     const loadData = () => {
         if (state.user) {
-            CategoryEndpoint.findAll().then(setCategories);
+            CategoryEndpoint.findAll()
+                .then(setCategories)
+                .catch(err => Notify.error('Could not find the category {}', err));
         }
     };
 

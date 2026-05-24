@@ -57,20 +57,23 @@ export default function QuestionDetailPage() {
             .then(() => {
                 Notify.error('Question "{}" deleted!', question?.title);
                 Navigate.to(BookmarkType.QUESTIONS);
-            });
+            })
+            .catch(err => Notify.error('Could not delete the question {}', err));
     }
 
     useEffect(() => {
         if (!id) return;
 
-        QuestionEndpoint.get(id).then(fetchedQuestion => {
-            setQuestion(fetchedQuestion);
-            setUpdateQuestion({
-                question: fetchedQuestion.question,
-                type: fetchedQuestion.type,
-                title: fetchedQuestion.title
-            });
-        });
+        QuestionEndpoint.get(id)
+            .then(fetchedQuestion => {
+                setQuestion(fetchedQuestion);
+                setUpdateQuestion({
+                    question: fetchedQuestion.question,
+                    type: fetchedQuestion.type,
+                    title: fetchedQuestion.title
+                });
+            })
+            .catch(err => Notify.error('Could not retrieve the question {}', err));
 
         QuestionTypeEndpoint.questionTypes()
             .then((questionTypes: string[]) => {
@@ -78,7 +81,8 @@ export default function QuestionDetailPage() {
                     label: `label.${e}`,
                     value: e
                 })));
-            });
+            })
+            .catch(err => Notify.error('Could not retrieve the question types {}', err));
     }, [id]);
 
     return question ? (
@@ -89,12 +93,13 @@ export default function QuestionDetailPage() {
 
                     <SaveButton
                         onClick={() => {
-                            // Fixed: Now accurately targets updateQuestion state variables
+                            QuestionEndpoint.update(question.id!!, updateQuestion)
                             QuestionEndpoint.update(question.id!!, updateQuestion)
                                 .then(() => {
                                     Notify.success('Question updated: ', updateQuestion.title);
                                     Navigate.to(BookmarkType.QUESTIONS);
-                                });
+                                })
+                                .catch(err => Notify.error('Could not update the question {}', err));
                         }}
                         disabled={isSame()}
                     />

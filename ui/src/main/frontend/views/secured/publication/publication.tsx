@@ -9,6 +9,7 @@ import styles from "Frontend/themes/riddler/common.module.css";
 import {BackButton} from "Frontend/components";
 import {Navigate} from "Frontend/util/navigate";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
+import {Notify} from "Frontend/util";
 
 export default function PublicationPage() {
     const [publication, setPublication] = useState<Publication>();
@@ -27,6 +28,7 @@ export default function PublicationPage() {
             .then((data) => {
                 setPublication(data);
             })
+            .catch(err => Notify.error('Could not retrieve the publication {}', err))
             .finally(() => {
                 setLoading(false);
             });
