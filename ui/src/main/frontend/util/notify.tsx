@@ -21,4 +21,12 @@ export class Notify {
         });
         this.LOGGER.error(message, ...data);
     }
+
+    static warn(message: string, ...data: any[]) {
+        Notification.show(Strings.format(message, data), {
+            position: 'top-end',
+            theme: ElementStylingTypes.WARNING
+        });
+        this.LOGGER.warn(message, ...data);
+    }
 }

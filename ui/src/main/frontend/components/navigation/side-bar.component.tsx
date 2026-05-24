@@ -161,7 +161,7 @@ export function SideBar() {
             label: bookmark.label,
             bookmark_type: bookmark.bookmark_type
         }).then(settings => {
-            Notify.success('Bookmark {} created', bookmark.path);
+            Notify.success('Bookmark {} added', bookmark.label);
             setSettings(settings);
         });
     };
@@ -169,7 +169,7 @@ export function SideBar() {
     const deleteBookmark = (bookmark: Bookmark) => {
         logger.debug('Bookmark {}', bookmark.id);
         BookmarkEndpoint.deleteBookmark(bookmark).then(() => {
-            Notify.success('Bookmark {} deleted', bookmark.path)
+            Notify.warn('Bookmark {} removed', bookmark.label)
             SettingsEndpoint.getSettings().then(setSettings);
         });
     };
