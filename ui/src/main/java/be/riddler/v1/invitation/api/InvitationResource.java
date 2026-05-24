@@ -3,10 +3,12 @@ package be.riddler.v1.invitation.api;
 import be.riddler.v1.invitation.client.InvitationClient;
 import be.riddler.v1.invitation.client.model.CreateInvitation;
 import be.riddler.v1.invitation.client.model.Invitation;
+import be.riddler.v1.invitation.client.model.UpdateInvitation;
 import be.riddler.v1.invitation.feature.DeleteByIdFeature;
 import be.riddler.v1.invitation.feature.FindAllByParticipantIdFeature;
 import be.riddler.v1.invitation.feature.FindByIdFeature;
 import be.riddler.v1.invitation.feature.SaveInvitationFeature;
+import be.riddler.v1.invitation.feature.UpdateInvitationFeature;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
@@ -30,10 +32,16 @@ class InvitationResource implements InvitationClient {
     private final FindByIdFeature findByIdFeature;
     private final DeleteByIdFeature deleteByIdFeature;
     private final FindAllByParticipantIdFeature findAllByParticipantIdFeature;
+    private final UpdateInvitationFeature updateInvitationFeature;
 
     @Override
     public @NonNull Invitation create(@NonNull CreateInvitation createInvitation) {
         return saveInvitationFeature.save(createInvitation);
+    }
+
+    @Override
+    public @NonNull Invitation update(UUID invitationId, @NonNull UpdateInvitation updateInvitation) {
+        return updateInvitationFeature.updateInvitation(invitationId, updateInvitation);
     }
 
     @Override

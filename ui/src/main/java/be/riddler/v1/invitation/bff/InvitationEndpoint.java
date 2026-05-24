@@ -3,6 +3,7 @@ package be.riddler.v1.invitation.bff;
 import be.riddler.v1.invitation.client.InvitationClient;
 import be.riddler.v1.invitation.client.model.CreateInvitation;
 import be.riddler.v1.invitation.client.model.Invitation;
+import be.riddler.v1.invitation.client.model.UpdateInvitation;
 import be.riddler.v1.question.client.QuestionClient;
 import be.riddler.v1.question.client.model.Question;
 import com.vaadin.hilla.BrowserCallable;
@@ -45,5 +46,9 @@ public class InvitationEndpoint {
 
     public @NonNull List<@NonNull Question> findByIds(@NonNull List<@NonNull UUID> questionIds) {
         return questionClient.getQuestionsById(questionIds);
+    }
+
+    public @NonNull Invitation addQuestions(@NonNull UUID invitationId, @NonNull List<@NonNull UUID> questionIds) {
+        return invitationClient.update(invitationId, new UpdateInvitation(questionIds));
     }
 }

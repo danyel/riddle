@@ -3,11 +3,13 @@ package be.riddler.v1.invitation.mapper;
 import be.riddler.v1.invitation.client.model.CreateInvitation;
 import be.riddler.v1.invitation.client.model.Invitation;
 import be.riddler.v1.invitation.entity.InvitationEntity;
+import be.riddler.v1.invitation.entity.InvitationQuestionEntity;
 import be.riddler.v1.publication.mapper.PublicationMapper;
 import lombok.experimental.UtilityClass;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * InvitationMapper
@@ -22,8 +24,10 @@ public class InvitationMapper {
     }
 
     public static Invitation fromInvitationEntity(InvitationEntity invitationEntity) {
-        List<java.util.UUID> safeQuestions = Optional.ofNullable(invitationEntity.getQuestions())
-                .orElseGet(List::of);
+        List<UUID> safeQuestions = Objects.requireNonNullElse(invitationEntity.getQuestions(), List.<InvitationQuestionEntity>of())
+                .stream()
+                .map(e -> e.getId().questionId())
+                .toList();
         var publication = PublicationMapper.fromEntity(invitationEntity.getPublication());
         return safeQuestions.isEmpty()
                 ? new Invitation(invitationEntity.getId(), invitationEntity.getParticipantId(), publication)
