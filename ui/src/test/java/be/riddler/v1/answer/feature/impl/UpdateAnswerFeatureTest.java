@@ -33,6 +33,7 @@ import static org.mockito.Mockito.when;
  * @author dnoulet
  * @version 1.0.0 30/05/2026
  */
+@DisplayName("Update Answer Feature")
 @ExtendWith(MockitoExtension.class)
 class UpdateAnswerFeatureTest {
     @Mock

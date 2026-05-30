@@ -4,11 +4,12 @@ import be.riddler.v1.activity.client.ActivityClient;
 import be.riddler.v1.activity.client.model.CreateActivity;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+
+import static lombok.AccessLevel.PACKAGE;
 
 /**
  * ActivityEndpoint
@@ -19,7 +20,7 @@ import java.util.List;
 @Slf4j
 @BrowserCallable
 @AnonymousAllowed
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+@RequiredArgsConstructor(access = PACKAGE)
 public class ActivityEndpoint {
     private final ActivityClient activityClient;
 

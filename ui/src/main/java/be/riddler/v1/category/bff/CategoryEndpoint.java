@@ -6,12 +6,13 @@ import be.riddler.v1.category.client.model.CreateCategory;
 import be.riddler.v1.category.client.model.UpdateCategory;
 import com.vaadin.hilla.BrowserCallable;
 import jakarta.annotation.security.RolesAllowed;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.UUID;
+
+import static lombok.AccessLevel.PACKAGE;
 
 /**
  * CategoryEndpoint
@@ -21,7 +22,7 @@ import java.util.UUID;
  */
 @BrowserCallable
 @RolesAllowed({"ADMIN", "USER"})
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+@RequiredArgsConstructor(access = PACKAGE)
 public class CategoryEndpoint {
     private final CategoryClient categoryClient;
 

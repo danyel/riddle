@@ -1,6 +1,7 @@
 package be.riddler.v1.ui.api;
 
-import be.riddler.common.resource.AbstractResourceTest;
+import be.riddler.common.resource.AbstractResourceIntegrationTest;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -9,12 +10,14 @@ import org.junit.jupiter.api.Test;
  * @author dnoulet
  * @version 1.0.0 26/04/2026
  */
-class UiResourceTest extends AbstractResourceTest {
+@DisplayName("UI Resource")
+class UiResourceIntegrationTest extends AbstractResourceIntegrationTest {
 
     @Test
     void icons() {
         webTestClient.get()
                 .uri("/v1/ui/icons")
+                .header("X-Authorization", xAuthenticationContent())
                 .exchange()
                 .expectStatus()
                 .isOk()

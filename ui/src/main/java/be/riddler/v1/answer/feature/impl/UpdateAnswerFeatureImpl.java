@@ -7,7 +7,6 @@ import be.riddler.v1.answer.feature.UpdateAnswerFeature;
 import be.riddler.v1.answer.mapper.AnswerMapper;
 import be.riddler.v1.answer.repository.AnswerRepository;
 import be.riddler.v1.answer.repository.SolutionRepository;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 import java.util.UUID;
 
+import static lombok.AccessLevel.PACKAGE;
+
 /**
  * UpdateAnswerFeature
  *
@@ -23,7 +24,7 @@ import java.util.UUID;
  * @version 1.0.0 10/05/2026
  */
 @Service
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+@RequiredArgsConstructor(access = PACKAGE)
 class UpdateAnswerFeatureImpl implements UpdateAnswerFeature {
     private final AnswerRepository answerRepository;
     private final SolutionRepository solutionRepository;

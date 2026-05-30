@@ -6,7 +6,6 @@ import be.riddler.v1.activity.client.model.CreateActivity;
 import be.riddler.v1.activity.client.model.GetActivities;
 import be.riddler.v1.activity.feature.CreateActivityFeature;
 import be.riddler.v1.activity.feature.GetActivitiesFeature;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +15,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import static lombok.AccessLevel.PACKAGE;
+
 /**
  * ActivityResource
  *
@@ -23,9 +24,10 @@ import java.util.UUID;
  * @version 1.0.0 09/05/2026
  */
 @RestController
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-@RequestMapping(path = "/v1/activities")
+@RequiredArgsConstructor(access = PACKAGE)
+@RequestMapping(path = ActivityResource.BASE)
 public class ActivityResource implements ActivityClient {
+    public static final String BASE = "/v1/activities";
     private final CreateActivityFeature createActivityFeature;
     private final GetActivitiesFeature getActivitiesFeature;
 

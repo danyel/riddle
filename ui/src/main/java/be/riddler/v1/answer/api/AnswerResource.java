@@ -8,13 +8,14 @@ import be.riddler.v1.answer.client.model.UpdateAnswer;
 import be.riddler.v1.answer.feature.CreateAnswerFeature;
 import be.riddler.v1.answer.feature.GetAnswersByQuestionIdFeature;
 import be.riddler.v1.answer.feature.UpdateAnswerFeature;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
+
+import static lombok.AccessLevel.PACKAGE;
 
 /**
  * AnswerResource
@@ -23,9 +24,10 @@ import java.util.UUID;
  * @version 1.0.0 26/04/2026
  */
 @RestController
-@RequestMapping(path = "/v1/answers")
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+@RequestMapping(path = AnswerResource.BASE)
+@RequiredArgsConstructor(access = PACKAGE)
 class AnswerResource implements AnswerClient {
+    public static final String BASE = "/v1/answers";
     private final CreateAnswerFeature createAnswerFeature;
     private final GetAnswersByQuestionIdFeature getAnswersByQuestionIdFeature;
     private final UpdateAnswerFeature updateAnswerFeature;

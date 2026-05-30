@@ -1,7 +1,7 @@
-package be.riddler.v1.question.adapter.repository;
+package be.riddler.v1.question.repository;
 
-import be.riddler.common.repository.AbstractRepositoryTest;
-import be.riddler.v1.question.repository.QuestionRepository;
+import be.riddler.common.repository.AbstractRepositoryIntegrationTest;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,7 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author dnoulet
  * @version 1.0.0 26/04/2026
  */
-class QuestionRepositoryTest extends AbstractRepositoryTest {
+@DisplayName("Question Repository")
+class QuestionRepositoryIntegrationTest extends AbstractRepositoryIntegrationTest {
     @Autowired
     private QuestionRepository questionRepository;
 

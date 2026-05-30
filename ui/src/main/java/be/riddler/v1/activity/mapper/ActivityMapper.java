@@ -4,9 +4,6 @@ import be.riddler.v1.activity.client.model.ActivityDetail;
 import be.riddler.v1.activity.client.model.CreateActivity;
 import be.riddler.v1.activity.entity.ActivityEntity;
 import lombok.experimental.UtilityClass;
-import org.springframework.security.core.context.SecurityContextHolder;
-
-import java.util.Objects;
 
 /**
  * ActivityMapper
@@ -21,7 +18,6 @@ public class ActivityMapper {
                 .actionType(createActivity.actionType())
                 .questionId(createActivity.questionId())
                 .timestamp(createActivity.timestamp())
-                .username(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName())
                 .elementId(createActivity.elementId())
                 .additionalData(createActivity.additionalData())
                 .build();

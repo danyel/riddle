@@ -1,27 +1,31 @@
 package be.riddler.v1.answer.feature.impl;
 
+import be.riddler.v1.answer.client.model.Answer;
 import be.riddler.v1.answer.client.model.CreateAnswer;
 import be.riddler.v1.answer.client.model.CreateSolution;
+import be.riddler.v1.answer.client.model.Solution;
 import be.riddler.v1.answer.entity.AnswerEntity;
-import be.riddler.v1.answer.entity.SolutionEntity;
+import be.riddler.v1.answer.mapper.AnswerMapper;
+import be.riddler.v1.answer.mapper.SolutionMapper;
 import be.riddler.v1.answer.repository.AnswerRepository;
 import be.riddler.v1.answer.repository.SolutionRepository;
+import be.riddler.v1.fixture.Fixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.UUID;
 
-import static org.mockito.Mockito.any;
+import static be.riddler.v1.fixture.Fixture.Answer.answerId;
+import static be.riddler.v1.fixture.Fixture.Question.questionId;
+import static be.riddler.v1.fixture.Fixture.Solution.solutionEntity;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * CreateAnswerFeatureTest
@@ -29,6 +33,7 @@ import static org.mockito.Mockito.when;
  * @author dnoulet
  * @version 1.0.0 30/05/2026
  */
+@DisplayName("Create Answer Feature")
 @ExtendWith(MockitoExtension.class)
 class CreateAnswerFeatureTest {
     @Mock
@@ -36,11 +41,7 @@ class CreateAnswerFeatureTest {
     @Mock
     private SolutionRepository solutionRepository;
     @InjectMocks
-    private CreateAnswerFeatureImpl createAnswerFeature;
-    @Captor
-    private ArgumentCaptor<AnswerEntity> onAddAnswerCaptor;
-    @Captor
-    private ArgumentCaptor<SolutionEntity> onAddSolutionCaptor;
+    private CreateAnswerFeatureImpl ut;
 
     /**
      * Given:
@@ -54,20 +55,27 @@ class CreateAnswerFeatureTest {
     @DisplayName("Given a create answer where we want to add when the answer will be saves")
     @Test
     void create() {
-        var questionId = UUID.fromString("11111111-1111-1111-1111-111111111111");
-        var answerId = UUID.fromString("22222222-2222-2222-2222-222222222222");
         var createAnswer = new CreateAnswer(List.of(new CreateSolution("value")), questionId);
-        var answerEntity = mock(AnswerEntity.class);
-        when(answerEntity.getId()).thenReturn(answerId);
-        when(answerRepository.save(any(AnswerEntity.class))).thenReturn(answerEntity);
-        when(answerRepository.save(answerEntity)).thenReturn(answerEntity);
+        var answerEntity = AnswerEntity.builder()
+                .questionId(questionId)
+                .build();
 
-        createAnswerFeature.create(createAnswer);
+        try (MockedStatic<AnswerMapper> answerMapper = Mockito.mockStatic(AnswerMapper.class)) {
+            try (MockedStatic<SolutionMapper> solutionMapper = Mockito.mockStatic(SolutionMapper.class)) {
+                answerMapper.when(() -> AnswerMapper.fromCreateAnswer(eq(createAnswer))).thenReturn(answerEntity);
+                solutionMapper.when(() -> SolutionMapper.fromCreateSolutionToEntity(eq(new CreateSolution("value")), eq(answerEntity)))
+                        .thenReturn(solutionEntity);
+                answerMapper.when(() -> AnswerMapper.fromAnswerEntity(eq(Fixture.Answer.answerEntity)))
+                        .thenReturn(new Answer(answerId, List.of(new Solution(solutionEntity.getId(), solutionEntity.getValue())), questionId));
 
-        var inOrder = inOrder(solutionRepository, answerRepository);
-        inOrder.verify(answerRepository).save(onAddAnswerCaptor.capture());
-        inOrder.verify(solutionRepository).save(onAddSolutionCaptor.capture());
-        inOrder.verify(answerRepository).save(onAddAnswerCaptor.capture());
-        inOrder.verifyNoMoreInteractions();
+                ut.create(createAnswer);
+
+                var inOrder = inOrder(solutionRepository, answerRepository);
+                inOrder.verify(answerRepository).save(answerEntity);
+                inOrder.verify(solutionRepository).save(solutionEntity);
+                inOrder.verify(answerRepository).save(answerEntity);
+                inOrder.verifyNoMoreInteractions();
+            }
+        }
     }
 }

@@ -8,7 +8,6 @@ import be.riddler.v1.category.feature.CreateCategoryFeature;
 import be.riddler.v1.category.feature.DeleteCategoryFeature;
 import be.riddler.v1.category.feature.FindAllCategoriesFeature;
 import be.riddler.v1.category.feature.UpdateCategoryFeature;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
+
+import static lombok.AccessLevel.PACKAGE;
 
 /**
  * CategoryResource
@@ -25,7 +26,7 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping(path = "/categories")
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+@RequiredArgsConstructor(access = PACKAGE)
 class CategoryResource implements CategoryClient {
     private final DeleteCategoryFeature deleteCategoryFeature;
     private final CreateCategoryFeature createCategoryFeature;

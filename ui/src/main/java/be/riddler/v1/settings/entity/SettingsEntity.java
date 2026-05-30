@@ -1,13 +1,12 @@
 package be.riddler.v1.settings.entity;
 
+import be.riddler.v1.common.entity.IdEntity;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +16,6 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * SettingsEntity
@@ -29,14 +27,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @SuperBuilder
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 @Entity
 @Table(name = "settings")
-public class SettingsEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+public class SettingsEntity extends IdEntity {
     @OneToMany(targetEntity = BookmarkEntity.class, mappedBy = "settings", orphanRemoval = true)
     @Builder.Default
     private List<BookmarkEntity> bookmarks = new ArrayList<>();
@@ -47,17 +43,5 @@ public class SettingsEntity {
             bookmarks = new ArrayList<>();
         }
         return bookmarks;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SettingsEntity that)) return false;
-        return id != null && id.equals(that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
     }
 }

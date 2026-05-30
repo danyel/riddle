@@ -2,6 +2,7 @@ package be.riddler.v1;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.crypto.SecretKey;
@@ -14,6 +15,7 @@ import java.util.Date;
  * @author dnoulet
  * @version 1.0.0 03/05/2026
  */
+@DisplayName("Token")
 class TokenTester {
     @Test
     void name() {

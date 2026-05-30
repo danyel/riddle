@@ -14,5 +14,5 @@ import org.springframework.test.context.ActiveProfiles;
 @DataJpaTest
 @Import(value = {TestcontainersConfiguration.class})
 @ActiveProfiles("test")
-public abstract class AbstractRepositoryTest {
+public abstract class AbstractRepositoryIntegrationTest {
 }

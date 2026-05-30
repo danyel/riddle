@@ -1,11 +1,12 @@
 package be.riddler.v1.answer.repository;
 
-import be.riddler.common.repository.AbstractRepositoryTest;
+import be.riddler.common.repository.AbstractRepositoryIntegrationTest;
 import be.riddler.v1.answer.entity.AnswerEntity;
 import be.riddler.v1.answer.entity.SolutionEntity;
 import be.riddler.v1.question.client.model.QuestionType;
 import be.riddler.v1.question.entity.QuestionEntity;
 import be.riddler.v1.question.repository.QuestionRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author dnoulet
  * @version 1.0.0 30/05/2026
  */
-class SolutionRepositoryTest extends AbstractRepositoryTest {
+@DisplayName("Solution Repository")
+class SolutionRepositoryIntegrationTest extends AbstractRepositoryIntegrationTest {
     @Autowired
     private SolutionRepository solutionRepository;
     @Autowired

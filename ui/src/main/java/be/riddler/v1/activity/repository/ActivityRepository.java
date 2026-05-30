@@ -13,5 +13,5 @@ import java.util.UUID;
  * @version 1.0.0 26/04/2026
  */
 public interface ActivityRepository extends JpaRepository<ActivityEntity, UUID> {
-    List<ActivityEntity> findAllByUsernameAndQuestionId(String username, UUID questionId);
+    List<ActivityEntity> findAllByCreatedByAndQuestionId(String username, UUID questionId);
 }

@@ -1,7 +1,8 @@
 package be.riddler.v1.menu.adapter.repository;
 
-import be.riddler.common.repository.AbstractRepositoryTest;
+import be.riddler.common.repository.AbstractRepositoryIntegrationTest;
 import be.riddler.v1.menu.repository.MenuRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,7 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author dnoulet
  * @version 1.0.0 26/04/2026
  */
-class MenuRepositoryTest extends AbstractRepositoryTest {
+@DisplayName("Menu Repository")
+class MenuRepositoryIntegrationTest extends AbstractRepositoryIntegrationTest {
     @Autowired
     private MenuRepository menuRepository;
 

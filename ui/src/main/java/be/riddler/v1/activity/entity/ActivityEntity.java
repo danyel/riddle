@@ -11,11 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -39,10 +36,5 @@ public class ActivityEntity extends BaseEntity {
     private String elementId;
     @Column(name = "action_time")
     private Instant timestamp;
-    private String username;
     private String additionalData;
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 }

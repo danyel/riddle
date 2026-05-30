@@ -8,13 +8,14 @@ import be.riddler.v1.answer.mapper.AnswerMapper;
 import be.riddler.v1.answer.mapper.SolutionMapper;
 import be.riddler.v1.answer.repository.AnswerRepository;
 import be.riddler.v1.answer.repository.SolutionRepository;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+
+import static lombok.AccessLevel.PACKAGE;
 
 /**
  * CreateAnswerFeature
@@ -23,7 +24,7 @@ import java.util.ArrayList;
  * @version 1.0.0 09/05/2026
  */
 @Service
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+@RequiredArgsConstructor(access = PACKAGE)
 class CreateAnswerFeatureImpl implements CreateAnswerFeature {
     private final AnswerRepository answerRepository;
     private final SolutionRepository solutionRepository;
@@ -31,7 +32,8 @@ class CreateAnswerFeatureImpl implements CreateAnswerFeature {
     @Transactional
     @Override
     public @NonNull Answer create(@NonNull CreateAnswer createAnswer) {
-        var answerEntity = answerRepository.save(AnswerMapper.fromCreateAnswer(createAnswer));
+        var answerEntity = AnswerMapper.fromCreateAnswer(createAnswer);
+        answerRepository.save(answerEntity);
         var solutions = new ArrayList<SolutionEntity>();
         createAnswer.solutions()
                 .forEach(createSolution -> {

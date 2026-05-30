@@ -9,13 +9,14 @@ import be.riddler.v1.category.mapper.CategoryMapper;
 import be.riddler.v1.category.mapper.KeywordMapper;
 import be.riddler.v1.category.repository.CategoryRepository;
 import be.riddler.v1.category.repository.KeywordRepository;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
+
+import static lombok.AccessLevel.PACKAGE;
 
 /**
  * CreateCategoryFeatureImpl
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
  * @version 1.0.0 18/05/2026
  */
 @Service
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+@RequiredArgsConstructor(access = PACKAGE)
 class CreateCategoryFeatureImpl implements CreateCategoryFeature {
     private final CategoryRepository categoryRepository;
     private final KeywordRepository keywordRepository;

@@ -6,12 +6,13 @@ import be.riddler.v1.answer.client.model.CreateAnswer;
 import be.riddler.v1.answer.client.model.UpdateAnswer;
 import com.vaadin.hilla.BrowserCallable;
 import jakarta.annotation.security.PermitAll;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.UUID;
+
+import static lombok.AccessLevel.PACKAGE;
 
 /**
  * AnswerEndpoint
@@ -21,7 +22,7 @@ import java.util.UUID;
  */
 @PermitAll
 @BrowserCallable
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+@RequiredArgsConstructor(access = PACKAGE)
 public class AnswerEndpoint {
     private final AnswerClient answerClient;
 

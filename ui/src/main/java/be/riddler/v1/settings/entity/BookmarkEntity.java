@@ -1,24 +1,21 @@
 package be.riddler.v1.settings.entity;
 
+import be.riddler.v1.common.entity.IdEntity;
 import be.riddler.v1.settings.model.BookmarkType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-
-import java.util.UUID;
 
 /**
  * SettingsEntity
@@ -30,14 +27,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @SuperBuilder
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 @Entity
 @Table(name = "bookmarks")
-public class BookmarkEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+public class BookmarkEntity extends IdEntity {
     @Enumerated(EnumType.STRING)
     private BookmarkType bookmarkType;
     private String label;
@@ -45,16 +40,4 @@ public class BookmarkEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "settings_id")
     private SettingsEntity settings;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof BookmarkEntity that)) return false;
-        return id != null && id.equals(that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }
