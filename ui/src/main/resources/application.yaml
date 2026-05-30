@@ -55,12 +55,12 @@ management:
   tracing:
     sampling:
       probability: 1.0
-server:
-  port: 18080
-  ssl:
-    enabled: true
-    key-store: classpath:riddler.urpi.be.p12
-    key-store-type: PKCS12
-    key-store-password: secret_password
-    key-alias: riddler.urpi.be
-  address: riddler.urpi.be
+#server:
+#  port: 18080
+#  ssl:
+#    enabled: true
+#    key-store: classpath:riddler.urpi.be.p12
+#    key-store-type: PKCS12
+#    key-store-password: secret_password
+#    key-alias: riddler.urpi.be
+#  address: riddler.urpi.be

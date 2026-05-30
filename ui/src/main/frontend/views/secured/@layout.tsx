@@ -47,8 +47,8 @@ function MainLayoutContent() {
             <main className={`${styles.content_container} ${isOpened ? 'drawer-is-open' : 'drawer-is-closed'}`}>
                 <VerticalLayout className={styles.content}>
                     <Outlet/>
+                    <Footer/>
                 </VerticalLayout>
-                <Footer/>
             </main>
         </AppLayout>
     );

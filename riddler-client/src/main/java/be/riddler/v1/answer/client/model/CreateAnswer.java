@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -13,7 +14,7 @@ import java.util.UUID;
  * @version 1.0.0 11/04/2026
  */
 public record CreateAnswer(
-        @NonNull @Valid String value,
+        @NonNull @Valid List<@NonNull CreateSolution> solutions,
         @NonNull @Valid @JsonProperty(value = "question_id") UUID questionId
 ) {
 }

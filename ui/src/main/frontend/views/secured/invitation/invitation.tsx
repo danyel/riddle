@@ -5,7 +5,7 @@ import Invitation from "Frontend/generated/be/riddler/v1/invitation/client/model
 import {Notify, Strings} from "Frontend/util";
 import Publication from "Frontend/generated/be/riddler/v1/publication/client/model/Publication";
 import {HorizontalLayout, Select} from "@vaadin/react-components";
-import RiddlerTable from "Frontend/components/table/table";
+import RiddlerTable from "Frontend/components/ui/table/table";
 import {BackButton, DeleteButton, PlusButton, SaveButton} from "Frontend/components";
 // @ts-ignore
 import styles from "Frontend/themes/riddler/common.module.css";

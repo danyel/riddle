@@ -1,8 +1,11 @@
 package be.riddler.v1.question.bff;
 
 import be.riddler.v1.question.client.QuestionClient;
+import be.riddler.v1.question.client.model.AddOption;
 import be.riddler.v1.question.client.model.CreateQuestion;
+import be.riddler.v1.question.client.model.Option;
 import be.riddler.v1.question.client.model.Question;
+import be.riddler.v1.question.client.model.UpdateOption;
 import be.riddler.v1.question.client.model.UpdateQuestion;
 import com.vaadin.hilla.BrowserCallable;
 import jakarta.annotation.security.RolesAllowed;
@@ -29,7 +32,6 @@ public class QuestionEndpoint {
         return questionApi.getQuestionsById(List.of());
     }
 
-
     public @NonNull Question get(UUID uuid) {
         return questionApi.findById(uuid);
     }
@@ -44,5 +46,15 @@ public class QuestionEndpoint {
 
     public Question create(CreateQuestion createQuestion) {
         return questionApi.create(createQuestion);
+    }
+
+    @Deprecated
+    public @NonNull Option addOption(@NonNull AddOption addOption) {
+        return questionApi.addOption(addOption);
+    }
+
+    @Deprecated
+    public @NonNull Option updateOption(@NonNull UpdateOption updateOption) {
+        return questionApi.updateOption(updateOption);
     }
 }

@@ -1,7 +1,10 @@
 package be.riddler.v1.question.client;
 
+import be.riddler.v1.question.client.model.AddOption;
 import be.riddler.v1.question.client.model.CreateQuestion;
+import be.riddler.v1.question.client.model.Option;
 import be.riddler.v1.question.client.model.Question;
+import be.riddler.v1.question.client.model.UpdateOption;
 import be.riddler.v1.question.client.model.UpdateQuestion;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
@@ -140,6 +144,69 @@ public interface QuestionClient {
     @ResponseStatus(HttpStatus.OK)
     Question update(@PathVariable(name = "id") UUID questionId, @RequestBody UpdateQuestion updateQuestion);
 
+    @Operation(
+            method = "POST",
+            tags = "options",
+            summary = "Adds an option to a question",
+            operationId = "addOption",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = AddOption.class)
+                            )
+                    }
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            content = @Content(schema = @Schema(implementation = Option.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            content = @Content(schema = @Schema(implementation = ProblemDetail.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            content = @Content(schema = @Schema(implementation = ProblemDetail.class))
+                    )
+            }
+    )
+    @PostMapping(path = "/options", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @NonNull Option addOption(@RequestBody @NonNull AddOption addOption);
+
+    @Operation(
+            method = "PUT",
+            tags = "options",
+            summary = "Updates an option of a question",
+            operationId = "updateOption",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = {
+                            @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = UpdateOption.class)
+                            )
+                    }
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            content = @Content(schema = @Schema(implementation = Option.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            content = @Content(schema = @Schema(implementation = ProblemDetail.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            content = @Content(schema = @Schema(implementation = ProblemDetail.class))
+                    )
+            }
+    )
+    @PutMapping(path = "/options", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @NonNull Option updateOption(@RequestBody @NonNull UpdateOption updateOption);
 
     @Operation(
             method = "DELETE",

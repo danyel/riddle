@@ -9,7 +9,6 @@ import AdminIconsPage from "./views/secured/icons/icons";
 import {createHashRouter, isRouteErrorResponse, useRouteError} from "react-router-dom";
 import AdminQuestionPage from "Frontend/views/secured/questions/{id}";
 import ParticipantLayout from "Frontend/views/participant/@layout";
-import ParticipantQuestionsPage from "Frontend/views/participant/question/view-question-page";
 import ParticipantPage from "Frontend/views/participant/@index";
 import AdminParticipantsPage from "./views/secured/participants/participants";
 import {AdminParticipant} from "./views/secured/participants/participant";
@@ -19,6 +18,7 @@ import InvitationPage from "./views/secured/invitation/invitation";
 import PublicationsPage from "Frontend/views/secured/publication/publications";
 import PublicationPage from "Frontend/views/secured/publication/publication";
 import CategoryManagementPage from "Frontend/views/secured/category/categories";
+import InterviewWizardView from "Frontend/views/participant/interview-wizard";
 
 
 function RootErrorBoundary() {
@@ -119,8 +119,8 @@ export const routes = protectRoutes([
                 element: <ParticipantPage/>
             },
             {
-                path: '/candidate/question/:id',
-                element: <ParticipantQuestionsPage/>
+                path: '/candidate/interview/:invitation_id',
+                element: <InterviewWizardView/>
             }
         ]
     },

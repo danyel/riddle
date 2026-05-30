@@ -17,8 +17,7 @@ import java.util.UUID;
 public record Invitation(
         @NonNull UUID id,
         @NonNull Publication publication,
-        @JsonProperty("participant_id")
-        @NonNull UUID participantId,
+        @NonNull @JsonProperty("participant_id") UUID participantId,
 
         @JsonProperty("stored_token")
         String storedToken,

@@ -12,7 +12,7 @@ import {CloseButton, PlusButton, SaveButton, ViewDetailButton} from "Frontend/co
 import QuestionType from "Frontend/generated/be/riddler/v1/question/client/model/QuestionType";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import FormItem from "Frontend/components/ui/form/form-item.component";
-import RiddlerTable from "Frontend/components/table/table";
+import RiddlerTable from "Frontend/components/ui/table/table";
 import RiddlerModal from "Frontend/components/ui/modal/modal";
 import {Navigate} from "Frontend/util/navigate";
 import {Notify} from "Frontend/util";

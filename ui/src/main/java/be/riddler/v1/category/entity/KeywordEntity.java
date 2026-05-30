@@ -32,7 +32,6 @@ public class KeywordEntity extends IdEntity {
     @Column(nullable = false)
     private String word;
 
-    // 💡 Many-to-One connection mapping back to the parent Category
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryEntity category;

@@ -14,7 +14,7 @@ import {PublicationsEndpoint} from "Frontend/generated/endpoints";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import FormItem from "Frontend/components/ui/form/form-item.component";
 import {Navigate} from "Frontend/util/navigate";
-import RiddlerTable from "Frontend/components/table/table";
+import RiddlerTable from "Frontend/components/ui/table/table";
 import RiddlerModal from "Frontend/components/ui/modal/modal";
 
 const PUBLIC_COLUMN_DEFINITIONS = [

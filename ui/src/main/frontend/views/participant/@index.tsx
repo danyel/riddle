@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {ParticipantEndpoint, UserEndpoint} from "Frontend/generated/endpoints";
+import {InvitationEndpoint, UserEndpoint} from "Frontend/generated/endpoints";
 import Invitation from "Frontend/generated/be/riddler/v1/invitation/client/model/Invitation";
 import {useParams} from "react-router-dom";
 import {Button, FormLayout, HorizontalLayout, TextField} from "@vaadin/react-components";
@@ -18,7 +18,7 @@ export default function ParticipantPage() {
 
     useEffect(() => {
         if (params.token) {
-            ParticipantEndpoint.findInvitationById(params.token)
+            InvitationEndpoint.findById(params.token)
                 .then(setInvitation)
                 .catch(err => Notify.error('Could not retrieve the invitation via token {}', err));
         }

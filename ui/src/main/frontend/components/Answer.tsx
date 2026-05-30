@@ -18,7 +18,7 @@ export function Answers(answerProperties: AnswerProperties) {
 
     return (
         <div>
-            {answers.map(answer => (<div>{answer.id} {answer.value}</div>))}
+            {answers.map(answer => (<div>{answer.id} {answer.solutions.map((d) => (<span>{d?.value}</span>))}</div>))}
         </div>
     );
 }

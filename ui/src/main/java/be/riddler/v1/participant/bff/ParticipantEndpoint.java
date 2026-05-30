@@ -1,6 +1,5 @@
 package be.riddler.v1.participant.bff;
 
-import be.riddler.v1.invitation.client.InvitationClient;
 import be.riddler.v1.invitation.client.model.Invitation;
 import be.riddler.v1.invitation.mapper.InvitationMapper;
 import be.riddler.v1.invitation.repository.InvitationRepository;
@@ -30,7 +29,6 @@ import java.util.UUID;
 public class ParticipantEndpoint {
     private final QuestionClient questionApi;
     private final ParticipantClient participantClient;
-    private final InvitationClient invitationClient;
     private final InvitationRepository invitationRepository;
 
     public @NonNull List<@NonNull Question> getQuestions() {
@@ -43,11 +41,6 @@ public class ParticipantEndpoint {
 
     public @NonNull Participant findById(@NonNull UUID uuid) {
         return participantClient.findById(uuid);
-    }
-
-
-    public @NonNull Invitation findInvitationById(@NonNull UUID invitationId) {
-        return invitationClient.findById(invitationId);
     }
 
     @Transactional(readOnly = true)

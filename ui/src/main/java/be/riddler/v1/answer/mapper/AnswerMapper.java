@@ -3,7 +3,12 @@ package be.riddler.v1.answer.mapper;
 import be.riddler.v1.answer.client.model.Answer;
 import be.riddler.v1.answer.client.model.CreateAnswer;
 import be.riddler.v1.answer.entity.AnswerEntity;
+import be.riddler.v1.answer.entity.SolutionEntity;
 import lombok.experimental.UtilityClass;
+import org.jspecify.annotations.NonNull;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * AnswerMapper
@@ -12,12 +17,16 @@ import lombok.experimental.UtilityClass;
  * @version 1.0.0 09/05/2026
  */
 @UtilityClass
-public class AnswerMapper {
-    public static AnswerEntity fromCreateAnswer(CreateAnswer answer) {
-        return AnswerEntity.builder().value(answer.value()).questionId(answer.questionId()).build();
+public final class AnswerMapper {
+    public static @NonNull AnswerEntity fromCreateAnswer(@NonNull CreateAnswer answer) {
+        return AnswerEntity.builder().questionId(answer.questionId()).build();
     }
 
-    public static Answer fromAnswerEntity(AnswerEntity answerEntity) {
-        return new Answer(answerEntity.getId(), answerEntity.getValue(), answerEntity.getQuestionId());
+    public static @NonNull Answer fromAnswerEntity(@NonNull AnswerEntity answerEntity) {
+        var solutions = Objects.requireNonNullElse(answerEntity.getSolutions(), List.<SolutionEntity>of())
+                .stream()
+                .map(SolutionMapper::fromEntityToSolution)
+                .toList();
+        return new Answer(answerEntity.getId(), solutions, answerEntity.getQuestionId());
     }
 }

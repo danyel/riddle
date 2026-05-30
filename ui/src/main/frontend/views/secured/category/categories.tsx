@@ -6,7 +6,7 @@ import Category from "Frontend/generated/be/riddler/v1/category/client/model/Cat
 import CreateCategory from "Frontend/generated/be/riddler/v1/category/client/model/CreateCategory";
 import {useAuth} from "Frontend/auth";
 import UpdateCategory from "Frontend/generated/be/riddler/v1/category/client/model/UpdateCategory";
-import RiddlerTable from "Frontend/components/table/table";
+import RiddlerTable from "Frontend/components/ui/table/table";
 import {CancelButton, PlusButton} from "Frontend/components";
 import {Ban, Pen, Save, Trash2} from "lucide-react";
 import {ElementStylingTypes} from "Frontend/constant";

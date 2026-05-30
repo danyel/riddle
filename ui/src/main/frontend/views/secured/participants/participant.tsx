@@ -16,7 +16,7 @@ import RiddlerModal from "Frontend/components/ui/modal/modal";
 import ParticipantProfileDetail from "Frontend/components/participant/participant";
 import PublicationDetail from "Frontend/components/publication/publication";
 import {Ban, Glasses, Key, Newspaper, RotateCcwKey, Save, Trash2} from "lucide-react";
-import RiddlerTable from "Frontend/components/table/table";
+import RiddlerTable from "Frontend/components/ui/table/table";
 import {Navigate} from "Frontend/util/navigate";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import {CheckIcon, CloseIcon} from "Frontend/components";
@@ -126,13 +126,13 @@ export function AdminParticipant() {
     const tokenIndicator = ({item}: { item: Invitation }) => {
         return (
             <>
-                {Strings.isNotEmpty(item.stored_token) ?
+                {Strings.isNotEmpty(item.id) ?
                     (
                         <>
                             <CheckIcon/>
                             <Button theme={ElementStylingTypes.TERTIARY_ICON}
                                     onClick={() => {
-                                        tokenSignal.value = item.stored_token;
+                                        tokenSignal.value = item.id;
                                         openModal("", 'TOKEN');
                                     }}>
                                 <Key size={24}/>
@@ -373,9 +373,9 @@ export function AdminParticipant() {
                                                   onClick={() => InvitationEndpoint.generateToken(item.id)
                                                       .then(invitation => {
                                                           invitations.forEach(e => {
-                                                              LOGGER.debug('Token {}', invitation.stored_token)
+                                                              LOGGER.debug('Token {}', invitation.id)
                                                               if (e.id === invitation.id) {
-                                                                  e.stored_token = invitation.stored_token;
+                                                                  e.id = invitation.id;
                                                               }
                                                           })
                                                           Notify.success('Token generated successfully for {}', item.publication.title);

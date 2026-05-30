@@ -13,7 +13,7 @@ import {Collections, LOGGER, Notify} from "Frontend/util";
 import BookmarkType from "Frontend/generated/be/riddler/v1/settings/model/BookmarkType";
 import Participant from "Frontend/generated/be/riddler/v1/participant/client/model/Participant";
 import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
-import RiddlerTable from "Frontend/components/table/table";
+import RiddlerTable from "Frontend/components/ui/table/table";
 import {Ban, Trash2} from "lucide-react";
 import RiddlerModal from "Frontend/components/ui/modal/modal";
 

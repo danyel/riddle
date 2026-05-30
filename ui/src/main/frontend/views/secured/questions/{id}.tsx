@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {QuestionEndpoint, QuestionTypeEndpoint} from "Frontend/generated/endpoints";
 import Question from "Frontend/generated/be/riddler/v1/question/client/model/Question";
-import AnswersTable from "Frontend/components/answers/answers-table.component";
+import OptionTable from "Frontend/components/option/question-table";
 import {
     Button,
     Dialog,
@@ -59,6 +59,10 @@ export default function QuestionDetailPage() {
                 Navigate.to(BookmarkType.QUESTIONS);
             })
             .catch(err => Notify.error('Could not delete the question {}', err));
+    }
+
+    const isChoice = (updateQuestion: UpdateQuestion) => {
+        return updateQuestion.type == QuestionType.REVIEW || updateQuestion.type !== QuestionType.OPEN;
     }
 
     useEffect(() => {
@@ -177,7 +181,8 @@ export default function QuestionDetailPage() {
                 </FormLayout>
 
                 <HorizontalLayout className={styles.full_width_layout}>
-                    {updateQuestion.type !== "REVIEW" && <AnswersTable questionId={question.id!!}/>}
+                    {isChoice(updateQuestion) &&
+                        <OptionTable question={question}/>}
                 </HorizontalLayout>
             </VerticalLayout>
         </>
