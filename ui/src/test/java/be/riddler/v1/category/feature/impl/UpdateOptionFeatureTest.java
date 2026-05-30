@@ -11,8 +11,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
-import java.util.UUID;
 
+import static be.riddler.v1.fixture.Fixture.Option.optionId;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.eq;
@@ -33,7 +33,6 @@ class UpdateOptionFeatureTest {
     private OptionRepository optionRepository;
     @InjectMocks
     private UpdateOptionFeatureImpl ut;
-    private final UUID optionId = UUID.fromString("11111111-1111-1111-1111-111111111111");
 
     /**
      * Given:

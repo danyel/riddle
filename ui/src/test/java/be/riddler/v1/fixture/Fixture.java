@@ -36,6 +36,10 @@ public class Fixture {
         public static final UUID keywordId = UUID.fromString("44444444-4444-4444-4444-444444444444");
     }
 
+    public static class Option {
+        public static final UUID optionId = UUID.fromString("66666666-6666-6666-6666-666666666666");
+    }
+
     public static class Solution {
         public static final UUID solutionId = UUID.fromString("55555555-5555-5555-5555-555555555555");
 

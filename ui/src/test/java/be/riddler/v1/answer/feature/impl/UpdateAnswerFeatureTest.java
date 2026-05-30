@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static be.riddler.v1.fixture.Fixture.Answer.answerId;
+import static be.riddler.v1.fixture.Fixture.Solution.solutionId;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
@@ -61,8 +63,6 @@ class UpdateAnswerFeatureTest {
     @DisplayName("Given an existing answer where we want to add and update an option when updating the answer then a solution has been saved and a new one will be added to the table")
     @Test
     void update() {
-        var answerId = UUID.fromString("11111111-1111-1111-1111-111111111111");
-        var solutionId = UUID.fromString("22222222-2222-2222-2222-222222222222");
         var answerEntity = AnswerEntity.builder()
                 .id(answerId)
                 .solutions(new ArrayList<>())
@@ -103,7 +103,6 @@ class UpdateAnswerFeatureTest {
     @DisplayName("Given an invalid id when updating option then illegal state exception will be thrown")
     @Test
     void updateNoValueFound() {
-        var answerId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         when(answerRepository.findById(answerId)).thenReturn(Optional.empty());
         var updateAnswer = new UpdateAnswer(List.of());
 

@@ -16,7 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -26,6 +25,7 @@ import static be.riddler.v1.fixture.Fixture.Question.questionId;
 import static be.riddler.v1.fixture.Fixture.Solution.solutionEntity;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mockStatic;
 
 /**
  * CreateAnswerFeatureTest
@@ -55,13 +55,12 @@ class CreateAnswerFeatureTest {
     @DisplayName("Given a create answer where we want to add when the answer will be saves")
     @Test
     void create() {
-        var createAnswer = new CreateAnswer(List.of(new CreateSolution("value")), questionId);
-        var answerEntity = AnswerEntity.builder()
-                .questionId(questionId)
-                .build();
-
-        try (MockedStatic<AnswerMapper> answerMapper = Mockito.mockStatic(AnswerMapper.class)) {
-            try (MockedStatic<SolutionMapper> solutionMapper = Mockito.mockStatic(SolutionMapper.class)) {
+        try (MockedStatic<AnswerMapper> answerMapper = mockStatic(AnswerMapper.class)) {
+            try (MockedStatic<SolutionMapper> solutionMapper = mockStatic(SolutionMapper.class)) {
+                var createAnswer = new CreateAnswer(List.of(new CreateSolution("value")), questionId);
+                var answerEntity = AnswerEntity.builder()
+                        .questionId(questionId)
+                        .build();
                 answerMapper.when(() -> AnswerMapper.fromCreateAnswer(eq(createAnswer))).thenReturn(answerEntity);
                 solutionMapper.when(() -> SolutionMapper.fromCreateSolutionToEntity(eq(new CreateSolution("value")), eq(answerEntity)))
                         .thenReturn(solutionEntity);
